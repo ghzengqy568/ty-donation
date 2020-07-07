@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baidu.mapp.bcd.dao.CertificateMapper">
+  <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.Certificate">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
+    <result column="cert_time" jdbcType="TIMESTAMP" property="certTime" />
+    <result column="source_table" jdbcType="VARCHAR" property="sourceTable" />
+    <result column="source_id" jdbcType="BIGINT" property="sourceId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, cert_code, cert_time, source_table, source_id, create_time, last_modify_time
+  </sql>
+  <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.CertificateExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <if test="columns!=null and columns.size() &gt; 0">
+      <foreach collection="columns" item="listItem" separator=",">
+        ${listItem}
+      </foreach>
+    </if>
+    <if test="columns==null or columns.size() &lt;= 0">
+      <include refid="Base_Column_List" />
+    </if>
+    from t_certificate
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null and limit > 0">
+       limit 
+      <if test="start != null and start > 0">
+         #{start},
+      </if>
+       #{limit} 
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_certificate
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_certificate
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.baidu.mapp.bcd.domain.CertificateExample">
+    delete from t_certificate
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.baidu.mapp.bcd.domain.Certificate">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_certificate (cert_code, cert_time, source_table, 
+      source_id, create_time, last_modify_time
+      )
+    values (#{certCode,jdbcType=VARCHAR}, #{certTime,jdbcType=TIMESTAMP}, #{sourceTable,jdbcType=VARCHAR}, 
+      #{sourceId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.Certificate">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_certificate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="certCode != null">
+        cert_code,
+      </if>
+      <if test="certTime != null">
+        cert_time,
+      </if>
+      <if test="sourceTable != null">
+        source_table,
+      </if>
+      <if test="sourceId != null">
+        source_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="certCode != null">
+        #{certCode,jdbcType=VARCHAR},
+      </if>
+      <if test="certTime != null">
+        #{certTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sourceTable != null">
+        #{sourceTable,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceId != null">
+        #{sourceId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null">
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.baidu.mapp.bcd.domain.CertificateExample" resultType="java.lang.Long">
+    select count(*) from t_certificate
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_certificate
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.certCode != null">
+        cert_code = #{record.certCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certTime != null">
+        cert_time = #{record.certTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sourceTable != null">
+        source_table = #{record.sourceTable,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceId != null">
+        source_id = #{record.sourceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastModifyTime != null">
+        last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_certificate
+    set id = #{record.id,jdbcType=BIGINT},
+      cert_code = #{record.certCode,jdbcType=VARCHAR},
+      cert_time = #{record.certTime,jdbcType=TIMESTAMP},
+      source_table = #{record.sourceTable,jdbcType=VARCHAR},
+      source_id = #{record.sourceId,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.Certificate">
+    update t_certificate
+    <set>
+      <if test="certCode != null">
+        cert_code = #{certCode,jdbcType=VARCHAR},
+      </if>
+      <if test="certTime != null">
+        cert_time = #{certTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sourceTable != null">
+        source_table = #{sourceTable,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceId != null">
+        source_id = #{sourceId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.Certificate">
+    update t_certificate
+    set cert_code = #{certCode,jdbcType=VARCHAR},
+      cert_time = #{certTime,jdbcType=TIMESTAMP},
+      source_table = #{sourceTable,jdbcType=VARCHAR},
+      source_id = #{sourceId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

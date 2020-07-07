@@ -1,0 +1,34 @@
+# 日志环境
+log:
+  env: dev
+
+# actuator 默认关闭
+# https://xz.aliyun.com/t/2233
+management:
+  endpoints:
+    enabled-by-default: false
+  sys:
+    # 权限描述注释
+    permissions-desc-packages-scan:
+    - com.baidu.mapp.bcd
+
+spring:
+  datasource:
+    name: exhibition-datasource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${db.ip}:3306/bcdonate?useSSL=false&zeroDateTimeBehavior=convertToNull
+    password: ${db.password}
+    username: ${db.username}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      allow-pool-suspension: false
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+mybatis:
+  mapper-locations: classpath*:mybatis/**/*.xml
+  configuration:
+    default-statement-timeout: 60
+
+swagger:
+  show: true

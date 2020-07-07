@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baidu.mapp.bcd.dao.ActivityPlanMapper">
+  <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.ActivityPlan">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="quantity" jdbcType="BIGINT" property="quantity" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="amount" jdbcType="BIGINT" property="amount" />
+    <result column="need_purchase" jdbcType="TINYINT" property="needPurchase" />
+    <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, activity_id, description, type, unit, quantity, name, amount, need_purchase, 
+    cert_code, sign, create_time, last_modify_time
+  </sql>
+  <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.ActivityPlanExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <if test="columns!=null and columns.size() &gt; 0">
+      <foreach collection="columns" item="listItem" separator=",">
+        ${listItem}
+      </foreach>
+    </if>
+    <if test="columns==null or columns.size() &lt;= 0">
+      <include refid="Base_Column_List" />
+    </if>
+    from t_activity_plan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null and limit > 0">
+       limit 
+      <if test="start != null and start > 0">
+         #{start},
+      </if>
+       #{limit} 
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_activity_plan
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_activity_plan
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.baidu.mapp.bcd.domain.ActivityPlanExample">
+    delete from t_activity_plan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.baidu.mapp.bcd.domain.ActivityPlan">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_activity_plan (activity_id, description, type, 
+      unit, quantity, name, 
+      amount, need_purchase, cert_code, 
+      sign, create_time, last_modify_time
+      )
+    values (#{activityId,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{unit,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=BIGINT}, #{needPurchase,jdbcType=TINYINT}, #{certCode,jdbcType=VARCHAR}, 
+      #{sign,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.ActivityPlan">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_activity_plan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="needPurchase != null">
+        need_purchase,
+      </if>
+      <if test="certCode != null">
+        cert_code,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=BIGINT},
+      </if>
+      <if test="needPurchase != null">
+        #{needPurchase,jdbcType=TINYINT},
+      </if>
+      <if test="certCode != null">
+        #{certCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null">
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.baidu.mapp.bcd.domain.ActivityPlanExample" resultType="java.lang.Long">
+    select count(*) from t_activity_plan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_activity_plan
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.activityId != null">
+        activity_id = #{record.activityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.unit != null">
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantity != null">
+        quantity = #{record.quantity,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=BIGINT},
+      </if>
+      <if test="record.needPurchase != null">
+        need_purchase = #{record.needPurchase,jdbcType=TINYINT},
+      </if>
+      <if test="record.certCode != null">
+        cert_code = #{record.certCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sign != null">
+        sign = #{record.sign,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastModifyTime != null">
+        last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_activity_plan
+    set id = #{record.id,jdbcType=BIGINT},
+      activity_id = #{record.activityId,jdbcType=BIGINT},
+      description = #{record.description,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=TINYINT},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      quantity = #{record.quantity,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      amount = #{record.amount,jdbcType=BIGINT},
+      need_purchase = #{record.needPurchase,jdbcType=TINYINT},
+      cert_code = #{record.certCode,jdbcType=VARCHAR},
+      sign = #{record.sign,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.ActivityPlan">
+    update t_activity_plan
+    <set>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=BIGINT},
+      </if>
+      <if test="needPurchase != null">
+        need_purchase = #{needPurchase,jdbcType=TINYINT},
+      </if>
+      <if test="certCode != null">
+        cert_code = #{certCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        sign = #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null">
+        last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.ActivityPlan">
+    update t_activity_plan
+    set activity_id = #{activityId,jdbcType=BIGINT},
+      description = #{description,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      unit = #{unit,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=BIGINT},
+      need_purchase = #{needPurchase,jdbcType=TINYINT},
+      cert_code = #{certCode,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
