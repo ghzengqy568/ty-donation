@@ -18,6 +18,7 @@ public class DonateReq {
     @Schema(description = "捐赠人ID")
     private Long donorId;
 
+    @Schema(description = "捐赠详情")
     List<DonateDetailReq> details;
 
 }
