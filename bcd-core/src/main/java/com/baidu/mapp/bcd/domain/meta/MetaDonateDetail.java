@@ -19,7 +19,7 @@ public final class MetaDonateDetail {
     /**
      * 捐赠明细
      */
-    public static final String TABLE_NAME = "`t_donate_detail`";
+    public static final String TABLE_NAME = "t_donate_detail";
 
     /**
      * 捐赠明细ID

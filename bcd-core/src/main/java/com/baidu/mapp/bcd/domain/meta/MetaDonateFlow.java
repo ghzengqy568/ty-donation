@@ -16,7 +16,7 @@ public final class MetaDonateFlow {
     /**
      * 捐赠流水
      */
-    public static final String TABLE_NAME = "`t_donate_flow`";
+    public static final String TABLE_NAME = "t_donate_flow";
 
     /**
      * 捐赠流水ID
