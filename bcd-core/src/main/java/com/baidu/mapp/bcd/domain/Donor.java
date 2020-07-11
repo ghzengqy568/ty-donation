@@ -15,6 +15,13 @@ public class Donor implements Serializable {
     private Long id;
 
     /**
+     * column-name:uuid
+     * 多链ID身份
+     */
+    @Schema(description = "多链ID身份")
+    private String uuid;
+
+    /**
      * column-name:donor_user_name
      * 捐赠人用户ID
      */
@@ -50,6 +57,41 @@ public class Donor implements Serializable {
     private String sign;
 
     /**
+     * column-name:idcard
+     * 身份证号码，加密存储
+     */
+    @Schema(description = "身份证号码，加密存储")
+    private String idcard;
+
+    /**
+     * column-name:mobile
+     * 手机号，加密存储
+     */
+    @Schema(description = "手机号，加密存储")
+    private String mobile;
+
+    /**
+     * column-name:province
+     * 省份
+     */
+    @Schema(description = "省份")
+    private String province;
+
+    /**
+     * column-name:city
+     * 城市
+     */
+    @Schema(description = "城市")
+    private String city;
+
+    /**
+     * column-name:address
+     * 地址
+     */
+    @Schema(description = "地址")
+    private String address;
+
+    /**
      * column-name:create_time
      * 创建时间
      */
@@ -75,11 +117,17 @@ public class Donor implements Serializable {
      */
     private Donor(XBuilder builder) {
         this.id = builder.id;
+        this.uuid = builder.uuid;
         this.donorUserName = builder.donorUserName;
         this.donorPwd = builder.donorPwd;
         this.donorName = builder.donorName;
         this.certCode = builder.certCode;
         this.sign = builder.sign;
+        this.idcard = builder.idcard;
+        this.mobile = builder.mobile;
+        this.province = builder.province;
+        this.city = builder.city;
+        this.address = builder.address;
         this.createTime = builder.createTime;
         this.lastModifyTime = builder.lastModifyTime;
     }
@@ -100,6 +148,20 @@ public class Donor implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * 多链ID身份
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * 多链ID身份
+     */
+    public void setUuid(String uuid) {
+        this.uuid = uuid == null ? null : uuid.trim();
     }
 
     /**
@@ -173,6 +235,76 @@ public class Donor implements Serializable {
     }
 
     /**
+     * 身份证号码，加密存储
+     */
+    public String getIdcard() {
+        return idcard;
+    }
+
+    /**
+     * 身份证号码，加密存储
+     */
+    public void setIdcard(String idcard) {
+        this.idcard = idcard == null ? null : idcard.trim();
+    }
+
+    /**
+     * 手机号，加密存储
+     */
+    public String getMobile() {
+        return mobile;
+    }
+
+    /**
+     * 手机号，加密存储
+     */
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
+    }
+
+    /**
+     * 省份
+     */
+    public String getProvince() {
+        return province;
+    }
+
+    /**
+     * 省份
+     */
+    public void setProvince(String province) {
+        this.province = province == null ? null : province.trim();
+    }
+
+    /**
+     * 城市
+     */
+    public String getCity() {
+        return city;
+    }
+
+    /**
+     * 城市
+     */
+    public void setCity(String city) {
+        this.city = city == null ? null : city.trim();
+    }
+
+    /**
+     * 地址
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * 地址
+     */
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
+    }
+
+    /**
      * 创建时间
      */
     public Date getCreateTime() {
@@ -202,11 +334,17 @@ public class Donor implements Serializable {
 
     public Donor copyFrom(Donor other) {
         this.id = other.id;
+        this.uuid = other.uuid;
         this.donorUserName = other.donorUserName;
         this.donorPwd = other.donorPwd;
         this.donorName = other.donorName;
         this.certCode = other.certCode;
         this.sign = other.sign;
+        this.idcard = other.idcard;
+        this.mobile = other.mobile;
+        this.province = other.province;
+        this.city = other.city;
+        this.address = other.address;
         this.createTime = other.createTime;
         this.lastModifyTime = other.lastModifyTime;
         return this;
@@ -217,11 +355,17 @@ public class Donor implements Serializable {
             throw new RuntimeException("`to` must not be null");
         }
         to.setId(from.id);
+        to.setUuid(from.uuid);
         to.setDonorUserName(from.donorUserName);
         to.setDonorPwd(from.donorPwd);
         to.setDonorName(from.donorName);
         to.setCertCode(from.certCode);
         to.setSign(from.sign);
+        to.setIdcard(from.idcard);
+        to.setMobile(from.mobile);
+        to.setProvince(from.province);
+        to.setCity(from.city);
+        to.setAddress(from.address);
         to.setCreateTime(from.createTime);
         to.setLastModifyTime(from.lastModifyTime);
         return to;
@@ -231,17 +375,23 @@ public class Donor implements Serializable {
         /*
         {
             id: '',
+            uuid: '',
             donorUserName: '',
             donorPwd: '',
             donorName: '',
             certCode: '',
             sign: '',
+            idcard: '',
+            mobile: '',
+            province: '',
+            city: '',
+            address: '',
             createTime: '',
             lastModifyTime: ''
         }
         */
         
-        return "{\"id\": \"\",\"donorUserName\": \"\",\"donorPwd\": \"\",\"donorName\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"uuid\": \"\",\"donorUserName\": \"\",\"donorPwd\": \"\",\"donorName\": \"\",\"certCode\": \"\",\"sign\": \"\",\"idcard\": \"\",\"mobile\": \"\",\"province\": \"\",\"city\": \"\",\"address\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -251,11 +401,17 @@ public class Donor implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", uuid=").append(uuid);
         sb.append(", donorUserName=").append(donorUserName);
         sb.append(", donorPwd=").append(donorPwd);
         sb.append(", donorName=").append(donorName);
         sb.append(", certCode=").append(certCode);
         sb.append(", sign=").append(sign);
+        sb.append(", idcard=").append(idcard);
+        sb.append(", mobile=").append(mobile);
+        sb.append(", province=").append(province);
+        sb.append(", city=").append(city);
+        sb.append(", address=").append(address);
         sb.append(", createTime=").append(createTime);
         sb.append(", lastModifyTime=").append(lastModifyTime);
         sb.append("]");
@@ -268,6 +424,11 @@ public class Donor implements Serializable {
          * 捐赠人ID
          */
         private Long id;
+
+        /**
+         * 多链ID身份
+         */
+        private String uuid;
 
         /**
          * 捐赠人用户ID
@@ -295,6 +456,31 @@ public class Donor implements Serializable {
         private String sign;
 
         /**
+         * 身份证号码，加密存储
+         */
+        private String idcard;
+
+        /**
+         * 手机号，加密存储
+         */
+        private String mobile;
+
+        /**
+         * 省份
+         */
+        private String province;
+
+        /**
+         * 城市
+         */
+        private String city;
+
+        /**
+         * 地址
+         */
+        private String address;
+
+        /**
          * 创建时间
          */
         private Date createTime;
@@ -313,6 +499,14 @@ public class Donor implements Serializable {
          */
         public XBuilder id(Long id) {
             this.id = id;
+            return this;
+        }
+
+        /**
+         * 多链ID身份
+         */
+        public XBuilder uuid(String uuid) {
+            this.uuid = uuid;
             return this;
         }
 
@@ -353,6 +547,46 @@ public class Donor implements Serializable {
          */
         public XBuilder sign(String sign) {
             this.sign = sign;
+            return this;
+        }
+
+        /**
+         * 身份证号码，加密存储
+         */
+        public XBuilder idcard(String idcard) {
+            this.idcard = idcard;
+            return this;
+        }
+
+        /**
+         * 手机号，加密存储
+         */
+        public XBuilder mobile(String mobile) {
+            this.mobile = mobile;
+            return this;
+        }
+
+        /**
+         * 省份
+         */
+        public XBuilder province(String province) {
+            this.province = province;
+            return this;
+        }
+
+        /**
+         * 城市
+         */
+        public XBuilder city(String city) {
+            this.city = city;
+            return this;
+        }
+
+        /**
+         * 地址
+         */
+        public XBuilder address(String address) {
+            this.address = address;
             return this;
         }
 

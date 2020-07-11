@@ -3,7 +3,8 @@
 <mapper namespace="com.baidu.mapp.bcd.dao.ActivityPlanMapper">
   <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.ActivityPlan">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
+    <result column="activity_uuid" jdbcType="VARCHAR" property="activityUuid" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="unit" jdbcType="VARCHAR" property="unit" />
@@ -75,7 +76,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, activity_id, description, type, unit, quantity, name, amount, need_purchase, 
+    id, uuid, activity_uuid, description, type, unit, quantity, name, amount, need_purchase, 
     cert_code, sign, create_time, last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.ActivityPlanExample" resultMap="BaseResultMap">
@@ -126,16 +127,16 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_activity_plan (activity_id, description, type, 
-      unit, quantity, name, 
-      amount, need_purchase, cert_code, 
-      sign, create_time, last_modify_time
-      )
-    values (#{activityId,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{unit,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
-      #{amount,jdbcType=BIGINT}, #{needPurchase,jdbcType=TINYINT}, #{certCode,jdbcType=VARCHAR}, 
-      #{sign,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
-      )
+    insert into t_activity_plan (uuid, activity_uuid, description, 
+      type, unit, quantity, 
+      name, amount, need_purchase, 
+      cert_code, sign, create_time, 
+      last_modify_time)
+    values (#{uuid,jdbcType=VARCHAR}, #{activityUuid,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, #{unit,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, 
+      #{name,jdbcType=VARCHAR}, #{amount,jdbcType=BIGINT}, #{needPurchase,jdbcType=TINYINT}, 
+      #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.ActivityPlan">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -143,8 +144,11 @@
     </selectKey>
     insert into t_activity_plan
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="activityId != null">
-        activity_id,
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="activityUuid != null">
+        activity_uuid,
       </if>
       <if test="description != null">
         description,
@@ -181,8 +185,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="activityId != null">
-        #{activityId,jdbcType=BIGINT},
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="activityUuid != null">
+        #{activityUuid,jdbcType=VARCHAR},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
@@ -231,8 +238,11 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.activityId != null">
-        activity_id = #{record.activityId,jdbcType=BIGINT},
+      <if test="record.uuid != null">
+        uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityUuid != null">
+        activity_uuid = #{record.activityUuid,jdbcType=VARCHAR},
       </if>
       <if test="record.description != null">
         description = #{record.description,jdbcType=VARCHAR},
@@ -275,7 +285,8 @@
   <update id="updateByExample" parameterType="map">
     update t_activity_plan
     set id = #{record.id,jdbcType=BIGINT},
-      activity_id = #{record.activityId,jdbcType=BIGINT},
+      uuid = #{record.uuid,jdbcType=VARCHAR},
+      activity_uuid = #{record.activityUuid,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
       unit = #{record.unit,jdbcType=VARCHAR},
@@ -294,8 +305,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.ActivityPlan">
     update t_activity_plan
     <set>
-      <if test="activityId != null">
-        activity_id = #{activityId,jdbcType=BIGINT},
+      <if test="uuid != null">
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="activityUuid != null">
+        activity_uuid = #{activityUuid,jdbcType=VARCHAR},
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
@@ -335,7 +349,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.ActivityPlan">
     update t_activity_plan
-    set activity_id = #{activityId,jdbcType=BIGINT},
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      activity_uuid = #{activityUuid,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},
       unit = #{unit,jdbcType=VARCHAR},

@@ -3,10 +3,16 @@ package com.baidu.mapp.bcd.domain.meta;
 /*
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
+       @Result(property = "uuid", column = "uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "donatoryUserName", column = "donatory_user_name", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "donatoryPwd", column = "donatory_pwd", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "donatoryName", column = "donatory_name", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "idcard", column = "idcard", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "mobile", column = "mobile", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "donatoryCard", column = "donatory_card", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "province", column = "province", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "city", column = "city", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "address", column = "address", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "donatoryLevel", column = "donatory_level", javaType = java.lang.Byte.class, jdbcType = JdbcType.TINYINT),
        @Result(property = "certCode", column = "cert_code", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "sign", column = "sign", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
@@ -33,6 +39,19 @@ public final class MetaDonatory {
     public static final String JDBC_TYPE_ID = "BIGINT";
 
     public static final String IS_KEY_ID = "true";
+
+    /**
+     * 多链ID身份
+     */
+    public static final String UUID = "uuid";
+
+    public static final String COLUMN_NAME_UUID = "`uuid`";
+
+    public static final String JAVA_TYPE_UUID = "java.lang.String";
+
+    public static final String JDBC_TYPE_UUID = "VARCHAR";
+
+    public static final String IS_KEY_UUID = "false";
 
     /**
      * 受赠人用户ID
@@ -74,7 +93,33 @@ public final class MetaDonatory {
     public static final String IS_KEY_DONATORYNAME = "false";
 
     /**
-     * 受赠人社保卡
+     * 身份证号码，加密存储
+     */
+    public static final String IDCARD = "idcard";
+
+    public static final String COLUMN_NAME_IDCARD = "`idcard`";
+
+    public static final String JAVA_TYPE_IDCARD = "java.lang.String";
+
+    public static final String JDBC_TYPE_IDCARD = "VARCHAR";
+
+    public static final String IS_KEY_IDCARD = "false";
+
+    /**
+     * 手机号，加密存储
+     */
+    public static final String MOBILE = "mobile";
+
+    public static final String COLUMN_NAME_MOBILE = "`mobile`";
+
+    public static final String JAVA_TYPE_MOBILE = "java.lang.String";
+
+    public static final String JDBC_TYPE_MOBILE = "VARCHAR";
+
+    public static final String IS_KEY_MOBILE = "false";
+
+    /**
+     * 受赠人社保卡，加密存储
      */
     public static final String DONATORYCARD = "donatoryCard";
 
@@ -87,7 +132,46 @@ public final class MetaDonatory {
     public static final String IS_KEY_DONATORYCARD = "false";
 
     /**
-     * 受赠人等级
+     * 省份
+     */
+    public static final String PROVINCE = "province";
+
+    public static final String COLUMN_NAME_PROVINCE = "`province`";
+
+    public static final String JAVA_TYPE_PROVINCE = "java.lang.String";
+
+    public static final String JDBC_TYPE_PROVINCE = "VARCHAR";
+
+    public static final String IS_KEY_PROVINCE = "false";
+
+    /**
+     * 城市
+     */
+    public static final String CITY = "city";
+
+    public static final String COLUMN_NAME_CITY = "`city`";
+
+    public static final String JAVA_TYPE_CITY = "java.lang.String";
+
+    public static final String JDBC_TYPE_CITY = "VARCHAR";
+
+    public static final String IS_KEY_CITY = "false";
+
+    /**
+     * 地址
+     */
+    public static final String ADDRESS = "address";
+
+    public static final String COLUMN_NAME_ADDRESS = "`address`";
+
+    public static final String JAVA_TYPE_ADDRESS = "java.lang.String";
+
+    public static final String JDBC_TYPE_ADDRESS = "VARCHAR";
+
+    public static final String IS_KEY_ADDRESS = "false";
+
+    /**
+     * 受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入
      */
     public static final String DONATORYLEVEL = "donatoryLevel";
 
@@ -168,6 +252,9 @@ public final class MetaDonatory {
         if (columnName.equals(COLUMN_NAME_ID)) {
             return ID;
         }
+        if (columnName.equals(COLUMN_NAME_UUID)) {
+            return UUID;
+        }
         if (columnName.equals(COLUMN_NAME_DONATORYUSERNAME)) {
             return DONATORYUSERNAME;
         }
@@ -177,8 +264,23 @@ public final class MetaDonatory {
         if (columnName.equals(COLUMN_NAME_DONATORYNAME)) {
             return DONATORYNAME;
         }
+        if (columnName.equals(COLUMN_NAME_IDCARD)) {
+            return IDCARD;
+        }
+        if (columnName.equals(COLUMN_NAME_MOBILE)) {
+            return MOBILE;
+        }
         if (columnName.equals(COLUMN_NAME_DONATORYCARD)) {
             return DONATORYCARD;
+        }
+        if (columnName.equals(COLUMN_NAME_PROVINCE)) {
+            return PROVINCE;
+        }
+        if (columnName.equals(COLUMN_NAME_CITY)) {
+            return CITY;
+        }
+        if (columnName.equals(COLUMN_NAME_ADDRESS)) {
+            return ADDRESS;
         }
         if (columnName.equals(COLUMN_NAME_DONATORYLEVEL)) {
             return DONATORYLEVEL;
@@ -212,6 +314,9 @@ public final class MetaDonatory {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID;
         }
+        if (fieldName.equals(UUID)) {
+            return COLUMN_NAME_UUID;
+        }
         if (fieldName.equals(DONATORYUSERNAME)) {
             return COLUMN_NAME_DONATORYUSERNAME;
         }
@@ -221,8 +326,23 @@ public final class MetaDonatory {
         if (fieldName.equals(DONATORYNAME)) {
             return COLUMN_NAME_DONATORYNAME;
         }
+        if (fieldName.equals(IDCARD)) {
+            return COLUMN_NAME_IDCARD;
+        }
+        if (fieldName.equals(MOBILE)) {
+            return COLUMN_NAME_MOBILE;
+        }
         if (fieldName.equals(DONATORYCARD)) {
             return COLUMN_NAME_DONATORYCARD;
+        }
+        if (fieldName.equals(PROVINCE)) {
+            return COLUMN_NAME_PROVINCE;
+        }
+        if (fieldName.equals(CITY)) {
+            return COLUMN_NAME_CITY;
+        }
+        if (fieldName.equals(ADDRESS)) {
+            return COLUMN_NAME_ADDRESS;
         }
         if (fieldName.equals(DONATORYLEVEL)) {
             return COLUMN_NAME_DONATORYLEVEL;
@@ -256,6 +376,9 @@ public final class MetaDonatory {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID.replace("`", "");
         }
+        if (fieldName.equals(UUID)) {
+            return COLUMN_NAME_UUID.replace("`", "");
+        }
         if (fieldName.equals(DONATORYUSERNAME)) {
             return COLUMN_NAME_DONATORYUSERNAME.replace("`", "");
         }
@@ -265,8 +388,23 @@ public final class MetaDonatory {
         if (fieldName.equals(DONATORYNAME)) {
             return COLUMN_NAME_DONATORYNAME.replace("`", "");
         }
+        if (fieldName.equals(IDCARD)) {
+            return COLUMN_NAME_IDCARD.replace("`", "");
+        }
+        if (fieldName.equals(MOBILE)) {
+            return COLUMN_NAME_MOBILE.replace("`", "");
+        }
         if (fieldName.equals(DONATORYCARD)) {
             return COLUMN_NAME_DONATORYCARD.replace("`", "");
+        }
+        if (fieldName.equals(PROVINCE)) {
+            return COLUMN_NAME_PROVINCE.replace("`", "");
+        }
+        if (fieldName.equals(CITY)) {
+            return COLUMN_NAME_CITY.replace("`", "");
+        }
+        if (fieldName.equals(ADDRESS)) {
+            return COLUMN_NAME_ADDRESS.replace("`", "");
         }
         if (fieldName.equals(DONATORYLEVEL)) {
             return COLUMN_NAME_DONATORYLEVEL.replace("`", "");

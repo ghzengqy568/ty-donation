@@ -208,207 +208,447 @@ public class PlanAllocationRelExample extends BaseExample {
             return (Criteria) this;
         }
 
-        public Criteria andActivityPlanIdIsNull() {
-            addCriterion("activity_plan_id is null");
+        public Criteria andActivityPlanUuidIsNull() {
+            addCriterion("activity_plan_uuid is null");
             return (Criteria) this;
         }
 
-        public Criteria andActivityPlanIdIsNotNull() {
-            addCriterion("activity_plan_id is not null");
+        public Criteria andActivityPlanUuidIsNotNull() {
+            addCriterion("activity_plan_uuid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andActivityPlanIdEqualTo(Long value) {
-            return andActivityPlanIdEqualTo(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidEqualTo(String value) {
+            return andActivityPlanUuidEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andActivityPlanIdEqualTo(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("activity_plan_id =", value, "activityPlanId");
+            addCriterion("activity_plan_uuid =", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andActivityPlanIdNotEqualTo(Long value) {
-            return andActivityPlanIdNotEqualTo(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidNotEqualTo(String value) {
+            return andActivityPlanUuidNotEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andActivityPlanIdNotEqualTo(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidNotEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("activity_plan_id <>", value, "activityPlanId");
+            addCriterion("activity_plan_uuid <>", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andActivityPlanIdGreaterThan(Long value) {
-            return andActivityPlanIdGreaterThan(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidGreaterThan(String value) {
+            return andActivityPlanUuidGreaterThan(value, Boolean.TRUE);
         }
 
-        public Criteria andActivityPlanIdGreaterThan(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidGreaterThan(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("activity_plan_id >", value, "activityPlanId");
+            addCriterion("activity_plan_uuid >", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andActivityPlanIdGreaterThanOrEqualTo(Long value) {
-            return andActivityPlanIdGreaterThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidGreaterThanOrEqualTo(String value) {
+            return andActivityPlanUuidGreaterThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andActivityPlanIdGreaterThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidGreaterThanOrEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("activity_plan_id >=", value, "activityPlanId");
+            addCriterion("activity_plan_uuid >=", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andActivityPlanIdLessThan(Long value) {
-            return andActivityPlanIdLessThan(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidLessThan(String value) {
+            return andActivityPlanUuidLessThan(value, Boolean.TRUE);
         }
 
-        public Criteria andActivityPlanIdLessThan(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidLessThan(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("activity_plan_id <", value, "activityPlanId");
+            addCriterion("activity_plan_uuid <", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andActivityPlanIdLessThanOrEqualTo(Long value) {
-            return andActivityPlanIdLessThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidLessThanOrEqualTo(String value) {
+            return andActivityPlanUuidLessThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andActivityPlanIdLessThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidLessThanOrEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("activity_plan_id <=", value, "activityPlanId");
+            addCriterion("activity_plan_uuid <=", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andActivityPlanIdIn(Collection<Long> values) {
-            addCriterion("activity_plan_id in", values, "activityPlanId");
-            return (Criteria) this;
+        public Criteria andActivityPlanUuidLike(String value) {
+            return andActivityPlanUuidLike(value, Boolean.TRUE);
         }
 
-        public Criteria andActivityPlanIdNotIn(Collection<Long> values) {
-            addCriterion("activity_plan_id not in", values, "activityPlanId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityPlanIdBetween(Long value1, Long value2) {
-            addCriterion("activity_plan_id between", value1, value2, "activityPlanId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityPlanIdNotBetween(Long value1, Long value2) {
-            addCriterion("activity_plan_id not between", value1, value2, "activityPlanId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAllocationIdIsNull() {
-            addCriterion("allocation_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAllocationIdIsNotNull() {
-            addCriterion("allocation_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAllocationIdEqualTo(Long value) {
-            return andAllocationIdEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andAllocationIdEqualTo(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidLike(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("allocation_id =", value, "allocationId");
+            addCriterion("activity_plan_uuid like", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andAllocationIdNotEqualTo(Long value) {
-            return andAllocationIdNotEqualTo(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidLikeLeft(String value) {
+            return andActivityPlanUuidLikeLeft(value, Boolean.TRUE);
         }
 
-        public Criteria andAllocationIdNotEqualTo(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidLikeLeft(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("allocation_id <>", value, "allocationId");
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("activity_plan_uuid like", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andAllocationIdGreaterThan(Long value) {
-            return andAllocationIdGreaterThan(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidLikeRight(String value) {
+            return andActivityPlanUuidLikeRight(value, Boolean.TRUE);
         }
 
-        public Criteria andAllocationIdGreaterThan(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidLikeRight(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("allocation_id >", value, "allocationId");
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("activity_plan_uuid like", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andAllocationIdGreaterThanOrEqualTo(Long value) {
-            return andAllocationIdGreaterThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidLikeBoth(String value) {
+            return andActivityPlanUuidLikeBoth(value, Boolean.TRUE);
         }
 
-        public Criteria andAllocationIdGreaterThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidLikeBoth(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("allocation_id >=", value, "allocationId");
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("activity_plan_uuid like", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andAllocationIdLessThan(Long value) {
-            return andAllocationIdLessThan(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidNotLike(String value) {
+            return andActivityPlanUuidNotLike(value, Boolean.TRUE);
         }
 
-        public Criteria andAllocationIdLessThan(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidNotLike(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("allocation_id <", value, "allocationId");
+            addCriterion("activity_plan_uuid not like", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andAllocationIdLessThanOrEqualTo(Long value) {
-            return andAllocationIdLessThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andActivityPlanUuidNotLikeLeft(String value) {
+            return andActivityPlanUuidNotLikeLeft(value, Boolean.TRUE);
         }
 
-        public Criteria andAllocationIdLessThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andActivityPlanUuidNotLikeLeft(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("allocation_id <=", value, "allocationId");
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("activity_plan_uuid not like", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andAllocationIdIn(Collection<Long> values) {
-            addCriterion("allocation_id in", values, "allocationId");
+        public Criteria andActivityPlanUuidNotLikeRight(String value) {
+            return andActivityPlanUuidNotLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andActivityPlanUuidNotLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("activity_plan_uuid not like", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andAllocationIdNotIn(Collection<Long> values) {
-            addCriterion("allocation_id not in", values, "allocationId");
+        public Criteria andActivityPlanUuidNotLikeBoth(String value) {
+            return andActivityPlanUuidNotLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andActivityPlanUuidNotLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("activity_plan_uuid not like", value, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andAllocationIdBetween(Long value1, Long value2) {
-            addCriterion("allocation_id between", value1, value2, "allocationId");
+        public Criteria andActivityPlanUuidIn(Collection<String> values) {
+            addCriterion("activity_plan_uuid in", values, "activityPlanUuid");
             return (Criteria) this;
         }
 
-        public Criteria andAllocationIdNotBetween(Long value1, Long value2) {
-            addCriterion("allocation_id not between", value1, value2, "allocationId");
+        public Criteria andActivityPlanUuidNotIn(Collection<String> values) {
+            addCriterion("activity_plan_uuid not in", values, "activityPlanUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityPlanUuidBetween(String value1, String value2) {
+            addCriterion("activity_plan_uuid between", value1, value2, "activityPlanUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityPlanUuidNotBetween(String value1, String value2) {
+            addCriterion("activity_plan_uuid not between", value1, value2, "activityPlanUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidIsNull() {
+            addCriterion("allocation_uuid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidIsNotNull() {
+            addCriterion("allocation_uuid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidEqualTo(String value) {
+            return andAllocationUuidEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("allocation_uuid =", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidNotEqualTo(String value) {
+            return andAllocationUuidNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidNotEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("allocation_uuid <>", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidGreaterThan(String value) {
+            return andAllocationUuidGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidGreaterThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("allocation_uuid >", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidGreaterThanOrEqualTo(String value) {
+            return andAllocationUuidGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidGreaterThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("allocation_uuid >=", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidLessThan(String value) {
+            return andAllocationUuidLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidLessThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("allocation_uuid <", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidLessThanOrEqualTo(String value) {
+            return andAllocationUuidLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidLessThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("allocation_uuid <=", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidLike(String value) {
+            return andAllocationUuidLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("allocation_uuid like", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidLikeLeft(String value) {
+            return andAllocationUuidLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("allocation_uuid like", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidLikeRight(String value) {
+            return andAllocationUuidLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("allocation_uuid like", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidLikeBoth(String value) {
+            return andAllocationUuidLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("allocation_uuid like", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidNotLike(String value) {
+            return andAllocationUuidNotLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidNotLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("allocation_uuid not like", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidNotLikeLeft(String value) {
+            return andAllocationUuidNotLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidNotLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("allocation_uuid not like", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidNotLikeRight(String value) {
+            return andAllocationUuidNotLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidNotLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("allocation_uuid not like", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidNotLikeBoth(String value) {
+            return andAllocationUuidNotLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andAllocationUuidNotLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("allocation_uuid not like", value, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidIn(Collection<String> values) {
+            addCriterion("allocation_uuid in", values, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidNotIn(Collection<String> values) {
+            addCriterion("allocation_uuid not in", values, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidBetween(String value1, String value2) {
+            addCriterion("allocation_uuid between", value1, value2, "allocationUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllocationUuidNotBetween(String value1, String value2) {
+            addCriterion("allocation_uuid not between", value1, value2, "allocationUuid");
             return (Criteria) this;
         }
 

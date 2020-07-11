@@ -15,11 +15,25 @@ public class DrawRecord implements Serializable {
     private Long id;
 
     /**
-     * column-name:donatory_id
+     * column-name:uuid
+     * 多链ID身份
+     */
+    @Schema(description = "多链ID身份")
+    private String uuid;
+
+    /**
+     * column-name:activity_uuid
+     * 活动ID
+     */
+    @Schema(description = "活动ID")
+    private String activityUuid;
+
+    /**
+     * column-name:donatory_uuid
      * 受赠人ID
      */
     @Schema(description = "受赠人ID")
-    private Long donatoryId;
+    private String donatoryUuid;
 
     /**
      * column-name:type
@@ -89,7 +103,9 @@ public class DrawRecord implements Serializable {
      */
     private DrawRecord(XBuilder builder) {
         this.id = builder.id;
-        this.donatoryId = builder.donatoryId;
+        this.uuid = builder.uuid;
+        this.activityUuid = builder.activityUuid;
+        this.donatoryUuid = builder.donatoryUuid;
         this.type = builder.type;
         this.unit = builder.unit;
         this.quantity = builder.quantity;
@@ -119,17 +135,45 @@ public class DrawRecord implements Serializable {
     }
 
     /**
-     * 受赠人ID
+     * 多链ID身份
      */
-    public Long getDonatoryId() {
-        return donatoryId;
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * 多链ID身份
+     */
+    public void setUuid(String uuid) {
+        this.uuid = uuid == null ? null : uuid.trim();
+    }
+
+    /**
+     * 活动ID
+     */
+    public String getActivityUuid() {
+        return activityUuid;
+    }
+
+    /**
+     * 活动ID
+     */
+    public void setActivityUuid(String activityUuid) {
+        this.activityUuid = activityUuid == null ? null : activityUuid.trim();
     }
 
     /**
      * 受赠人ID
      */
-    public void setDonatoryId(Long donatoryId) {
-        this.donatoryId = donatoryId;
+    public String getDonatoryUuid() {
+        return donatoryUuid;
+    }
+
+    /**
+     * 受赠人ID
+     */
+    public void setDonatoryUuid(String donatoryUuid) {
+        this.donatoryUuid = donatoryUuid == null ? null : donatoryUuid.trim();
     }
 
     /**
@@ -246,7 +290,9 @@ public class DrawRecord implements Serializable {
 
     public DrawRecord copyFrom(DrawRecord other) {
         this.id = other.id;
-        this.donatoryId = other.donatoryId;
+        this.uuid = other.uuid;
+        this.activityUuid = other.activityUuid;
+        this.donatoryUuid = other.donatoryUuid;
         this.type = other.type;
         this.unit = other.unit;
         this.quantity = other.quantity;
@@ -263,7 +309,9 @@ public class DrawRecord implements Serializable {
             throw new RuntimeException("`to` must not be null");
         }
         to.setId(from.id);
-        to.setDonatoryId(from.donatoryId);
+        to.setUuid(from.uuid);
+        to.setActivityUuid(from.activityUuid);
+        to.setDonatoryUuid(from.donatoryUuid);
         to.setType(from.type);
         to.setUnit(from.unit);
         to.setQuantity(from.quantity);
@@ -279,7 +327,9 @@ public class DrawRecord implements Serializable {
         /*
         {
             id: '',
-            donatoryId: '',
+            uuid: '',
+            activityUuid: '',
+            donatoryUuid: '',
             type: '',
             unit: '',
             quantity: '',
@@ -291,7 +341,7 @@ public class DrawRecord implements Serializable {
         }
         */
         
-        return "{\"id\": \"\",\"donatoryId\": \"\",\"type\": \"\",\"unit\": \"\",\"quantity\": \"\",\"name\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"uuid\": \"\",\"activityUuid\": \"\",\"donatoryUuid\": \"\",\"type\": \"\",\"unit\": \"\",\"quantity\": \"\",\"name\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -301,7 +351,9 @@ public class DrawRecord implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", donatoryId=").append(donatoryId);
+        sb.append(", uuid=").append(uuid);
+        sb.append(", activityUuid=").append(activityUuid);
+        sb.append(", donatoryUuid=").append(donatoryUuid);
         sb.append(", type=").append(type);
         sb.append(", unit=").append(unit);
         sb.append(", quantity=").append(quantity);
@@ -322,9 +374,19 @@ public class DrawRecord implements Serializable {
         private Long id;
 
         /**
+         * 多链ID身份
+         */
+        private String uuid;
+
+        /**
+         * 活动ID
+         */
+        private String activityUuid;
+
+        /**
          * 受赠人ID
          */
-        private Long donatoryId;
+        private String donatoryUuid;
 
         /**
          * 捐赠类别, 1-钱，2-物
@@ -379,10 +441,26 @@ public class DrawRecord implements Serializable {
         }
 
         /**
+         * 多链ID身份
+         */
+        public XBuilder uuid(String uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
+        /**
+         * 活动ID
+         */
+        public XBuilder activityUuid(String activityUuid) {
+            this.activityUuid = activityUuid;
+            return this;
+        }
+
+        /**
          * 受赠人ID
          */
-        public XBuilder donatoryId(Long donatoryId) {
-            this.donatoryId = donatoryId;
+        public XBuilder donatoryUuid(String donatoryUuid) {
+            this.donatoryUuid = donatoryUuid;
             return this;
         }
 

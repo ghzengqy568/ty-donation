@@ -14,7 +14,7 @@ public class SignUtils {
 
         StringBuilder sb = new StringBuilder();
         for (Object f : field) {
-            sb.append(f == null ? "null" : f.toString());
+            sb.append(f == null ? "null" : f.toString()).append(":");
         }
         return DigestUtils.md5DigestAsHex(sb.toString().getBytes());
     }

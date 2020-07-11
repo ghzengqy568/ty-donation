@@ -3,7 +3,8 @@ package com.baidu.mapp.bcd.domain.meta;
 /*
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
-       @Result(property = "donateDetailId", column = "donate_detail_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
+       @Result(property = "uuid", column = "uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "donateDetailUuid", column = "donate_detail_uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "used", column = "used", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "balance", column = "balance", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "certCode", column = "cert_code", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
@@ -33,17 +34,30 @@ public final class MetaAllocation {
     public static final String IS_KEY_ID = "true";
 
     /**
+     * 多链ID身份
+     */
+    public static final String UUID = "uuid";
+
+    public static final String COLUMN_NAME_UUID = "`uuid`";
+
+    public static final String JAVA_TYPE_UUID = "java.lang.String";
+
+    public static final String JDBC_TYPE_UUID = "VARCHAR";
+
+    public static final String IS_KEY_UUID = "false";
+
+    /**
      * 捐款明细ID
      */
-    public static final String DONATEDETAILID = "donateDetailId";
+    public static final String DONATEDETAILUUID = "donateDetailUuid";
 
-    public static final String COLUMN_NAME_DONATEDETAILID = "`donate_detail_id`";
+    public static final String COLUMN_NAME_DONATEDETAILUUID = "`donate_detail_uuid`";
 
-    public static final String JAVA_TYPE_DONATEDETAILID = "java.lang.Long";
+    public static final String JAVA_TYPE_DONATEDETAILUUID = "java.lang.String";
 
-    public static final String JDBC_TYPE_DONATEDETAILID = "BIGINT";
+    public static final String JDBC_TYPE_DONATEDETAILUUID = "VARCHAR";
 
-    public static final String IS_KEY_DONATEDETAILID = "false";
+    public static final String IS_KEY_DONATEDETAILUUID = "false";
 
     /**
      * 用量
@@ -140,8 +154,11 @@ public final class MetaAllocation {
         if (columnName.equals(COLUMN_NAME_ID)) {
             return ID;
         }
-        if (columnName.equals(COLUMN_NAME_DONATEDETAILID)) {
-            return DONATEDETAILID;
+        if (columnName.equals(COLUMN_NAME_UUID)) {
+            return UUID;
+        }
+        if (columnName.equals(COLUMN_NAME_DONATEDETAILUUID)) {
+            return DONATEDETAILUUID;
         }
         if (columnName.equals(COLUMN_NAME_USED)) {
             return USED;
@@ -178,8 +195,11 @@ public final class MetaAllocation {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID;
         }
-        if (fieldName.equals(DONATEDETAILID)) {
-            return COLUMN_NAME_DONATEDETAILID;
+        if (fieldName.equals(UUID)) {
+            return COLUMN_NAME_UUID;
+        }
+        if (fieldName.equals(DONATEDETAILUUID)) {
+            return COLUMN_NAME_DONATEDETAILUUID;
         }
         if (fieldName.equals(USED)) {
             return COLUMN_NAME_USED;
@@ -216,8 +236,11 @@ public final class MetaAllocation {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID.replace("`", "");
         }
-        if (fieldName.equals(DONATEDETAILID)) {
-            return COLUMN_NAME_DONATEDETAILID.replace("`", "");
+        if (fieldName.equals(UUID)) {
+            return COLUMN_NAME_UUID.replace("`", "");
+        }
+        if (fieldName.equals(DONATEDETAILUUID)) {
+            return COLUMN_NAME_DONATEDETAILUUID.replace("`", "");
         }
         if (fieldName.equals(USED)) {
             return COLUMN_NAME_USED.replace("`", "");

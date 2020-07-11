@@ -3,12 +3,14 @@
 <mapper namespace="com.baidu.mapp.bcd.dao.ActivityMapper">
   <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.Activity">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
     <result column="theme" jdbcType="VARCHAR" property="theme" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
     <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
   </resultMap>
@@ -71,7 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, theme, description, start_time, end_time, cert_code, sign, create_time, last_modify_time
+    id, uuid, theme, description, start_time, end_time, cert_code, sign, status, create_time, 
+    last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.ActivityExample" resultMap="BaseResultMap">
     select
@@ -121,12 +124,14 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_activity (theme, description, start_time, 
-      end_time, cert_code, sign, 
-      create_time, last_modify_time)
-    values (#{theme,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP})
+    insert into t_activity (uuid, theme, description, 
+      start_time, end_time, cert_code, 
+      sign, status, create_time, 
+      last_modify_time)
+    values (#{uuid,jdbcType=VARCHAR}, #{theme,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{certCode,jdbcType=VARCHAR}, 
+      #{sign,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.Activity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -134,6 +139,9 @@
     </selectKey>
     insert into t_activity
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
       <if test="theme != null">
         theme,
       </if>
@@ -152,6 +160,9 @@
       <if test="sign != null">
         sign,
       </if>
+      <if test="status != null">
+        status,
+      </if>
       <if test="createTime != null">
         create_time,
       </if>
@@ -160,6 +171,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="theme != null">
         #{theme,jdbcType=VARCHAR},
       </if>
@@ -177,6 +191,9 @@
       </if>
       <if test="sign != null">
         #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -198,6 +215,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.uuid != null">
+        uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
       <if test="record.theme != null">
         theme = #{record.theme,jdbcType=VARCHAR},
       </if>
@@ -216,6 +236,9 @@
       <if test="record.sign != null">
         sign = #{record.sign,jdbcType=VARCHAR},
       </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -230,12 +253,14 @@
   <update id="updateByExample" parameterType="map">
     update t_activity
     set id = #{record.id,jdbcType=BIGINT},
+      uuid = #{record.uuid,jdbcType=VARCHAR},
       theme = #{record.theme,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       cert_code = #{record.certCode,jdbcType=VARCHAR},
       sign = #{record.sign,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -245,6 +270,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.Activity">
     update t_activity
     <set>
+      <if test="uuid != null">
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="theme != null">
         theme = #{theme,jdbcType=VARCHAR},
       </if>
@@ -263,6 +291,9 @@
       <if test="sign != null">
         sign = #{sign,jdbcType=VARCHAR},
       </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -274,12 +305,14 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.Activity">
     update t_activity
-    set theme = #{theme,jdbcType=VARCHAR},
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      theme = #{theme,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       cert_code = #{certCode,jdbcType=VARCHAR},
       sign = #{sign,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

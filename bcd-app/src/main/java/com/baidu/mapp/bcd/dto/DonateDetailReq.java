@@ -10,11 +10,8 @@ import lombok.Data;
 @Schema(description = "捐赠明细")
 public class DonateDetailReq {
 
-    /**
-     * 捐赠明细ID
-     */
-    @Schema(description = "捐赠明细ID")
-    private Long id;
+    @Schema(description = "流水uuid", hidden = true)
+    private String uuid;
 
     /**
      * 捐赠类别, 1-钱，2-物

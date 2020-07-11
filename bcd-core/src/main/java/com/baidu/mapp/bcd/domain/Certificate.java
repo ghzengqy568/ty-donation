@@ -36,6 +36,13 @@ public class Certificate implements Serializable {
     private String sourceTable;
 
     /**
+     * column-name:uuid
+     * 多链ID身份
+     */
+    @Schema(description = "多链ID身份")
+    private String uuid;
+
+    /**
      * column-name:source_id
      * 存证来源表ID
      */
@@ -71,6 +78,7 @@ public class Certificate implements Serializable {
         this.certCode = builder.certCode;
         this.certTime = builder.certTime;
         this.sourceTable = builder.sourceTable;
+        this.uuid = builder.uuid;
         this.sourceId = builder.sourceId;
         this.createTime = builder.createTime;
         this.lastModifyTime = builder.lastModifyTime;
@@ -137,6 +145,20 @@ public class Certificate implements Serializable {
     }
 
     /**
+     * 多链ID身份
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * 多链ID身份
+     */
+    public void setUuid(String uuid) {
+        this.uuid = uuid == null ? null : uuid.trim();
+    }
+
+    /**
      * 存证来源表ID
      */
     public Long getSourceId() {
@@ -183,6 +205,7 @@ public class Certificate implements Serializable {
         this.certCode = other.certCode;
         this.certTime = other.certTime;
         this.sourceTable = other.sourceTable;
+        this.uuid = other.uuid;
         this.sourceId = other.sourceId;
         this.createTime = other.createTime;
         this.lastModifyTime = other.lastModifyTime;
@@ -197,6 +220,7 @@ public class Certificate implements Serializable {
         to.setCertCode(from.certCode);
         to.setCertTime(from.certTime);
         to.setSourceTable(from.sourceTable);
+        to.setUuid(from.uuid);
         to.setSourceId(from.sourceId);
         to.setCreateTime(from.createTime);
         to.setLastModifyTime(from.lastModifyTime);
@@ -210,13 +234,14 @@ public class Certificate implements Serializable {
             certCode: '',
             certTime: '',
             sourceTable: '',
+            uuid: '',
             sourceId: '',
             createTime: '',
             lastModifyTime: ''
         }
         */
         
-        return "{\"id\": \"\",\"certCode\": \"\",\"certTime\": \"\",\"sourceTable\": \"\",\"sourceId\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"certCode\": \"\",\"certTime\": \"\",\"sourceTable\": \"\",\"uuid\": \"\",\"sourceId\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -229,6 +254,7 @@ public class Certificate implements Serializable {
         sb.append(", certCode=").append(certCode);
         sb.append(", certTime=").append(certTime);
         sb.append(", sourceTable=").append(sourceTable);
+        sb.append(", uuid=").append(uuid);
         sb.append(", sourceId=").append(sourceId);
         sb.append(", createTime=").append(createTime);
         sb.append(", lastModifyTime=").append(lastModifyTime);
@@ -257,6 +283,11 @@ public class Certificate implements Serializable {
          * 存证来源表名
          */
         private String sourceTable;
+
+        /**
+         * 多链ID身份
+         */
+        private String uuid;
 
         /**
          * 存证来源表ID
@@ -306,6 +337,14 @@ public class Certificate implements Serializable {
          */
         public XBuilder sourceTable(String sourceTable) {
             this.sourceTable = sourceTable;
+            return this;
+        }
+
+        /**
+         * 多链ID身份
+         */
+        public XBuilder uuid(String uuid) {
+            this.uuid = uuid;
             return this;
         }
 

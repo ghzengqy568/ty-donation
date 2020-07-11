@@ -56,10 +56,10 @@ public class ActivityController {
 
         activityService.insertSelective(activity);
 
-        Long activityId = activity.getId();
+        String activityId = activity.getUuid();
         activityPlanReqs.forEach((ActivityPlanReq req) -> {
             ActivityPlan plan = ActivityPlan.newBuilder()
-                    .activityId(activityId)
+                    .activityUuid(activityId)
                     .description(req.getDescription())
                     .type(req.getType())
                     .unit(req.getUnit())
@@ -91,16 +91,16 @@ public class ActivityController {
         List<Activity> activities = activityPagination.getDataList();
         activities.forEach((Activity act) -> {
             Long actId = act.getId();
-
+            String actUuid = act.getUuid();
             List<ActivityPlan> activityPlans =
                     activityPlanService.selectByExample(ActivityPlanExample.newBuilder().build().createCriteria()
-                            .andActivityIdEqualTo(actId).toExample());
+                            .andActivityUuidEqualTo(actUuid).toExample());
             List<ActivityPlanResp> planResps = new ArrayList<>(activityPlans.size());
             if (!CollectionUtils.isEmpty(activityPlans)) {
                 activityPlans.forEach((ActivityPlan p) -> {
                     ActivityPlanResp planResp = ActivityPlanResp.builder()
                             .id(p.getId())
-                            .activityId(p.getActivityId())
+                            .activityId(p.getActivityUuid())
                             .type(p.getType())
                             .unit(p.getUnit())
                             .quantity(p.getQuantity())

@@ -3,7 +3,8 @@
 <mapper namespace="com.baidu.mapp.bcd.dao.AllocationMapper">
   <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.Allocation">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="donate_detail_id" jdbcType="BIGINT" property="donateDetailId" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
+    <result column="donate_detail_uuid" jdbcType="VARCHAR" property="donateDetailUuid" />
     <result column="used" jdbcType="BIGINT" property="used" />
     <result column="balance" jdbcType="BIGINT" property="balance" />
     <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, donate_detail_id, used, balance, cert_code, sign, create_time, last_modify_time
+    id, uuid, donate_detail_uuid, used, balance, cert_code, sign, create_time, last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.AllocationExample" resultMap="BaseResultMap">
     select
@@ -120,12 +121,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_allocation (donate_detail_id, used, balance, 
-      cert_code, sign, create_time, 
-      last_modify_time)
-    values (#{donateDetailId,jdbcType=BIGINT}, #{used,jdbcType=BIGINT}, #{balance,jdbcType=BIGINT}, 
-      #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{lastModifyTime,jdbcType=TIMESTAMP})
+    insert into t_allocation (uuid, donate_detail_uuid, used, 
+      balance, cert_code, sign, 
+      create_time, last_modify_time)
+    values (#{uuid,jdbcType=VARCHAR}, #{donateDetailUuid,jdbcType=VARCHAR}, #{used,jdbcType=BIGINT}, 
+      #{balance,jdbcType=BIGINT}, #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.Allocation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -133,8 +134,11 @@
     </selectKey>
     insert into t_allocation
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="donateDetailId != null">
-        donate_detail_id,
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="donateDetailUuid != null">
+        donate_detail_uuid,
       </if>
       <if test="used != null">
         used,
@@ -156,8 +160,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="donateDetailId != null">
-        #{donateDetailId,jdbcType=BIGINT},
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="donateDetailUuid != null">
+        #{donateDetailUuid,jdbcType=VARCHAR},
       </if>
       <if test="used != null">
         #{used,jdbcType=BIGINT},
@@ -191,8 +198,11 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.donateDetailId != null">
-        donate_detail_id = #{record.donateDetailId,jdbcType=BIGINT},
+      <if test="record.uuid != null">
+        uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.donateDetailUuid != null">
+        donate_detail_uuid = #{record.donateDetailUuid,jdbcType=VARCHAR},
       </if>
       <if test="record.used != null">
         used = #{record.used,jdbcType=BIGINT},
@@ -220,7 +230,8 @@
   <update id="updateByExample" parameterType="map">
     update t_allocation
     set id = #{record.id,jdbcType=BIGINT},
-      donate_detail_id = #{record.donateDetailId,jdbcType=BIGINT},
+      uuid = #{record.uuid,jdbcType=VARCHAR},
+      donate_detail_uuid = #{record.donateDetailUuid,jdbcType=VARCHAR},
       used = #{record.used,jdbcType=BIGINT},
       balance = #{record.balance,jdbcType=BIGINT},
       cert_code = #{record.certCode,jdbcType=VARCHAR},
@@ -234,8 +245,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.Allocation">
     update t_allocation
     <set>
-      <if test="donateDetailId != null">
-        donate_detail_id = #{donateDetailId,jdbcType=BIGINT},
+      <if test="uuid != null">
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="donateDetailUuid != null">
+        donate_detail_uuid = #{donateDetailUuid,jdbcType=VARCHAR},
       </if>
       <if test="used != null">
         used = #{used,jdbcType=BIGINT},
@@ -260,7 +274,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.Allocation">
     update t_allocation
-    set donate_detail_id = #{donateDetailId,jdbcType=BIGINT},
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      donate_detail_uuid = #{donateDetailUuid,jdbcType=VARCHAR},
       used = #{used,jdbcType=BIGINT},
       balance = #{balance,jdbcType=BIGINT},
       cert_code = #{certCode,jdbcType=VARCHAR},

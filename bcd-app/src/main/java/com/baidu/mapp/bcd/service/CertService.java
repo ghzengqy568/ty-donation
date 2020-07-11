@@ -22,23 +22,26 @@ public class CertService {
      *                  领取记录 -> 受捐人ID
      *                  活动，计划，拨款 —> 操作人ID
      * @param tableName
-     * @param id
+     * @param uuid
      * @param sign
      *
      * @return
      */
-    public String writeChain(String userId, String tableName, Long id, String sign) {
+    public String writeChain(String userId, String tableName, String uuid, String sign) {
         // 上链并返回证书
-        String certCode = chain(userId, tableName.concat(":").concat(id.toString()), sign);
+        String certCode = chain(userId, tableName.concat(":").concat(uuid), sign);
         // 记录存证表
         certificateService.insertSelective(Certificate.newBuilder()
                 .certCode(certCode)
                 .certTime(new Date())
                 .lastModifyTime(new Date())
                 .createTime(new Date())
-                .sourceId(id)
+                .uuid(uuid)
                 .sourceTable(tableName)
                 .build());
+
+        // TODO 发布消息 t_certificate_hash(certCode, uuid)
+
         // 返回证书
         return certCode;
     }

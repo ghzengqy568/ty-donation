@@ -3,13 +3,15 @@ package com.baidu.mapp.bcd.domain.meta;
 /*
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
-       @Result(property = "flowId", column = "flow_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
+       @Result(property = "uuid", column = "uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "flowUuid", column = "flow_uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "type", column = "type", javaType = java.lang.Byte.class, jdbcType = JdbcType.TINYINT),
        @Result(property = "unit", column = "unit", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "quantity", column = "quantity", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "name", column = "name", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "certCode", column = "cert_code", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "sign", column = "sign", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "balance", column = "balance", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
 })
@@ -19,7 +21,7 @@ public final class MetaDonateDetail {
     /**
      * 捐赠明细
      */
-    public static final String TABLE_NAME = "t_donate_detail";
+    public static final String TABLE_NAME = "`t_donate_detail`";
 
     /**
      * 捐赠明细ID
@@ -35,17 +37,30 @@ public final class MetaDonateDetail {
     public static final String IS_KEY_ID = "true";
 
     /**
+     * 多链ID身份
+     */
+    public static final String UUID = "uuid";
+
+    public static final String COLUMN_NAME_UUID = "`uuid`";
+
+    public static final String JAVA_TYPE_UUID = "java.lang.String";
+
+    public static final String JDBC_TYPE_UUID = "VARCHAR";
+
+    public static final String IS_KEY_UUID = "false";
+
+    /**
      * 捐赠流水ID
      */
-    public static final String FLOWID = "flowId";
+    public static final String FLOWUUID = "flowUuid";
 
-    public static final String COLUMN_NAME_FLOWID = "`flow_id`";
+    public static final String COLUMN_NAME_FLOWUUID = "`flow_uuid`";
 
-    public static final String JAVA_TYPE_FLOWID = "java.lang.Long";
+    public static final String JAVA_TYPE_FLOWUUID = "java.lang.String";
 
-    public static final String JDBC_TYPE_FLOWID = "BIGINT";
+    public static final String JDBC_TYPE_FLOWUUID = "VARCHAR";
 
-    public static final String IS_KEY_FLOWID = "false";
+    public static final String IS_KEY_FLOWUUID = "false";
 
     /**
      * 捐赠类别, 1-钱，2-物
@@ -126,6 +141,19 @@ public final class MetaDonateDetail {
     public static final String IS_KEY_SIGN = "false";
 
     /**
+     * 余额
+     */
+    public static final String BALANCE = "balance";
+
+    public static final String COLUMN_NAME_BALANCE = "`balance`";
+
+    public static final String JAVA_TYPE_BALANCE = "java.lang.Long";
+
+    public static final String JDBC_TYPE_BALANCE = "BIGINT";
+
+    public static final String IS_KEY_BALANCE = "false";
+
+    /**
      * 创建时间
      */
     public static final String CREATETIME = "createTime";
@@ -168,8 +196,11 @@ public final class MetaDonateDetail {
         if (columnName.equals(COLUMN_NAME_ID)) {
             return ID;
         }
-        if (columnName.equals(COLUMN_NAME_FLOWID)) {
-            return FLOWID;
+        if (columnName.equals(COLUMN_NAME_UUID)) {
+            return UUID;
+        }
+        if (columnName.equals(COLUMN_NAME_FLOWUUID)) {
+            return FLOWUUID;
         }
         if (columnName.equals(COLUMN_NAME_TYPE)) {
             return TYPE;
@@ -188,6 +219,9 @@ public final class MetaDonateDetail {
         }
         if (columnName.equals(COLUMN_NAME_SIGN)) {
             return SIGN;
+        }
+        if (columnName.equals(COLUMN_NAME_BALANCE)) {
+            return BALANCE;
         }
         if (columnName.equals(COLUMN_NAME_CREATETIME)) {
             return CREATETIME;
@@ -212,8 +246,11 @@ public final class MetaDonateDetail {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID;
         }
-        if (fieldName.equals(FLOWID)) {
-            return COLUMN_NAME_FLOWID;
+        if (fieldName.equals(UUID)) {
+            return COLUMN_NAME_UUID;
+        }
+        if (fieldName.equals(FLOWUUID)) {
+            return COLUMN_NAME_FLOWUUID;
         }
         if (fieldName.equals(TYPE)) {
             return COLUMN_NAME_TYPE;
@@ -232,6 +269,9 @@ public final class MetaDonateDetail {
         }
         if (fieldName.equals(SIGN)) {
             return COLUMN_NAME_SIGN;
+        }
+        if (fieldName.equals(BALANCE)) {
+            return COLUMN_NAME_BALANCE;
         }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME;
@@ -256,8 +296,11 @@ public final class MetaDonateDetail {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID.replace("`", "");
         }
-        if (fieldName.equals(FLOWID)) {
-            return COLUMN_NAME_FLOWID.replace("`", "");
+        if (fieldName.equals(UUID)) {
+            return COLUMN_NAME_UUID.replace("`", "");
+        }
+        if (fieldName.equals(FLOWUUID)) {
+            return COLUMN_NAME_FLOWUUID.replace("`", "");
         }
         if (fieldName.equals(TYPE)) {
             return COLUMN_NAME_TYPE.replace("`", "");
@@ -276,6 +319,9 @@ public final class MetaDonateDetail {
         }
         if (fieldName.equals(SIGN)) {
             return COLUMN_NAME_SIGN.replace("`", "");
+        }
+        if (fieldName.equals(BALANCE)) {
+            return COLUMN_NAME_BALANCE.replace("`", "");
         }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME.replace("`", "");

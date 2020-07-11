@@ -3,10 +3,16 @@
 <mapper namespace="com.baidu.mapp.bcd.dao.DonatoryMapper">
   <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.Donatory">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
     <result column="donatory_user_name" jdbcType="VARCHAR" property="donatoryUserName" />
     <result column="donatory_pwd" jdbcType="VARCHAR" property="donatoryPwd" />
     <result column="donatory_name" jdbcType="VARCHAR" property="donatoryName" />
+    <result column="idcard" jdbcType="VARCHAR" property="idcard" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="donatory_card" jdbcType="VARCHAR" property="donatoryCard" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="donatory_level" jdbcType="TINYINT" property="donatoryLevel" />
     <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
     <result column="sign" jdbcType="VARCHAR" property="sign" />
@@ -72,8 +78,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, donatory_user_name, donatory_pwd, donatory_name, donatory_card, donatory_level, 
-    cert_code, sign, create_time, last_modify_time
+    id, uuid, donatory_user_name, donatory_pwd, donatory_name, idcard, mobile, donatory_card, 
+    province, city, address, donatory_level, cert_code, sign, create_time, last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.DonatoryExample" resultMap="BaseResultMap">
     select
@@ -123,12 +129,16 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_donatory (donatory_user_name, donatory_pwd, donatory_name, 
-      donatory_card, donatory_level, cert_code, 
+    insert into t_donatory (uuid, donatory_user_name, donatory_pwd, 
+      donatory_name, idcard, mobile, 
+      donatory_card, province, city, 
+      address, donatory_level, cert_code, 
       sign, create_time, last_modify_time
       )
-    values (#{donatoryUserName,jdbcType=VARCHAR}, #{donatoryPwd,jdbcType=VARCHAR}, #{donatoryName,jdbcType=VARCHAR}, 
-      #{donatoryCard,jdbcType=VARCHAR}, #{donatoryLevel,jdbcType=TINYINT}, #{certCode,jdbcType=VARCHAR}, 
+    values (#{uuid,jdbcType=VARCHAR}, #{donatoryUserName,jdbcType=VARCHAR}, #{donatoryPwd,jdbcType=VARCHAR}, 
+      #{donatoryName,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{donatoryCard,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{donatoryLevel,jdbcType=TINYINT}, #{certCode,jdbcType=VARCHAR}, 
       #{sign,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -138,6 +148,9 @@
     </selectKey>
     insert into t_donatory
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
       <if test="donatoryUserName != null">
         donatory_user_name,
       </if>
@@ -147,8 +160,23 @@
       <if test="donatoryName != null">
         donatory_name,
       </if>
+      <if test="idcard != null">
+        idcard,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
       <if test="donatoryCard != null">
         donatory_card,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="address != null">
+        address,
       </if>
       <if test="donatoryLevel != null">
         donatory_level,
@@ -167,6 +195,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="donatoryUserName != null">
         #{donatoryUserName,jdbcType=VARCHAR},
       </if>
@@ -176,8 +207,23 @@
       <if test="donatoryName != null">
         #{donatoryName,jdbcType=VARCHAR},
       </if>
+      <if test="idcard != null">
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
       <if test="donatoryCard != null">
         #{donatoryCard,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
       <if test="donatoryLevel != null">
         #{donatoryLevel,jdbcType=TINYINT},
@@ -208,6 +254,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.uuid != null">
+        uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
       <if test="record.donatoryUserName != null">
         donatory_user_name = #{record.donatoryUserName,jdbcType=VARCHAR},
       </if>
@@ -217,8 +266,23 @@
       <if test="record.donatoryName != null">
         donatory_name = #{record.donatoryName,jdbcType=VARCHAR},
       </if>
+      <if test="record.idcard != null">
+        idcard = #{record.idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null">
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
       <if test="record.donatoryCard != null">
         donatory_card = #{record.donatoryCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null">
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
       </if>
       <if test="record.donatoryLevel != null">
         donatory_level = #{record.donatoryLevel,jdbcType=TINYINT},
@@ -243,10 +307,16 @@
   <update id="updateByExample" parameterType="map">
     update t_donatory
     set id = #{record.id,jdbcType=BIGINT},
+      uuid = #{record.uuid,jdbcType=VARCHAR},
       donatory_user_name = #{record.donatoryUserName,jdbcType=VARCHAR},
       donatory_pwd = #{record.donatoryPwd,jdbcType=VARCHAR},
       donatory_name = #{record.donatoryName,jdbcType=VARCHAR},
+      idcard = #{record.idcard,jdbcType=VARCHAR},
+      mobile = #{record.mobile,jdbcType=VARCHAR},
       donatory_card = #{record.donatoryCard,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
       donatory_level = #{record.donatoryLevel,jdbcType=TINYINT},
       cert_code = #{record.certCode,jdbcType=VARCHAR},
       sign = #{record.sign,jdbcType=VARCHAR},
@@ -259,6 +329,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.Donatory">
     update t_donatory
     <set>
+      <if test="uuid != null">
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="donatoryUserName != null">
         donatory_user_name = #{donatoryUserName,jdbcType=VARCHAR},
       </if>
@@ -268,8 +341,23 @@
       <if test="donatoryName != null">
         donatory_name = #{donatoryName,jdbcType=VARCHAR},
       </if>
+      <if test="idcard != null">
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
       <if test="donatoryCard != null">
         donatory_card = #{donatoryCard,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
       </if>
       <if test="donatoryLevel != null">
         donatory_level = #{donatoryLevel,jdbcType=TINYINT},
@@ -291,10 +379,16 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.Donatory">
     update t_donatory
-    set donatory_user_name = #{donatoryUserName,jdbcType=VARCHAR},
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      donatory_user_name = #{donatoryUserName,jdbcType=VARCHAR},
       donatory_pwd = #{donatoryPwd,jdbcType=VARCHAR},
       donatory_name = #{donatoryName,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
       donatory_card = #{donatoryCard,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
       donatory_level = #{donatoryLevel,jdbcType=TINYINT},
       cert_code = #{certCode,jdbcType=VARCHAR},
       sign = #{sign,jdbcType=VARCHAR},

@@ -208,105 +208,447 @@ public class DonateDetailExample extends BaseExample {
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdIsNull() {
-            addCriterion("flow_id is null");
+        public Criteria andUuidIsNull() {
+            addCriterion("uuid is null");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdIsNotNull() {
-            addCriterion("flow_id is not null");
+        public Criteria andUuidIsNotNull() {
+            addCriterion("uuid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdEqualTo(Long value) {
-            return andFlowIdEqualTo(value, Boolean.TRUE);
+        public Criteria andUuidEqualTo(String value) {
+            return andUuidEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andFlowIdEqualTo(Long value, Boolean condition) {
+        public Criteria andUuidEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("flow_id =", value, "flowId");
+            addCriterion("uuid =", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdNotEqualTo(Long value) {
-            return andFlowIdNotEqualTo(value, Boolean.TRUE);
+        public Criteria andUuidNotEqualTo(String value) {
+            return andUuidNotEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andFlowIdNotEqualTo(Long value, Boolean condition) {
+        public Criteria andUuidNotEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("flow_id <>", value, "flowId");
+            addCriterion("uuid <>", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdGreaterThan(Long value) {
-            return andFlowIdGreaterThan(value, Boolean.TRUE);
+        public Criteria andUuidGreaterThan(String value) {
+            return andUuidGreaterThan(value, Boolean.TRUE);
         }
 
-        public Criteria andFlowIdGreaterThan(Long value, Boolean condition) {
+        public Criteria andUuidGreaterThan(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("flow_id >", value, "flowId");
+            addCriterion("uuid >", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdGreaterThanOrEqualTo(Long value) {
-            return andFlowIdGreaterThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andUuidGreaterThanOrEqualTo(String value) {
+            return andUuidGreaterThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andFlowIdGreaterThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andUuidGreaterThanOrEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("flow_id >=", value, "flowId");
+            addCriterion("uuid >=", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdLessThan(Long value) {
-            return andFlowIdLessThan(value, Boolean.TRUE);
+        public Criteria andUuidLessThan(String value) {
+            return andUuidLessThan(value, Boolean.TRUE);
         }
 
-        public Criteria andFlowIdLessThan(Long value, Boolean condition) {
+        public Criteria andUuidLessThan(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("flow_id <", value, "flowId");
+            addCriterion("uuid <", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdLessThanOrEqualTo(Long value) {
-            return andFlowIdLessThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andUuidLessThanOrEqualTo(String value) {
+            return andUuidLessThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andFlowIdLessThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andUuidLessThanOrEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("flow_id <=", value, "flowId");
+            addCriterion("uuid <=", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdIn(Collection<Long> values) {
-            addCriterion("flow_id in", values, "flowId");
+        public Criteria andUuidLike(String value) {
+            return andUuidLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("uuid like", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdNotIn(Collection<Long> values) {
-            addCriterion("flow_id not in", values, "flowId");
+        public Criteria andUuidLikeLeft(String value) {
+            return andUuidLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("uuid like", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdBetween(Long value1, Long value2) {
-            addCriterion("flow_id between", value1, value2, "flowId");
+        public Criteria andUuidLikeRight(String value) {
+            return andUuidLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("uuid like", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdNotBetween(Long value1, Long value2) {
-            addCriterion("flow_id not between", value1, value2, "flowId");
+        public Criteria andUuidLikeBoth(String value) {
+            return andUuidLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("uuid like", value, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotLike(String value) {
+            return andUuidNotLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidNotLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("uuid not like", value, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotLikeLeft(String value) {
+            return andUuidNotLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidNotLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("uuid not like", value, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotLikeRight(String value) {
+            return andUuidNotLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidNotLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("uuid not like", value, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotLikeBoth(String value) {
+            return andUuidNotLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidNotLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("uuid not like", value, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidIn(Collection<String> values) {
+            addCriterion("uuid in", values, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotIn(Collection<String> values) {
+            addCriterion("uuid not in", values, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidBetween(String value1, String value2) {
+            addCriterion("uuid between", value1, value2, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotBetween(String value1, String value2) {
+            addCriterion("uuid not between", value1, value2, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidIsNull() {
+            addCriterion("flow_uuid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidIsNotNull() {
+            addCriterion("flow_uuid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidEqualTo(String value) {
+            return andFlowUuidEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("flow_uuid =", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidNotEqualTo(String value) {
+            return andFlowUuidNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidNotEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("flow_uuid <>", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidGreaterThan(String value) {
+            return andFlowUuidGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidGreaterThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("flow_uuid >", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidGreaterThanOrEqualTo(String value) {
+            return andFlowUuidGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidGreaterThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("flow_uuid >=", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidLessThan(String value) {
+            return andFlowUuidLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidLessThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("flow_uuid <", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidLessThanOrEqualTo(String value) {
+            return andFlowUuidLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidLessThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("flow_uuid <=", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidLike(String value) {
+            return andFlowUuidLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("flow_uuid like", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidLikeLeft(String value) {
+            return andFlowUuidLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("flow_uuid like", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidLikeRight(String value) {
+            return andFlowUuidLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("flow_uuid like", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidLikeBoth(String value) {
+            return andFlowUuidLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("flow_uuid like", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidNotLike(String value) {
+            return andFlowUuidNotLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidNotLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("flow_uuid not like", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidNotLikeLeft(String value) {
+            return andFlowUuidNotLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidNotLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("flow_uuid not like", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidNotLikeRight(String value) {
+            return andFlowUuidNotLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidNotLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("flow_uuid not like", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidNotLikeBoth(String value) {
+            return andFlowUuidNotLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andFlowUuidNotLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("flow_uuid not like", value, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidIn(Collection<String> values) {
+            addCriterion("flow_uuid in", values, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidNotIn(Collection<String> values) {
+            addCriterion("flow_uuid not in", values, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidBetween(String value1, String value2) {
+            addCriterion("flow_uuid between", value1, value2, "flowUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowUuidNotBetween(String value1, String value2) {
+            addCriterion("flow_uuid not between", value1, value2, "flowUuid");
             return (Criteria) this;
         }
 
@@ -1399,6 +1741,108 @@ public class DonateDetailExample extends BaseExample {
 
         public Criteria andSignNotBetween(String value1, String value2) {
             addCriterion("sign not between", value1, value2, "sign");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceIsNull() {
+            addCriterion("balance is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceIsNotNull() {
+            addCriterion("balance is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceEqualTo(Long value) {
+            return andBalanceEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance =", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceNotEqualTo(Long value) {
+            return andBalanceNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceNotEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance <>", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceGreaterThan(Long value) {
+            return andBalanceGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceGreaterThan(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance >", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceGreaterThanOrEqualTo(Long value) {
+            return andBalanceGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceGreaterThanOrEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance >=", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceLessThan(Long value) {
+            return andBalanceLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceLessThan(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance <", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceLessThanOrEqualTo(Long value) {
+            return andBalanceLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceLessThanOrEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance <=", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceIn(Collection<Long> values) {
+            addCriterion("balance in", values, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceNotIn(Collection<Long> values) {
+            addCriterion("balance not in", values, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceBetween(Long value1, Long value2) {
+            addCriterion("balance between", value1, value2, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceNotBetween(Long value1, Long value2) {
+            addCriterion("balance not between", value1, value2, "balance");
             return (Criteria) this;
         }
 

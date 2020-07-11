@@ -3,7 +3,8 @@
 <mapper namespace="com.baidu.mapp.bcd.dao.DonateFlowMapper">
   <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.DonateFlow">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="donor_id" jdbcType="BIGINT" property="donorId" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
+    <result column="donor_uuid" jdbcType="VARCHAR" property="donorUuid" />
     <result column="donate_time" jdbcType="TIMESTAMP" property="donateTime" />
     <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
     <result column="sign" jdbcType="VARCHAR" property="sign" />
@@ -69,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, donor_id, donate_time, cert_code, sign, create_time, last_modify_time
+    id, uuid, donor_uuid, donate_time, cert_code, sign, create_time, last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.DonateFlowExample" resultMap="BaseResultMap">
     select
@@ -119,12 +120,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_donate_flow (donor_id, donate_time, cert_code, 
-      sign, create_time, last_modify_time
-      )
-    values (#{donorId,jdbcType=BIGINT}, #{donateTime,jdbcType=TIMESTAMP}, #{certCode,jdbcType=VARCHAR}, 
-      #{sign,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
-      )
+    insert into t_donate_flow (uuid, donor_uuid, donate_time, 
+      cert_code, sign, create_time, 
+      last_modify_time)
+    values (#{uuid,jdbcType=VARCHAR}, #{donorUuid,jdbcType=VARCHAR}, #{donateTime,jdbcType=TIMESTAMP}, 
+      #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.DonateFlow">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -132,8 +133,11 @@
     </selectKey>
     insert into t_donate_flow
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="donorId != null">
-        donor_id,
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="donorUuid != null">
+        donor_uuid,
       </if>
       <if test="donateTime != null">
         donate_time,
@@ -152,8 +156,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="donorId != null">
-        #{donorId,jdbcType=BIGINT},
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="donorUuid != null">
+        #{donorUuid,jdbcType=VARCHAR},
       </if>
       <if test="donateTime != null">
         #{donateTime,jdbcType=TIMESTAMP},
@@ -184,8 +191,11 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.donorId != null">
-        donor_id = #{record.donorId,jdbcType=BIGINT},
+      <if test="record.uuid != null">
+        uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.donorUuid != null">
+        donor_uuid = #{record.donorUuid,jdbcType=VARCHAR},
       </if>
       <if test="record.donateTime != null">
         donate_time = #{record.donateTime,jdbcType=TIMESTAMP},
@@ -210,7 +220,8 @@
   <update id="updateByExample" parameterType="map">
     update t_donate_flow
     set id = #{record.id,jdbcType=BIGINT},
-      donor_id = #{record.donorId,jdbcType=BIGINT},
+      uuid = #{record.uuid,jdbcType=VARCHAR},
+      donor_uuid = #{record.donorUuid,jdbcType=VARCHAR},
       donate_time = #{record.donateTime,jdbcType=TIMESTAMP},
       cert_code = #{record.certCode,jdbcType=VARCHAR},
       sign = #{record.sign,jdbcType=VARCHAR},
@@ -223,8 +234,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.DonateFlow">
     update t_donate_flow
     <set>
-      <if test="donorId != null">
-        donor_id = #{donorId,jdbcType=BIGINT},
+      <if test="uuid != null">
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="donorUuid != null">
+        donor_uuid = #{donorUuid,jdbcType=VARCHAR},
       </if>
       <if test="donateTime != null">
         donate_time = #{donateTime,jdbcType=TIMESTAMP},
@@ -246,7 +260,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.DonateFlow">
     update t_donate_flow
-    set donor_id = #{donorId,jdbcType=BIGINT},
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      donor_uuid = #{donorUuid,jdbcType=VARCHAR},
       donate_time = #{donateTime,jdbcType=TIMESTAMP},
       cert_code = #{certCode,jdbcType=VARCHAR},
       sign = #{sign,jdbcType=VARCHAR},

@@ -31,9 +31,6 @@ public class CrossDomainFilter implements Filter {
         }
         response.addHeader("Access-Control-Allow-Credentials", "true");
         response.addHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-        response.addHeader("Access-Control-Allow-Headers",
-                "x-litemall-admin-token, openid, x-token, Content-Type, Access-Control-Allow-Headers, Authorization, "
-                        + "X-Requested-With, BDUSS, My-Session-Id");
         if (request.getMethod().equals(RequestMethod.OPTIONS.name())) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
             return;

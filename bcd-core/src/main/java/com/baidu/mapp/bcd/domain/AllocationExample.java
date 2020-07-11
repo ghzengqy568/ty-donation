@@ -208,105 +208,447 @@ public class AllocationExample extends BaseExample {
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdIsNull() {
-            addCriterion("donate_detail_id is null");
+        public Criteria andUuidIsNull() {
+            addCriterion("uuid is null");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdIsNotNull() {
-            addCriterion("donate_detail_id is not null");
+        public Criteria andUuidIsNotNull() {
+            addCriterion("uuid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdEqualTo(Long value) {
-            return andDonateDetailIdEqualTo(value, Boolean.TRUE);
+        public Criteria andUuidEqualTo(String value) {
+            return andUuidEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdEqualTo(Long value, Boolean condition) {
+        public Criteria andUuidEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id =", value, "donateDetailId");
+            addCriterion("uuid =", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdNotEqualTo(Long value) {
-            return andDonateDetailIdNotEqualTo(value, Boolean.TRUE);
+        public Criteria andUuidNotEqualTo(String value) {
+            return andUuidNotEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdNotEqualTo(Long value, Boolean condition) {
+        public Criteria andUuidNotEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id <>", value, "donateDetailId");
+            addCriterion("uuid <>", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdGreaterThan(Long value) {
-            return andDonateDetailIdGreaterThan(value, Boolean.TRUE);
+        public Criteria andUuidGreaterThan(String value) {
+            return andUuidGreaterThan(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdGreaterThan(Long value, Boolean condition) {
+        public Criteria andUuidGreaterThan(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id >", value, "donateDetailId");
+            addCriterion("uuid >", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdGreaterThanOrEqualTo(Long value) {
-            return andDonateDetailIdGreaterThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andUuidGreaterThanOrEqualTo(String value) {
+            return andUuidGreaterThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdGreaterThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andUuidGreaterThanOrEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id >=", value, "donateDetailId");
+            addCriterion("uuid >=", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdLessThan(Long value) {
-            return andDonateDetailIdLessThan(value, Boolean.TRUE);
+        public Criteria andUuidLessThan(String value) {
+            return andUuidLessThan(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdLessThan(Long value, Boolean condition) {
+        public Criteria andUuidLessThan(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id <", value, "donateDetailId");
+            addCriterion("uuid <", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdLessThanOrEqualTo(Long value) {
-            return andDonateDetailIdLessThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andUuidLessThanOrEqualTo(String value) {
+            return andUuidLessThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdLessThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andUuidLessThanOrEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id <=", value, "donateDetailId");
+            addCriterion("uuid <=", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdIn(Collection<Long> values) {
-            addCriterion("donate_detail_id in", values, "donateDetailId");
+        public Criteria andUuidLike(String value) {
+            return andUuidLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("uuid like", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdNotIn(Collection<Long> values) {
-            addCriterion("donate_detail_id not in", values, "donateDetailId");
+        public Criteria andUuidLikeLeft(String value) {
+            return andUuidLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("uuid like", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdBetween(Long value1, Long value2) {
-            addCriterion("donate_detail_id between", value1, value2, "donateDetailId");
+        public Criteria andUuidLikeRight(String value) {
+            return andUuidLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("uuid like", value, "uuid");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdNotBetween(Long value1, Long value2) {
-            addCriterion("donate_detail_id not between", value1, value2, "donateDetailId");
+        public Criteria andUuidLikeBoth(String value) {
+            return andUuidLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("uuid like", value, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotLike(String value) {
+            return andUuidNotLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidNotLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("uuid not like", value, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotLikeLeft(String value) {
+            return andUuidNotLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidNotLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("uuid not like", value, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotLikeRight(String value) {
+            return andUuidNotLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidNotLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("uuid not like", value, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotLikeBoth(String value) {
+            return andUuidNotLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andUuidNotLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("uuid not like", value, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidIn(Collection<String> values) {
+            addCriterion("uuid in", values, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotIn(Collection<String> values) {
+            addCriterion("uuid not in", values, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidBetween(String value1, String value2) {
+            addCriterion("uuid between", value1, value2, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUuidNotBetween(String value1, String value2) {
+            addCriterion("uuid not between", value1, value2, "uuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidIsNull() {
+            addCriterion("donate_detail_uuid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidIsNotNull() {
+            addCriterion("donate_detail_uuid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidEqualTo(String value) {
+            return andDonateDetailUuidEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("donate_detail_uuid =", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidNotEqualTo(String value) {
+            return andDonateDetailUuidNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidNotEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("donate_detail_uuid <>", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidGreaterThan(String value) {
+            return andDonateDetailUuidGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidGreaterThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("donate_detail_uuid >", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidGreaterThanOrEqualTo(String value) {
+            return andDonateDetailUuidGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidGreaterThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("donate_detail_uuid >=", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidLessThan(String value) {
+            return andDonateDetailUuidLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidLessThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("donate_detail_uuid <", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidLessThanOrEqualTo(String value) {
+            return andDonateDetailUuidLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidLessThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("donate_detail_uuid <=", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidLike(String value) {
+            return andDonateDetailUuidLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("donate_detail_uuid like", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidLikeLeft(String value) {
+            return andDonateDetailUuidLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("donate_detail_uuid like", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidLikeRight(String value) {
+            return andDonateDetailUuidLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("donate_detail_uuid like", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidLikeBoth(String value) {
+            return andDonateDetailUuidLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("donate_detail_uuid like", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidNotLike(String value) {
+            return andDonateDetailUuidNotLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidNotLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("donate_detail_uuid not like", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidNotLikeLeft(String value) {
+            return andDonateDetailUuidNotLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidNotLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("donate_detail_uuid not like", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidNotLikeRight(String value) {
+            return andDonateDetailUuidNotLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidNotLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("donate_detail_uuid not like", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidNotLikeBoth(String value) {
+            return andDonateDetailUuidNotLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andDonateDetailUuidNotLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("donate_detail_uuid not like", value, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidIn(Collection<String> values) {
+            addCriterion("donate_detail_uuid in", values, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidNotIn(Collection<String> values) {
+            addCriterion("donate_detail_uuid not in", values, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidBetween(String value1, String value2) {
+            addCriterion("donate_detail_uuid between", value1, value2, "donateDetailUuid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDonateDetailUuidNotBetween(String value1, String value2) {
+            addCriterion("donate_detail_uuid not between", value1, value2, "donateDetailUuid");
             return (Criteria) this;
         }
 

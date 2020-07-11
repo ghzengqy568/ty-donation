@@ -3,11 +3,17 @@
 <mapper namespace="com.baidu.mapp.bcd.dao.DonorMapper">
   <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.Donor">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
     <result column="donor_user_name" jdbcType="VARCHAR" property="donorUserName" />
     <result column="donor_pwd" jdbcType="VARCHAR" property="donorPwd" />
     <result column="donor_name" jdbcType="VARCHAR" property="donorName" />
     <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
     <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="idcard" jdbcType="VARCHAR" property="idcard" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
   </resultMap>
@@ -70,7 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, donor_user_name, donor_pwd, donor_name, cert_code, sign, create_time, last_modify_time
+    id, uuid, donor_user_name, donor_pwd, donor_name, cert_code, sign, idcard, mobile, 
+    province, city, address, create_time, last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.DonorExample" resultMap="BaseResultMap">
     select
@@ -120,11 +127,15 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_donor (donor_user_name, donor_pwd, donor_name, 
-      cert_code, sign, create_time, 
+    insert into t_donor (uuid, donor_user_name, donor_pwd, 
+      donor_name, cert_code, sign, 
+      idcard, mobile, province, 
+      city, address, create_time, 
       last_modify_time)
-    values (#{donorUserName,jdbcType=VARCHAR}, #{donorPwd,jdbcType=VARCHAR}, #{donorName,jdbcType=VARCHAR}, 
-      #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{uuid,jdbcType=VARCHAR}, #{donorUserName,jdbcType=VARCHAR}, #{donorPwd,jdbcType=VARCHAR}, 
+      #{donorName,jdbcType=VARCHAR}, #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
+      #{idcard,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.Donor">
@@ -133,6 +144,9 @@
     </selectKey>
     insert into t_donor
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
       <if test="donorUserName != null">
         donor_user_name,
       </if>
@@ -148,6 +162,21 @@
       <if test="sign != null">
         sign,
       </if>
+      <if test="idcard != null">
+        idcard,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
       <if test="createTime != null">
         create_time,
       </if>
@@ -156,6 +185,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="donorUserName != null">
         #{donorUserName,jdbcType=VARCHAR},
       </if>
@@ -170,6 +202,21 @@
       </if>
       <if test="sign != null">
         #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null">
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -191,6 +238,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.uuid != null">
+        uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
       <if test="record.donorUserName != null">
         donor_user_name = #{record.donorUserName,jdbcType=VARCHAR},
       </if>
@@ -206,6 +256,21 @@
       <if test="record.sign != null">
         sign = #{record.sign,jdbcType=VARCHAR},
       </if>
+      <if test="record.idcard != null">
+        idcard = #{record.idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null">
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null">
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -220,11 +285,17 @@
   <update id="updateByExample" parameterType="map">
     update t_donor
     set id = #{record.id,jdbcType=BIGINT},
+      uuid = #{record.uuid,jdbcType=VARCHAR},
       donor_user_name = #{record.donorUserName,jdbcType=VARCHAR},
       donor_pwd = #{record.donorPwd,jdbcType=VARCHAR},
       donor_name = #{record.donorName,jdbcType=VARCHAR},
       cert_code = #{record.certCode,jdbcType=VARCHAR},
       sign = #{record.sign,jdbcType=VARCHAR},
+      idcard = #{record.idcard,jdbcType=VARCHAR},
+      mobile = #{record.mobile,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -234,6 +305,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.Donor">
     update t_donor
     <set>
+      <if test="uuid != null">
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
       <if test="donorUserName != null">
         donor_user_name = #{donorUserName,jdbcType=VARCHAR},
       </if>
@@ -249,6 +323,21 @@
       <if test="sign != null">
         sign = #{sign,jdbcType=VARCHAR},
       </if>
+      <if test="idcard != null">
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -260,11 +349,17 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.Donor">
     update t_donor
-    set donor_user_name = #{donorUserName,jdbcType=VARCHAR},
+    set uuid = #{uuid,jdbcType=VARCHAR},
+      donor_user_name = #{donorUserName,jdbcType=VARCHAR},
       donor_pwd = #{donorPwd,jdbcType=VARCHAR},
       donor_name = #{donorName,jdbcType=VARCHAR},
       cert_code = #{certCode,jdbcType=VARCHAR},
       sign = #{sign,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

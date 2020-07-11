@@ -3,11 +3,17 @@ package com.baidu.mapp.bcd.domain.meta;
 /*
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
+       @Result(property = "uuid", column = "uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "donorUserName", column = "donor_user_name", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "donorPwd", column = "donor_pwd", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "donorName", column = "donor_name", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "certCode", column = "cert_code", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "sign", column = "sign", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "idcard", column = "idcard", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "mobile", column = "mobile", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "province", column = "province", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "city", column = "city", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "address", column = "address", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
 })
@@ -31,6 +37,19 @@ public final class MetaDonor {
     public static final String JDBC_TYPE_ID = "BIGINT";
 
     public static final String IS_KEY_ID = "true";
+
+    /**
+     * 多链ID身份
+     */
+    public static final String UUID = "uuid";
+
+    public static final String COLUMN_NAME_UUID = "`uuid`";
+
+    public static final String JAVA_TYPE_UUID = "java.lang.String";
+
+    public static final String JDBC_TYPE_UUID = "VARCHAR";
+
+    public static final String IS_KEY_UUID = "false";
 
     /**
      * 捐赠人用户ID
@@ -98,6 +117,71 @@ public final class MetaDonor {
     public static final String IS_KEY_SIGN = "false";
 
     /**
+     * 身份证号码，加密存储
+     */
+    public static final String IDCARD = "idcard";
+
+    public static final String COLUMN_NAME_IDCARD = "`idcard`";
+
+    public static final String JAVA_TYPE_IDCARD = "java.lang.String";
+
+    public static final String JDBC_TYPE_IDCARD = "VARCHAR";
+
+    public static final String IS_KEY_IDCARD = "false";
+
+    /**
+     * 手机号，加密存储
+     */
+    public static final String MOBILE = "mobile";
+
+    public static final String COLUMN_NAME_MOBILE = "`mobile`";
+
+    public static final String JAVA_TYPE_MOBILE = "java.lang.String";
+
+    public static final String JDBC_TYPE_MOBILE = "VARCHAR";
+
+    public static final String IS_KEY_MOBILE = "false";
+
+    /**
+     * 省份
+     */
+    public static final String PROVINCE = "province";
+
+    public static final String COLUMN_NAME_PROVINCE = "`province`";
+
+    public static final String JAVA_TYPE_PROVINCE = "java.lang.String";
+
+    public static final String JDBC_TYPE_PROVINCE = "VARCHAR";
+
+    public static final String IS_KEY_PROVINCE = "false";
+
+    /**
+     * 城市
+     */
+    public static final String CITY = "city";
+
+    public static final String COLUMN_NAME_CITY = "`city`";
+
+    public static final String JAVA_TYPE_CITY = "java.lang.String";
+
+    public static final String JDBC_TYPE_CITY = "VARCHAR";
+
+    public static final String IS_KEY_CITY = "false";
+
+    /**
+     * 地址
+     */
+    public static final String ADDRESS = "address";
+
+    public static final String COLUMN_NAME_ADDRESS = "`address`";
+
+    public static final String JAVA_TYPE_ADDRESS = "java.lang.String";
+
+    public static final String JDBC_TYPE_ADDRESS = "VARCHAR";
+
+    public static final String IS_KEY_ADDRESS = "false";
+
+    /**
      * 创建时间
      */
     public static final String CREATETIME = "createTime";
@@ -140,6 +224,9 @@ public final class MetaDonor {
         if (columnName.equals(COLUMN_NAME_ID)) {
             return ID;
         }
+        if (columnName.equals(COLUMN_NAME_UUID)) {
+            return UUID;
+        }
         if (columnName.equals(COLUMN_NAME_DONORUSERNAME)) {
             return DONORUSERNAME;
         }
@@ -154,6 +241,21 @@ public final class MetaDonor {
         }
         if (columnName.equals(COLUMN_NAME_SIGN)) {
             return SIGN;
+        }
+        if (columnName.equals(COLUMN_NAME_IDCARD)) {
+            return IDCARD;
+        }
+        if (columnName.equals(COLUMN_NAME_MOBILE)) {
+            return MOBILE;
+        }
+        if (columnName.equals(COLUMN_NAME_PROVINCE)) {
+            return PROVINCE;
+        }
+        if (columnName.equals(COLUMN_NAME_CITY)) {
+            return CITY;
+        }
+        if (columnName.equals(COLUMN_NAME_ADDRESS)) {
+            return ADDRESS;
         }
         if (columnName.equals(COLUMN_NAME_CREATETIME)) {
             return CREATETIME;
@@ -178,6 +280,9 @@ public final class MetaDonor {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID;
         }
+        if (fieldName.equals(UUID)) {
+            return COLUMN_NAME_UUID;
+        }
         if (fieldName.equals(DONORUSERNAME)) {
             return COLUMN_NAME_DONORUSERNAME;
         }
@@ -192,6 +297,21 @@ public final class MetaDonor {
         }
         if (fieldName.equals(SIGN)) {
             return COLUMN_NAME_SIGN;
+        }
+        if (fieldName.equals(IDCARD)) {
+            return COLUMN_NAME_IDCARD;
+        }
+        if (fieldName.equals(MOBILE)) {
+            return COLUMN_NAME_MOBILE;
+        }
+        if (fieldName.equals(PROVINCE)) {
+            return COLUMN_NAME_PROVINCE;
+        }
+        if (fieldName.equals(CITY)) {
+            return COLUMN_NAME_CITY;
+        }
+        if (fieldName.equals(ADDRESS)) {
+            return COLUMN_NAME_ADDRESS;
         }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME;
@@ -216,6 +336,9 @@ public final class MetaDonor {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID.replace("`", "");
         }
+        if (fieldName.equals(UUID)) {
+            return COLUMN_NAME_UUID.replace("`", "");
+        }
         if (fieldName.equals(DONORUSERNAME)) {
             return COLUMN_NAME_DONORUSERNAME.replace("`", "");
         }
@@ -230,6 +353,21 @@ public final class MetaDonor {
         }
         if (fieldName.equals(SIGN)) {
             return COLUMN_NAME_SIGN.replace("`", "");
+        }
+        if (fieldName.equals(IDCARD)) {
+            return COLUMN_NAME_IDCARD.replace("`", "");
+        }
+        if (fieldName.equals(MOBILE)) {
+            return COLUMN_NAME_MOBILE.replace("`", "");
+        }
+        if (fieldName.equals(PROVINCE)) {
+            return COLUMN_NAME_PROVINCE.replace("`", "");
+        }
+        if (fieldName.equals(CITY)) {
+            return COLUMN_NAME_CITY.replace("`", "");
+        }
+        if (fieldName.equals(ADDRESS)) {
+            return COLUMN_NAME_ADDRESS.replace("`", "");
         }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME.replace("`", "");

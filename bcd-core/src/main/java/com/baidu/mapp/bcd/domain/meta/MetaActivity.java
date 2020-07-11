@@ -3,12 +3,14 @@ package com.baidu.mapp.bcd.domain.meta;
 /*
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
+       @Result(property = "uuid", column = "uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "theme", column = "theme", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "description", column = "description", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "startTime", column = "start_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "endTime", column = "end_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "certCode", column = "cert_code", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "sign", column = "sign", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "status", column = "status", javaType = java.lang.Byte.class, jdbcType = JdbcType.TINYINT),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
 })
@@ -32,6 +34,19 @@ public final class MetaActivity {
     public static final String JDBC_TYPE_ID = "BIGINT";
 
     public static final String IS_KEY_ID = "true";
+
+    /**
+     * 多链ID身份
+     */
+    public static final String UUID = "uuid";
+
+    public static final String COLUMN_NAME_UUID = "`uuid`";
+
+    public static final String JAVA_TYPE_UUID = "java.lang.String";
+
+    public static final String JDBC_TYPE_UUID = "VARCHAR";
+
+    public static final String IS_KEY_UUID = "false";
 
     /**
      * 活动主题
@@ -112,6 +127,19 @@ public final class MetaActivity {
     public static final String IS_KEY_SIGN = "false";
 
     /**
+     * 活动状态， 0-待实施， 1-实施中， 2-实施完成
+     */
+    public static final String STATUS = "status";
+
+    public static final String COLUMN_NAME_STATUS = "`status`";
+
+    public static final String JAVA_TYPE_STATUS = "java.lang.Byte";
+
+    public static final String JDBC_TYPE_STATUS = "TINYINT";
+
+    public static final String IS_KEY_STATUS = "false";
+
+    /**
      * 创建时间
      */
     public static final String CREATETIME = "createTime";
@@ -154,6 +182,9 @@ public final class MetaActivity {
         if (columnName.equals(COLUMN_NAME_ID)) {
             return ID;
         }
+        if (columnName.equals(COLUMN_NAME_UUID)) {
+            return UUID;
+        }
         if (columnName.equals(COLUMN_NAME_THEME)) {
             return THEME;
         }
@@ -171,6 +202,9 @@ public final class MetaActivity {
         }
         if (columnName.equals(COLUMN_NAME_SIGN)) {
             return SIGN;
+        }
+        if (columnName.equals(COLUMN_NAME_STATUS)) {
+            return STATUS;
         }
         if (columnName.equals(COLUMN_NAME_CREATETIME)) {
             return CREATETIME;
@@ -195,6 +229,9 @@ public final class MetaActivity {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID;
         }
+        if (fieldName.equals(UUID)) {
+            return COLUMN_NAME_UUID;
+        }
         if (fieldName.equals(THEME)) {
             return COLUMN_NAME_THEME;
         }
@@ -212,6 +249,9 @@ public final class MetaActivity {
         }
         if (fieldName.equals(SIGN)) {
             return COLUMN_NAME_SIGN;
+        }
+        if (fieldName.equals(STATUS)) {
+            return COLUMN_NAME_STATUS;
         }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME;
@@ -236,6 +276,9 @@ public final class MetaActivity {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID.replace("`", "");
         }
+        if (fieldName.equals(UUID)) {
+            return COLUMN_NAME_UUID.replace("`", "");
+        }
         if (fieldName.equals(THEME)) {
             return COLUMN_NAME_THEME.replace("`", "");
         }
@@ -253,6 +296,9 @@ public final class MetaActivity {
         }
         if (fieldName.equals(SIGN)) {
             return COLUMN_NAME_SIGN.replace("`", "");
+        }
+        if (fieldName.equals(STATUS)) {
+            return COLUMN_NAME_STATUS.replace("`", "");
         }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME.replace("`", "");
