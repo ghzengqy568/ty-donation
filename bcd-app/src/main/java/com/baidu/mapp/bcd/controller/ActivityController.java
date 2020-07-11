@@ -43,11 +43,11 @@ public class ActivityController {
         }
 
         Activity activity = Activity.newBuilder()
-//                .certCode("123")
+                //                .certCode("123")
                 .description(act.getDescription())
                 .createTime(new Date())
                 .endTime(new Date())
-//                .sign("123")
+                //                .sign("123")
                 .lastModifyTime(new Date())
                 .startTime(act.getStartTime())
                 .endTime(act.getEndTime())
@@ -56,10 +56,10 @@ public class ActivityController {
 
         activityService.insertSelective(activity);
 
-        String activityId = activity.getUuid();
+        Long activityId = activity.getId();
         activityPlanReqs.forEach((ActivityPlanReq req) -> {
             ActivityPlan plan = ActivityPlan.newBuilder()
-                    .activityUuid(activityId)
+                    .activityId(activityId)
                     .description(req.getDescription())
                     .type(req.getType())
                     .unit(req.getUnit())
@@ -91,16 +91,16 @@ public class ActivityController {
         List<Activity> activities = activityPagination.getDataList();
         activities.forEach((Activity act) -> {
             Long actId = act.getId();
-            String actUuid = act.getUuid();
+
             List<ActivityPlan> activityPlans =
                     activityPlanService.selectByExample(ActivityPlanExample.newBuilder().build().createCriteria()
-                            .andActivityUuidEqualTo(actUuid).toExample());
+                            .andActivityIdEqualTo(actId).toExample());
             List<ActivityPlanResp> planResps = new ArrayList<>(activityPlans.size());
             if (!CollectionUtils.isEmpty(activityPlans)) {
                 activityPlans.forEach((ActivityPlan p) -> {
                     ActivityPlanResp planResp = ActivityPlanResp.builder()
                             .id(p.getId())
-                            .activityId(p.getActivityUuid())
+                            .activityId(p.getActivityId())
                             .type(p.getType())
                             .unit(p.getUnit())
                             .quantity(p.getQuantity())

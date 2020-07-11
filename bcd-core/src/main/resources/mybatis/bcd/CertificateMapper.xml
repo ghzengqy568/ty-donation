@@ -6,7 +6,6 @@
     <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
     <result column="cert_time" jdbcType="TIMESTAMP" property="certTime" />
     <result column="source_table" jdbcType="VARCHAR" property="sourceTable" />
-    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
     <result column="source_id" jdbcType="BIGINT" property="sourceId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
@@ -70,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, cert_code, cert_time, source_table, uuid, source_id, create_time, last_modify_time
+    id, cert_code, cert_time, source_table, source_id, create_time, last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.CertificateExample" resultMap="BaseResultMap">
     select
@@ -121,11 +120,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_certificate (cert_code, cert_time, source_table, 
-      uuid, source_id, create_time, 
-      last_modify_time)
+      source_id, create_time, last_modify_time
+      )
     values (#{certCode,jdbcType=VARCHAR}, #{certTime,jdbcType=TIMESTAMP}, #{sourceTable,jdbcType=VARCHAR}, 
-      #{uuid,jdbcType=VARCHAR}, #{sourceId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{lastModifyTime,jdbcType=TIMESTAMP})
+      #{sourceId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.Certificate">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -141,9 +140,6 @@
       </if>
       <if test="sourceTable != null">
         source_table,
-      </if>
-      <if test="uuid != null">
-        uuid,
       </if>
       <if test="sourceId != null">
         source_id,
@@ -164,9 +160,6 @@
       </if>
       <if test="sourceTable != null">
         #{sourceTable,jdbcType=VARCHAR},
-      </if>
-      <if test="uuid != null">
-        #{uuid,jdbcType=VARCHAR},
       </if>
       <if test="sourceId != null">
         #{sourceId,jdbcType=BIGINT},
@@ -200,9 +193,6 @@
       <if test="record.sourceTable != null">
         source_table = #{record.sourceTable,jdbcType=VARCHAR},
       </if>
-      <if test="record.uuid != null">
-        uuid = #{record.uuid,jdbcType=VARCHAR},
-      </if>
       <if test="record.sourceId != null">
         source_id = #{record.sourceId,jdbcType=BIGINT},
       </if>
@@ -223,7 +213,6 @@
       cert_code = #{record.certCode,jdbcType=VARCHAR},
       cert_time = #{record.certTime,jdbcType=TIMESTAMP},
       source_table = #{record.sourceTable,jdbcType=VARCHAR},
-      uuid = #{record.uuid,jdbcType=VARCHAR},
       source_id = #{record.sourceId,jdbcType=BIGINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
@@ -243,9 +232,6 @@
       <if test="sourceTable != null">
         source_table = #{sourceTable,jdbcType=VARCHAR},
       </if>
-      <if test="uuid != null">
-        uuid = #{uuid,jdbcType=VARCHAR},
-      </if>
       <if test="sourceId != null">
         source_id = #{sourceId,jdbcType=BIGINT},
       </if>
@@ -263,7 +249,6 @@
     set cert_code = #{certCode,jdbcType=VARCHAR},
       cert_time = #{certTime,jdbcType=TIMESTAMP},
       source_table = #{sourceTable,jdbcType=VARCHAR},
-      uuid = #{uuid,jdbcType=VARCHAR},
       source_id = #{sourceId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}

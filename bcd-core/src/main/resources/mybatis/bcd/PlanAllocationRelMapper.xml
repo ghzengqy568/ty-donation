@@ -3,8 +3,8 @@
 <mapper namespace="com.baidu.mapp.bcd.dao.PlanAllocationRelMapper">
   <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.PlanAllocationRel">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="activity_plan_uuid" jdbcType="VARCHAR" property="activityPlanUuid" />
-    <result column="allocation_uuid" jdbcType="VARCHAR" property="allocationUuid" />
+    <result column="activity_plan_id" jdbcType="BIGINT" property="activityPlanId" />
+    <result column="allocation_id" jdbcType="BIGINT" property="allocationId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
   </resultMap>
@@ -67,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, activity_plan_uuid, allocation_uuid, create_time, last_modify_time
+    id, activity_plan_id, allocation_id, create_time, last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.PlanAllocationRelExample" resultMap="BaseResultMap">
     select
@@ -117,10 +117,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_plan_allocation_rel (activity_plan_uuid, allocation_uuid, 
-      create_time, last_modify_time)
-    values (#{activityPlanUuid,jdbcType=VARCHAR}, #{allocationUuid,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP})
+    insert into t_plan_allocation_rel (activity_plan_id, allocation_id, create_time, 
+      last_modify_time)
+    values (#{activityPlanId,jdbcType=BIGINT}, #{allocationId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.PlanAllocationRel">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -128,11 +128,11 @@
     </selectKey>
     insert into t_plan_allocation_rel
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="activityPlanUuid != null">
-        activity_plan_uuid,
+      <if test="activityPlanId != null">
+        activity_plan_id,
       </if>
-      <if test="allocationUuid != null">
-        allocation_uuid,
+      <if test="allocationId != null">
+        allocation_id,
       </if>
       <if test="createTime != null">
         create_time,
@@ -142,11 +142,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="activityPlanUuid != null">
-        #{activityPlanUuid,jdbcType=VARCHAR},
+      <if test="activityPlanId != null">
+        #{activityPlanId,jdbcType=BIGINT},
       </if>
-      <if test="allocationUuid != null">
-        #{allocationUuid,jdbcType=VARCHAR},
+      <if test="allocationId != null">
+        #{allocationId,jdbcType=BIGINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -168,11 +168,11 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.activityPlanUuid != null">
-        activity_plan_uuid = #{record.activityPlanUuid,jdbcType=VARCHAR},
+      <if test="record.activityPlanId != null">
+        activity_plan_id = #{record.activityPlanId,jdbcType=BIGINT},
       </if>
-      <if test="record.allocationUuid != null">
-        allocation_uuid = #{record.allocationUuid,jdbcType=VARCHAR},
+      <if test="record.allocationId != null">
+        allocation_id = #{record.allocationId,jdbcType=BIGINT},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -188,8 +188,8 @@
   <update id="updateByExample" parameterType="map">
     update t_plan_allocation_rel
     set id = #{record.id,jdbcType=BIGINT},
-      activity_plan_uuid = #{record.activityPlanUuid,jdbcType=VARCHAR},
-      allocation_uuid = #{record.allocationUuid,jdbcType=VARCHAR},
+      activity_plan_id = #{record.activityPlanId,jdbcType=BIGINT},
+      allocation_id = #{record.allocationId,jdbcType=BIGINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -199,11 +199,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.PlanAllocationRel">
     update t_plan_allocation_rel
     <set>
-      <if test="activityPlanUuid != null">
-        activity_plan_uuid = #{activityPlanUuid,jdbcType=VARCHAR},
+      <if test="activityPlanId != null">
+        activity_plan_id = #{activityPlanId,jdbcType=BIGINT},
       </if>
-      <if test="allocationUuid != null">
-        allocation_uuid = #{allocationUuid,jdbcType=VARCHAR},
+      <if test="allocationId != null">
+        allocation_id = #{allocationId,jdbcType=BIGINT},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -216,8 +216,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.PlanAllocationRel">
     update t_plan_allocation_rel
-    set activity_plan_uuid = #{activityPlanUuid,jdbcType=VARCHAR},
-      allocation_uuid = #{allocationUuid,jdbcType=VARCHAR},
+    set activity_plan_id = #{activityPlanId,jdbcType=BIGINT},
+      allocation_id = #{allocationId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

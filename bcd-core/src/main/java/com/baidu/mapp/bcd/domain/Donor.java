@@ -15,13 +15,6 @@ public class Donor implements Serializable {
     private Long id;
 
     /**
-     * column-name:uuid
-     * 多链ID身份
-     */
-    @Schema(description = "多链ID身份")
-    private String uuid;
-
-    /**
      * column-name:donor_user_name
      * 捐赠人用户ID
      */
@@ -117,7 +110,6 @@ public class Donor implements Serializable {
      */
     private Donor(XBuilder builder) {
         this.id = builder.id;
-        this.uuid = builder.uuid;
         this.donorUserName = builder.donorUserName;
         this.donorPwd = builder.donorPwd;
         this.donorName = builder.donorName;
@@ -148,20 +140,6 @@ public class Donor implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * 多链ID身份
-     */
-    public String getUuid() {
-        return uuid;
-    }
-
-    /**
-     * 多链ID身份
-     */
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
     }
 
     /**
@@ -334,7 +312,6 @@ public class Donor implements Serializable {
 
     public Donor copyFrom(Donor other) {
         this.id = other.id;
-        this.uuid = other.uuid;
         this.donorUserName = other.donorUserName;
         this.donorPwd = other.donorPwd;
         this.donorName = other.donorName;
@@ -355,7 +332,6 @@ public class Donor implements Serializable {
             throw new RuntimeException("`to` must not be null");
         }
         to.setId(from.id);
-        to.setUuid(from.uuid);
         to.setDonorUserName(from.donorUserName);
         to.setDonorPwd(from.donorPwd);
         to.setDonorName(from.donorName);
@@ -375,7 +351,6 @@ public class Donor implements Serializable {
         /*
         {
             id: '',
-            uuid: '',
             donorUserName: '',
             donorPwd: '',
             donorName: '',
@@ -391,7 +366,7 @@ public class Donor implements Serializable {
         }
         */
         
-        return "{\"id\": \"\",\"uuid\": \"\",\"donorUserName\": \"\",\"donorPwd\": \"\",\"donorName\": \"\",\"certCode\": \"\",\"sign\": \"\",\"idcard\": \"\",\"mobile\": \"\",\"province\": \"\",\"city\": \"\",\"address\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"donorUserName\": \"\",\"donorPwd\": \"\",\"donorName\": \"\",\"certCode\": \"\",\"sign\": \"\",\"idcard\": \"\",\"mobile\": \"\",\"province\": \"\",\"city\": \"\",\"address\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -401,7 +376,6 @@ public class Donor implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", uuid=").append(uuid);
         sb.append(", donorUserName=").append(donorUserName);
         sb.append(", donorPwd=").append(donorPwd);
         sb.append(", donorName=").append(donorName);
@@ -424,11 +398,6 @@ public class Donor implements Serializable {
          * 捐赠人ID
          */
         private Long id;
-
-        /**
-         * 多链ID身份
-         */
-        private String uuid;
 
         /**
          * 捐赠人用户ID
@@ -499,14 +468,6 @@ public class Donor implements Serializable {
          */
         public XBuilder id(Long id) {
             this.id = id;
-            return this;
-        }
-
-        /**
-         * 多链ID身份
-         */
-        public XBuilder uuid(String uuid) {
-            this.uuid = uuid;
             return this;
         }
 

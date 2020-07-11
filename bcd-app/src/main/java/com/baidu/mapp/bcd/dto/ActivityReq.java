@@ -40,4 +40,6 @@ public class ActivityReq {
     @Schema(description = "活动计划详情")
     List<ActivityPlanReq> activityPlanReqList;
 
+
+
 }

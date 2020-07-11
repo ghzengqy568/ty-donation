@@ -15,13 +15,6 @@ public class Activity implements Serializable {
     private Long id;
 
     /**
-     * column-name:uuid
-     * 多链ID身份
-     */
-    @Schema(description = "多链ID身份")
-    private String uuid;
-
-    /**
      * column-name:theme
      * 活动主题
      */
@@ -96,7 +89,6 @@ public class Activity implements Serializable {
      */
     private Activity(XBuilder builder) {
         this.id = builder.id;
-        this.uuid = builder.uuid;
         this.theme = builder.theme;
         this.description = builder.description;
         this.startTime = builder.startTime;
@@ -124,20 +116,6 @@ public class Activity implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * 多链ID身份
-     */
-    public String getUuid() {
-        return uuid;
-    }
-
-    /**
-     * 多链ID身份
-     */
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
     }
 
     /**
@@ -268,7 +246,6 @@ public class Activity implements Serializable {
 
     public Activity copyFrom(Activity other) {
         this.id = other.id;
-        this.uuid = other.uuid;
         this.theme = other.theme;
         this.description = other.description;
         this.startTime = other.startTime;
@@ -286,7 +263,6 @@ public class Activity implements Serializable {
             throw new RuntimeException("`to` must not be null");
         }
         to.setId(from.id);
-        to.setUuid(from.uuid);
         to.setTheme(from.theme);
         to.setDescription(from.description);
         to.setStartTime(from.startTime);
@@ -303,7 +279,6 @@ public class Activity implements Serializable {
         /*
         {
             id: '',
-            uuid: '',
             theme: '',
             description: '',
             startTime: '',
@@ -316,7 +291,7 @@ public class Activity implements Serializable {
         }
         */
         
-        return "{\"id\": \"\",\"uuid\": \"\",\"theme\": \"\",\"description\": \"\",\"startTime\": \"\",\"endTime\": \"\",\"certCode\": \"\",\"sign\": \"\",\"status\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"theme\": \"\",\"description\": \"\",\"startTime\": \"\",\"endTime\": \"\",\"certCode\": \"\",\"sign\": \"\",\"status\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -326,7 +301,6 @@ public class Activity implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", uuid=").append(uuid);
         sb.append(", theme=").append(theme);
         sb.append(", description=").append(description);
         sb.append(", startTime=").append(startTime);
@@ -346,11 +320,6 @@ public class Activity implements Serializable {
          * 活动ID
          */
         private Long id;
-
-        /**
-         * 多链ID身份
-         */
-        private String uuid;
 
         /**
          * 活动主题
@@ -406,14 +375,6 @@ public class Activity implements Serializable {
          */
         public XBuilder id(Long id) {
             this.id = id;
-            return this;
-        }
-
-        /**
-         * 多链ID身份
-         */
-        public XBuilder uuid(String uuid) {
-            this.uuid = uuid;
             return this;
         }
 

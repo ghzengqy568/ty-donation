@@ -53,37 +53,33 @@ public class DonateController {
 
     @PostMapping("submit")
     public R<String> submit(@RequestBody DonateReq donateReq) {
-        String donorId = donateReq.getDonorUuid();
-        if (StringUtils.isBlank(donorId)) {
+        Long donorId = donateReq.getDonorId();
+        if (donorId == null || donorId <=0 ) {
             return R.error(100101, "捐赠人Id不能为空");
         }
         if (CollectionUtils.isEmpty(donateReq.getDetails())) {
             return R.error(100101, "捐赠明细不能为空");
         }
-        Donor donor =
-                donorService.selectOneByExample(
-                        DonorExample.newBuilder().build().createCriteria().andUuidEqualTo(donorId).toExample());
+        Donor donor = donorService.selectByPrimaryKey(donorId);
         if (donor == null) {
             return R.error(100102, "捐赠人不存在");
         }
 
         // 装载UUID
-        donateReq.setUuid(UUID.randomUUID().toString());
         Date donateTime = new Date();
         // 流水签名 donorId, donorTime
-        String sign = SignUtils.sign(donateReq.getDonorUuid(), DateTimeUtils.toDateTimeString(donateTime,
-                "yyyyMMddHHmmss"));
+        String sign = SignUtils.sign(donorId, DateTimeUtils.toDateTimeString(donateTime, "yyyyMMddHHmmss"));
         DonateFlow flow = DonateFlow.newBuilder()
-                .donorUuid(donorId)
+                .donorId(donorId)
                 .donateTime(donateTime)
                 .certCode("")
                 .sign(sign)
-                .uuid(donateReq.getUuid())
                 .createTime(new Date())
                 .lastModifyTime(new Date())
                 .build();
         donateFlowService.insertSelective(flow);
-        String certCode = certService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, donateReq.getUuid(), sign);
+        Long flowId = flow.getId();
+        String certCode = certService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, flowId, sign);
         flow.setCertCode(certCode);
         flow.setLastModifyTime(new Date());
         donateFlowService.updateByPrimaryKeySelective(flow);
@@ -94,27 +90,24 @@ public class DonateController {
             Long quantity = detail.getQuantity();
             Byte type = detail.getType();
             String unit = detail.getUnit();
-            detail.setUuid(UUID.randomUUID().toString());
-            sign = SignUtils.sign(donateReq.getDonorUuid(), name, quantity, type, unit);
+            sign = SignUtils.sign(donorId, name, quantity, type, unit);
 
             DonateDetail donateDetail = DonateDetail.newBuilder()
                     .certCode("")
-                    .flowUuid(donateReq.getUuid())
+                    .flowId(flowId)
                     .createTime(new Date())
                     .lastModifyTime(new Date())
                     .name(name)
                     .quantity(quantity)
                     .balance(quantity)
                     .sign(sign)
-                    .uuid(detail.getUuid())
                     .type(type)
                     .unit(unit)
                     .build();
 
             donateDetailService.insertSelective(donateDetail);
-            String detailId = donateDetail.getUuid();
-            String detailCertCode = certService.writeChain(donorId, MetaDonateDetail.TABLE_NAME, detailId,
-                    sign);
+            Long detailId = donateDetail.getId();
+            String detailCertCode = certService.writeChain(donorId, MetaDonateDetail.TABLE_NAME, detailId, sign);
             donateDetail.setCertCode(detailCertCode);
             donateDetail.setLastModifyTime(new Date());
             donateDetailService.updateByPrimaryKeySelective(donateDetail);

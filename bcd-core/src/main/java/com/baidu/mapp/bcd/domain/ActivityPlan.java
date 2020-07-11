@@ -15,18 +15,11 @@ public class ActivityPlan implements Serializable {
     private Long id;
 
     /**
-     * column-name:uuid
-     * 多链ID身份
-     */
-    @Schema(description = "多链ID身份")
-    private String uuid;
-
-    /**
-     * column-name:activity_uuid
+     * column-name:activity_id
      * 活动ID
      */
     @Schema(description = "活动ID")
-    private String activityUuid;
+    private Long activityId;
 
     /**
      * column-name:description
@@ -117,8 +110,7 @@ public class ActivityPlan implements Serializable {
      */
     private ActivityPlan(XBuilder builder) {
         this.id = builder.id;
-        this.uuid = builder.uuid;
-        this.activityUuid = builder.activityUuid;
+        this.activityId = builder.activityId;
         this.description = builder.description;
         this.type = builder.type;
         this.unit = builder.unit;
@@ -151,31 +143,17 @@ public class ActivityPlan implements Serializable {
     }
 
     /**
-     * 多链ID身份
+     * 活动ID
      */
-    public String getUuid() {
-        return uuid;
-    }
-
-    /**
-     * 多链ID身份
-     */
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
+    public Long getActivityId() {
+        return activityId;
     }
 
     /**
      * 活动ID
      */
-    public String getActivityUuid() {
-        return activityUuid;
-    }
-
-    /**
-     * 活动ID
-     */
-    public void setActivityUuid(String activityUuid) {
-        this.activityUuid = activityUuid == null ? null : activityUuid.trim();
+    public void setActivityId(Long activityId) {
+        this.activityId = activityId;
     }
 
     /**
@@ -334,8 +312,7 @@ public class ActivityPlan implements Serializable {
 
     public ActivityPlan copyFrom(ActivityPlan other) {
         this.id = other.id;
-        this.uuid = other.uuid;
-        this.activityUuid = other.activityUuid;
+        this.activityId = other.activityId;
         this.description = other.description;
         this.type = other.type;
         this.unit = other.unit;
@@ -355,8 +332,7 @@ public class ActivityPlan implements Serializable {
             throw new RuntimeException("`to` must not be null");
         }
         to.setId(from.id);
-        to.setUuid(from.uuid);
-        to.setActivityUuid(from.activityUuid);
+        to.setActivityId(from.activityId);
         to.setDescription(from.description);
         to.setType(from.type);
         to.setUnit(from.unit);
@@ -375,8 +351,7 @@ public class ActivityPlan implements Serializable {
         /*
         {
             id: '',
-            uuid: '',
-            activityUuid: '',
+            activityId: '',
             description: '',
             type: '',
             unit: '',
@@ -391,7 +366,7 @@ public class ActivityPlan implements Serializable {
         }
         */
         
-        return "{\"id\": \"\",\"uuid\": \"\",\"activityUuid\": \"\",\"description\": \"\",\"type\": \"\",\"unit\": \"\",\"quantity\": \"\",\"name\": \"\",\"amount\": \"\",\"needPurchase\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"activityId\": \"\",\"description\": \"\",\"type\": \"\",\"unit\": \"\",\"quantity\": \"\",\"name\": \"\",\"amount\": \"\",\"needPurchase\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -401,8 +376,7 @@ public class ActivityPlan implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", uuid=").append(uuid);
-        sb.append(", activityUuid=").append(activityUuid);
+        sb.append(", activityId=").append(activityId);
         sb.append(", description=").append(description);
         sb.append(", type=").append(type);
         sb.append(", unit=").append(unit);
@@ -426,14 +400,9 @@ public class ActivityPlan implements Serializable {
         private Long id;
 
         /**
-         * 多链ID身份
-         */
-        private String uuid;
-
-        /**
          * 活动ID
          */
-        private String activityUuid;
+        private Long activityId;
 
         /**
          * 计划描述
@@ -503,18 +472,10 @@ public class ActivityPlan implements Serializable {
         }
 
         /**
-         * 多链ID身份
-         */
-        public XBuilder uuid(String uuid) {
-            this.uuid = uuid;
-            return this;
-        }
-
-        /**
          * 活动ID
          */
-        public XBuilder activityUuid(String activityUuid) {
-            this.activityUuid = activityUuid;
+        public XBuilder activityId(Long activityId) {
+            this.activityId = activityId;
             return this;
         }
 

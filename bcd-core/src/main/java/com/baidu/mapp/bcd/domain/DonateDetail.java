@@ -15,18 +15,11 @@ public class DonateDetail implements Serializable {
     private Long id;
 
     /**
-     * column-name:uuid
-     * 多链ID身份
-     */
-    @Schema(description = "多链ID身份")
-    private String uuid;
-
-    /**
-     * column-name:flow_uuid
+     * column-name:flow_id
      * 捐赠流水ID
      */
     @Schema(description = "捐赠流水ID")
-    private String flowUuid;
+    private Long flowId;
 
     /**
      * column-name:type
@@ -103,8 +96,7 @@ public class DonateDetail implements Serializable {
      */
     private DonateDetail(XBuilder builder) {
         this.id = builder.id;
-        this.uuid = builder.uuid;
-        this.flowUuid = builder.flowUuid;
+        this.flowId = builder.flowId;
         this.type = builder.type;
         this.unit = builder.unit;
         this.quantity = builder.quantity;
@@ -135,31 +127,17 @@ public class DonateDetail implements Serializable {
     }
 
     /**
-     * 多链ID身份
+     * 捐赠流水ID
      */
-    public String getUuid() {
-        return uuid;
-    }
-
-    /**
-     * 多链ID身份
-     */
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
+    public Long getFlowId() {
+        return flowId;
     }
 
     /**
      * 捐赠流水ID
      */
-    public String getFlowUuid() {
-        return flowUuid;
-    }
-
-    /**
-     * 捐赠流水ID
-     */
-    public void setFlowUuid(String flowUuid) {
-        this.flowUuid = flowUuid == null ? null : flowUuid.trim();
+    public void setFlowId(Long flowId) {
+        this.flowId = flowId;
     }
 
     /**
@@ -290,8 +268,7 @@ public class DonateDetail implements Serializable {
 
     public DonateDetail copyFrom(DonateDetail other) {
         this.id = other.id;
-        this.uuid = other.uuid;
-        this.flowUuid = other.flowUuid;
+        this.flowId = other.flowId;
         this.type = other.type;
         this.unit = other.unit;
         this.quantity = other.quantity;
@@ -309,8 +286,7 @@ public class DonateDetail implements Serializable {
             throw new RuntimeException("`to` must not be null");
         }
         to.setId(from.id);
-        to.setUuid(from.uuid);
-        to.setFlowUuid(from.flowUuid);
+        to.setFlowId(from.flowId);
         to.setType(from.type);
         to.setUnit(from.unit);
         to.setQuantity(from.quantity);
@@ -327,8 +303,7 @@ public class DonateDetail implements Serializable {
         /*
         {
             id: '',
-            uuid: '',
-            flowUuid: '',
+            flowId: '',
             type: '',
             unit: '',
             quantity: '',
@@ -341,7 +316,7 @@ public class DonateDetail implements Serializable {
         }
         */
         
-        return "{\"id\": \"\",\"uuid\": \"\",\"flowUuid\": \"\",\"type\": \"\",\"unit\": \"\",\"quantity\": \"\",\"name\": \"\",\"certCode\": \"\",\"sign\": \"\",\"balance\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"flowId\": \"\",\"type\": \"\",\"unit\": \"\",\"quantity\": \"\",\"name\": \"\",\"certCode\": \"\",\"sign\": \"\",\"balance\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -351,8 +326,7 @@ public class DonateDetail implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", uuid=").append(uuid);
-        sb.append(", flowUuid=").append(flowUuid);
+        sb.append(", flowId=").append(flowId);
         sb.append(", type=").append(type);
         sb.append(", unit=").append(unit);
         sb.append(", quantity=").append(quantity);
@@ -374,14 +348,9 @@ public class DonateDetail implements Serializable {
         private Long id;
 
         /**
-         * 多链ID身份
-         */
-        private String uuid;
-
-        /**
          * 捐赠流水ID
          */
-        private String flowUuid;
+        private Long flowId;
 
         /**
          * 捐赠类别, 1-钱，2-物
@@ -441,18 +410,10 @@ public class DonateDetail implements Serializable {
         }
 
         /**
-         * 多链ID身份
-         */
-        public XBuilder uuid(String uuid) {
-            this.uuid = uuid;
-            return this;
-        }
-
-        /**
          * 捐赠流水ID
          */
-        public XBuilder flowUuid(String flowUuid) {
-            this.flowUuid = flowUuid;
+        public XBuilder flowId(Long flowId) {
+            this.flowId = flowId;
             return this;
         }
 

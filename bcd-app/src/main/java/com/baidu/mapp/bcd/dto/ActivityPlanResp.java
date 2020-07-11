@@ -19,7 +19,7 @@ public class ActivityPlanResp {
      * 活动ID
      */
     @Schema(description = "活动ID")
-    private String activityId;
+    private Long activityId;
 
     /**
      * 计划描述

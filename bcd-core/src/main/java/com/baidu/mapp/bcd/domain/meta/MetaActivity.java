@@ -3,7 +3,6 @@ package com.baidu.mapp.bcd.domain.meta;
 /*
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
-       @Result(property = "uuid", column = "uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "theme", column = "theme", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "description", column = "description", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "startTime", column = "start_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
@@ -34,19 +33,6 @@ public final class MetaActivity {
     public static final String JDBC_TYPE_ID = "BIGINT";
 
     public static final String IS_KEY_ID = "true";
-
-    /**
-     * 多链ID身份
-     */
-    public static final String UUID = "uuid";
-
-    public static final String COLUMN_NAME_UUID = "`uuid`";
-
-    public static final String JAVA_TYPE_UUID = "java.lang.String";
-
-    public static final String JDBC_TYPE_UUID = "VARCHAR";
-
-    public static final String IS_KEY_UUID = "false";
 
     /**
      * 活动主题
@@ -182,9 +168,6 @@ public final class MetaActivity {
         if (columnName.equals(COLUMN_NAME_ID)) {
             return ID;
         }
-        if (columnName.equals(COLUMN_NAME_UUID)) {
-            return UUID;
-        }
         if (columnName.equals(COLUMN_NAME_THEME)) {
             return THEME;
         }
@@ -229,9 +212,6 @@ public final class MetaActivity {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID;
         }
-        if (fieldName.equals(UUID)) {
-            return COLUMN_NAME_UUID;
-        }
         if (fieldName.equals(THEME)) {
             return COLUMN_NAME_THEME;
         }
@@ -275,9 +255,6 @@ public final class MetaActivity {
         }
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID.replace("`", "");
-        }
-        if (fieldName.equals(UUID)) {
-            return COLUMN_NAME_UUID.replace("`", "");
         }
         if (fieldName.equals(THEME)) {
             return COLUMN_NAME_THEME.replace("`", "");

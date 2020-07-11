@@ -15,18 +15,18 @@ public class PlanAllocationRel implements Serializable {
     private Long id;
 
     /**
-     * column-name:activity_plan_uuid
+     * column-name:activity_plan_id
      * 活动计划ID
      */
     @Schema(description = "活动计划ID")
-    private String activityPlanUuid;
+    private Long activityPlanId;
 
     /**
-     * column-name:allocation_uuid
+     * column-name:allocation_id
      * 拨款记录ID
      */
     @Schema(description = "拨款记录ID")
-    private String allocationUuid;
+    private Long allocationId;
 
     /**
      * column-name:create_time
@@ -54,8 +54,8 @@ public class PlanAllocationRel implements Serializable {
      */
     private PlanAllocationRel(XBuilder builder) {
         this.id = builder.id;
-        this.activityPlanUuid = builder.activityPlanUuid;
-        this.allocationUuid = builder.allocationUuid;
+        this.activityPlanId = builder.activityPlanId;
+        this.allocationId = builder.allocationId;
         this.createTime = builder.createTime;
         this.lastModifyTime = builder.lastModifyTime;
     }
@@ -81,29 +81,29 @@ public class PlanAllocationRel implements Serializable {
     /**
      * 活动计划ID
      */
-    public String getActivityPlanUuid() {
-        return activityPlanUuid;
+    public Long getActivityPlanId() {
+        return activityPlanId;
     }
 
     /**
      * 活动计划ID
      */
-    public void setActivityPlanUuid(String activityPlanUuid) {
-        this.activityPlanUuid = activityPlanUuid == null ? null : activityPlanUuid.trim();
+    public void setActivityPlanId(Long activityPlanId) {
+        this.activityPlanId = activityPlanId;
     }
 
     /**
      * 拨款记录ID
      */
-    public String getAllocationUuid() {
-        return allocationUuid;
+    public Long getAllocationId() {
+        return allocationId;
     }
 
     /**
      * 拨款记录ID
      */
-    public void setAllocationUuid(String allocationUuid) {
-        this.allocationUuid = allocationUuid == null ? null : allocationUuid.trim();
+    public void setAllocationId(Long allocationId) {
+        this.allocationId = allocationId;
     }
 
     /**
@@ -136,8 +136,8 @@ public class PlanAllocationRel implements Serializable {
 
     public PlanAllocationRel copyFrom(PlanAllocationRel other) {
         this.id = other.id;
-        this.activityPlanUuid = other.activityPlanUuid;
-        this.allocationUuid = other.allocationUuid;
+        this.activityPlanId = other.activityPlanId;
+        this.allocationId = other.allocationId;
         this.createTime = other.createTime;
         this.lastModifyTime = other.lastModifyTime;
         return this;
@@ -148,8 +148,8 @@ public class PlanAllocationRel implements Serializable {
             throw new RuntimeException("`to` must not be null");
         }
         to.setId(from.id);
-        to.setActivityPlanUuid(from.activityPlanUuid);
-        to.setAllocationUuid(from.allocationUuid);
+        to.setActivityPlanId(from.activityPlanId);
+        to.setAllocationId(from.allocationId);
         to.setCreateTime(from.createTime);
         to.setLastModifyTime(from.lastModifyTime);
         return to;
@@ -159,14 +159,14 @@ public class PlanAllocationRel implements Serializable {
         /*
         {
             id: '',
-            activityPlanUuid: '',
-            allocationUuid: '',
+            activityPlanId: '',
+            allocationId: '',
             createTime: '',
             lastModifyTime: ''
         }
         */
         
-        return "{\"id\": \"\",\"activityPlanUuid\": \"\",\"allocationUuid\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"activityPlanId\": \"\",\"allocationId\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -176,8 +176,8 @@ public class PlanAllocationRel implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", activityPlanUuid=").append(activityPlanUuid);
-        sb.append(", allocationUuid=").append(allocationUuid);
+        sb.append(", activityPlanId=").append(activityPlanId);
+        sb.append(", allocationId=").append(allocationId);
         sb.append(", createTime=").append(createTime);
         sb.append(", lastModifyTime=").append(lastModifyTime);
         sb.append("]");
@@ -194,12 +194,12 @@ public class PlanAllocationRel implements Serializable {
         /**
          * 活动计划ID
          */
-        private String activityPlanUuid;
+        private Long activityPlanId;
 
         /**
          * 拨款记录ID
          */
-        private String allocationUuid;
+        private Long allocationId;
 
         /**
          * 创建时间
@@ -226,16 +226,16 @@ public class PlanAllocationRel implements Serializable {
         /**
          * 活动计划ID
          */
-        public XBuilder activityPlanUuid(String activityPlanUuid) {
-            this.activityPlanUuid = activityPlanUuid;
+        public XBuilder activityPlanId(Long activityPlanId) {
+            this.activityPlanId = activityPlanId;
             return this;
         }
 
         /**
          * 拨款记录ID
          */
-        public XBuilder allocationUuid(String allocationUuid) {
-            this.allocationUuid = allocationUuid;
+        public XBuilder allocationId(Long allocationId) {
+            this.allocationId = allocationId;
             return this;
         }
 

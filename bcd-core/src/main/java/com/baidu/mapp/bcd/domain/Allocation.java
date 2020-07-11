@@ -15,18 +15,11 @@ public class Allocation implements Serializable {
     private Long id;
 
     /**
-     * column-name:uuid
-     * 多链ID身份
-     */
-    @Schema(description = "多链ID身份")
-    private String uuid;
-
-    /**
-     * column-name:donate_detail_uuid
+     * column-name:donate_detail_id
      * 捐款明细ID
      */
     @Schema(description = "捐款明细ID")
-    private String donateDetailUuid;
+    private Long donateDetailId;
 
     /**
      * column-name:used
@@ -82,8 +75,7 @@ public class Allocation implements Serializable {
      */
     private Allocation(XBuilder builder) {
         this.id = builder.id;
-        this.uuid = builder.uuid;
-        this.donateDetailUuid = builder.donateDetailUuid;
+        this.donateDetailId = builder.donateDetailId;
         this.used = builder.used;
         this.balance = builder.balance;
         this.certCode = builder.certCode;
@@ -111,31 +103,17 @@ public class Allocation implements Serializable {
     }
 
     /**
-     * 多链ID身份
+     * 捐款明细ID
      */
-    public String getUuid() {
-        return uuid;
-    }
-
-    /**
-     * 多链ID身份
-     */
-    public void setUuid(String uuid) {
-        this.uuid = uuid == null ? null : uuid.trim();
+    public Long getDonateDetailId() {
+        return donateDetailId;
     }
 
     /**
      * 捐款明细ID
      */
-    public String getDonateDetailUuid() {
-        return donateDetailUuid;
-    }
-
-    /**
-     * 捐款明细ID
-     */
-    public void setDonateDetailUuid(String donateDetailUuid) {
-        this.donateDetailUuid = donateDetailUuid == null ? null : donateDetailUuid.trim();
+    public void setDonateDetailId(Long donateDetailId) {
+        this.donateDetailId = donateDetailId;
     }
 
     /**
@@ -224,8 +202,7 @@ public class Allocation implements Serializable {
 
     public Allocation copyFrom(Allocation other) {
         this.id = other.id;
-        this.uuid = other.uuid;
-        this.donateDetailUuid = other.donateDetailUuid;
+        this.donateDetailId = other.donateDetailId;
         this.used = other.used;
         this.balance = other.balance;
         this.certCode = other.certCode;
@@ -240,8 +217,7 @@ public class Allocation implements Serializable {
             throw new RuntimeException("`to` must not be null");
         }
         to.setId(from.id);
-        to.setUuid(from.uuid);
-        to.setDonateDetailUuid(from.donateDetailUuid);
+        to.setDonateDetailId(from.donateDetailId);
         to.setUsed(from.used);
         to.setBalance(from.balance);
         to.setCertCode(from.certCode);
@@ -255,8 +231,7 @@ public class Allocation implements Serializable {
         /*
         {
             id: '',
-            uuid: '',
-            donateDetailUuid: '',
+            donateDetailId: '',
             used: '',
             balance: '',
             certCode: '',
@@ -266,7 +241,7 @@ public class Allocation implements Serializable {
         }
         */
         
-        return "{\"id\": \"\",\"uuid\": \"\",\"donateDetailUuid\": \"\",\"used\": \"\",\"balance\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"donateDetailId\": \"\",\"used\": \"\",\"balance\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -276,8 +251,7 @@ public class Allocation implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", uuid=").append(uuid);
-        sb.append(", donateDetailUuid=").append(donateDetailUuid);
+        sb.append(", donateDetailId=").append(donateDetailId);
         sb.append(", used=").append(used);
         sb.append(", balance=").append(balance);
         sb.append(", certCode=").append(certCode);
@@ -296,14 +270,9 @@ public class Allocation implements Serializable {
         private Long id;
 
         /**
-         * 多链ID身份
-         */
-        private String uuid;
-
-        /**
          * 捐款明细ID
          */
-        private String donateDetailUuid;
+        private Long donateDetailId;
 
         /**
          * 用量
@@ -348,18 +317,10 @@ public class Allocation implements Serializable {
         }
 
         /**
-         * 多链ID身份
-         */
-        public XBuilder uuid(String uuid) {
-            this.uuid = uuid;
-            return this;
-        }
-
-        /**
          * 捐款明细ID
          */
-        public XBuilder donateDetailUuid(String donateDetailUuid) {
-            this.donateDetailUuid = donateDetailUuid;
+        public XBuilder donateDetailId(Long donateDetailId) {
+            this.donateDetailId = donateDetailId;
             return this;
         }
 

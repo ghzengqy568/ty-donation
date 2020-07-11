@@ -12,15 +12,13 @@ import lombok.Data;
 @Schema(description = "捐赠")
 public class DonateReq {
 
-    @Schema(description = "流水uuid", hidden = true)
-    private String uuid;
+    @Schema(description = "捐赠")
+    private Long id;
 
     @Schema(description = "捐赠人ID")
-    private String donorUuid;
+    private Long donorId;
 
     @Schema(description = "捐赠详情")
     List<DonateDetailReq> details;
-
-
 
 }

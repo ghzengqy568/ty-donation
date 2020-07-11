@@ -3,8 +3,7 @@ package com.baidu.mapp.bcd.domain.meta;
 /*
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
-       @Result(property = "uuid", column = "uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
-       @Result(property = "flowUuid", column = "flow_uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "flowId", column = "flow_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "type", column = "type", javaType = java.lang.Byte.class, jdbcType = JdbcType.TINYINT),
        @Result(property = "unit", column = "unit", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "quantity", column = "quantity", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
@@ -37,30 +36,17 @@ public final class MetaDonateDetail {
     public static final String IS_KEY_ID = "true";
 
     /**
-     * 多链ID身份
-     */
-    public static final String UUID = "uuid";
-
-    public static final String COLUMN_NAME_UUID = "`uuid`";
-
-    public static final String JAVA_TYPE_UUID = "java.lang.String";
-
-    public static final String JDBC_TYPE_UUID = "VARCHAR";
-
-    public static final String IS_KEY_UUID = "false";
-
-    /**
      * 捐赠流水ID
      */
-    public static final String FLOWUUID = "flowUuid";
+    public static final String FLOWID = "flowId";
 
-    public static final String COLUMN_NAME_FLOWUUID = "`flow_uuid`";
+    public static final String COLUMN_NAME_FLOWID = "`flow_id`";
 
-    public static final String JAVA_TYPE_FLOWUUID = "java.lang.String";
+    public static final String JAVA_TYPE_FLOWID = "java.lang.Long";
 
-    public static final String JDBC_TYPE_FLOWUUID = "VARCHAR";
+    public static final String JDBC_TYPE_FLOWID = "BIGINT";
 
-    public static final String IS_KEY_FLOWUUID = "false";
+    public static final String IS_KEY_FLOWID = "false";
 
     /**
      * 捐赠类别, 1-钱，2-物
@@ -196,11 +182,8 @@ public final class MetaDonateDetail {
         if (columnName.equals(COLUMN_NAME_ID)) {
             return ID;
         }
-        if (columnName.equals(COLUMN_NAME_UUID)) {
-            return UUID;
-        }
-        if (columnName.equals(COLUMN_NAME_FLOWUUID)) {
-            return FLOWUUID;
+        if (columnName.equals(COLUMN_NAME_FLOWID)) {
+            return FLOWID;
         }
         if (columnName.equals(COLUMN_NAME_TYPE)) {
             return TYPE;
@@ -246,11 +229,8 @@ public final class MetaDonateDetail {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID;
         }
-        if (fieldName.equals(UUID)) {
-            return COLUMN_NAME_UUID;
-        }
-        if (fieldName.equals(FLOWUUID)) {
-            return COLUMN_NAME_FLOWUUID;
+        if (fieldName.equals(FLOWID)) {
+            return COLUMN_NAME_FLOWID;
         }
         if (fieldName.equals(TYPE)) {
             return COLUMN_NAME_TYPE;
@@ -296,11 +276,8 @@ public final class MetaDonateDetail {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID.replace("`", "");
         }
-        if (fieldName.equals(UUID)) {
-            return COLUMN_NAME_UUID.replace("`", "");
-        }
-        if (fieldName.equals(FLOWUUID)) {
-            return COLUMN_NAME_FLOWUUID.replace("`", "");
+        if (fieldName.equals(FLOWID)) {
+            return COLUMN_NAME_FLOWID.replace("`", "");
         }
         if (fieldName.equals(TYPE)) {
             return COLUMN_NAME_TYPE.replace("`", "");

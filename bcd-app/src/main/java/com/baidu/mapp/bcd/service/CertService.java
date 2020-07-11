@@ -22,31 +22,28 @@ public class CertService {
      *                  领取记录 -> 受捐人ID
      *                  活动，计划，拨款 —> 操作人ID
      * @param tableName
-     * @param uuid
+     * @param id
      * @param sign
      *
      * @return
      */
-    public String writeChain(String userId, String tableName, String uuid, String sign) {
+    public String writeChain(Long userId, String tableName, Long id, String sign) {
         // 上链并返回证书
-        String certCode = chain(userId, tableName.concat(":").concat(uuid), sign);
+        String certCode = chain(userId, tableName.concat(":").concat(id.toString()), sign);
         // 记录存证表
         certificateService.insertSelective(Certificate.newBuilder()
                 .certCode(certCode)
                 .certTime(new Date())
                 .lastModifyTime(new Date())
                 .createTime(new Date())
-                .uuid(uuid)
+                .sourceId(id)
                 .sourceTable(tableName)
                 .build());
-
-        // TODO 发布消息 t_certificate_hash(certCode, uuid)
-
         // 返回证书
         return certCode;
     }
 
-    private String chain(String userId, String hashId, String fileName) {
+    private String chain(Long userId, String hashId, String fileName) {
         // TODO 调用GO服务上链
         return UUID.randomUUID().toString();
     }

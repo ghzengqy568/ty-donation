@@ -3,8 +3,7 @@
 <mapper namespace="com.baidu.mapp.bcd.dao.DonateDetailMapper">
   <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.DonateDetail">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
-    <result column="flow_uuid" jdbcType="VARCHAR" property="flowUuid" />
+    <result column="flow_id" jdbcType="BIGINT" property="flowId" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="unit" jdbcType="VARCHAR" property="unit" />
     <result column="quantity" jdbcType="BIGINT" property="quantity" />
@@ -74,8 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, uuid, flow_uuid, type, unit, quantity, name, cert_code, sign, balance, create_time, 
-    last_modify_time
+    id, flow_id, type, unit, quantity, name, cert_code, sign, balance, create_time, last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.DonateDetailExample" resultMap="BaseResultMap">
     select
@@ -125,14 +123,14 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_donate_detail (uuid, flow_uuid, type, 
-      unit, quantity, name, 
-      cert_code, sign, balance, 
-      create_time, last_modify_time)
-    values (#{uuid,jdbcType=VARCHAR}, #{flowUuid,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{unit,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
-      #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{balance,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP})
+    insert into t_donate_detail (flow_id, type, unit, 
+      quantity, name, cert_code, 
+      sign, balance, create_time, 
+      last_modify_time)
+    values (#{flowId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, #{unit,jdbcType=VARCHAR}, 
+      #{quantity,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{certCode,jdbcType=VARCHAR}, 
+      #{sign,jdbcType=VARCHAR}, #{balance,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.DonateDetail">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -140,11 +138,8 @@
     </selectKey>
     insert into t_donate_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="uuid != null">
-        uuid,
-      </if>
-      <if test="flowUuid != null">
-        flow_uuid,
+      <if test="flowId != null">
+        flow_id,
       </if>
       <if test="type != null">
         type,
@@ -175,11 +170,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="uuid != null">
-        #{uuid,jdbcType=VARCHAR},
-      </if>
-      <if test="flowUuid != null">
-        #{flowUuid,jdbcType=VARCHAR},
+      <if test="flowId != null">
+        #{flowId,jdbcType=BIGINT},
       </if>
       <if test="type != null">
         #{type,jdbcType=TINYINT},
@@ -222,11 +214,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.uuid != null">
-        uuid = #{record.uuid,jdbcType=VARCHAR},
-      </if>
-      <if test="record.flowUuid != null">
-        flow_uuid = #{record.flowUuid,jdbcType=VARCHAR},
+      <if test="record.flowId != null">
+        flow_id = #{record.flowId,jdbcType=BIGINT},
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=TINYINT},
@@ -263,8 +252,7 @@
   <update id="updateByExample" parameterType="map">
     update t_donate_detail
     set id = #{record.id,jdbcType=BIGINT},
-      uuid = #{record.uuid,jdbcType=VARCHAR},
-      flow_uuid = #{record.flowUuid,jdbcType=VARCHAR},
+      flow_id = #{record.flowId,jdbcType=BIGINT},
       type = #{record.type,jdbcType=TINYINT},
       unit = #{record.unit,jdbcType=VARCHAR},
       quantity = #{record.quantity,jdbcType=BIGINT},
@@ -281,11 +269,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.DonateDetail">
     update t_donate_detail
     <set>
-      <if test="uuid != null">
-        uuid = #{uuid,jdbcType=VARCHAR},
-      </if>
-      <if test="flowUuid != null">
-        flow_uuid = #{flowUuid,jdbcType=VARCHAR},
+      <if test="flowId != null">
+        flow_id = #{flowId,jdbcType=BIGINT},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=TINYINT},
@@ -319,8 +304,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.DonateDetail">
     update t_donate_detail
-    set uuid = #{uuid,jdbcType=VARCHAR},
-      flow_uuid = #{flowUuid,jdbcType=VARCHAR},
+    set flow_id = #{flowId,jdbcType=BIGINT},
       type = #{type,jdbcType=TINYINT},
       unit = #{unit,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=BIGINT},

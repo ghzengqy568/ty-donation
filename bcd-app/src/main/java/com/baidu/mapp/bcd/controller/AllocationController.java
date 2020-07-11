@@ -78,7 +78,7 @@ public class AllocationController {
         List<ActivityPlan> activityPlans = activityPlanService.selectByExample(ActivityPlanExample.newBuilder()
                 .build()
                 .createCriteria()
-                .andActivityUuidEqualTo(activity.getUuid())
+                .andActivityIdEqualTo(activity.getId())
                 .toExample()
         );
 
@@ -143,14 +143,14 @@ public class AllocationController {
         int idx = 0;
         int len = payload.size();
         for (ActivityPlan activityPlan : activityPlans) {
-            String planId = activityPlan.getUuid();
+            Long planId = activityPlan.getId();
             Long amount = activityPlan.getAmount();
             while (amount > 0) {
                 if (idx >= len) {
                     throw new IllegalArgumentException("配置错误！");
                 }
                 DonateDetail donateDetail = payload.get(idx);
-                String detailId = donateDetail.getUuid();
+                Long detailId = donateDetail.getId();
                 Long b1 = donateDetail.getBalance();
                 long used = 0;
                 if (b1 <= amount) {
@@ -174,24 +174,25 @@ public class AllocationController {
                         .used(used)
                         .certCode("")
                         .createTime(new Date())
-                        .donateDetailUuid(detailId)
+                        .donateDetailId(detailId)
                         .sign(sign)
                         .build();
 
                 allocationService.insertSelective(allocation);
-                String allocationId = allocation.getUuid();
+                Long allocationId = allocation.getId();
                 // 存证
-                String certCode = certService.writeChain("admin", MetaAllocation.TABLE_NAME, allocationId, sign);
+
+                String certCode = certService.writeChain(9900000L, MetaAllocation.TABLE_NAME, allocationId, sign);
                 allocation.setCertCode(certCode);
                 allocation.setLastModifyTime(new Date());
                 allocationService.updateByPrimaryKeySelective(allocation);
 
                 // 创建t_plan_allocation_rel
                 PlanAllocationRel rel = PlanAllocationRel.newBuilder()
-                        .activityPlanUuid(planId)
+                        .activityPlanId(planId)
                         .createTime(new Date())
                         .lastModifyTime(new Date())
-                        .allocationUuid(allocationId)
+                        .allocationId(allocationId)
                         .build();
 
                 planAllocationRelService.insertSelective(rel);

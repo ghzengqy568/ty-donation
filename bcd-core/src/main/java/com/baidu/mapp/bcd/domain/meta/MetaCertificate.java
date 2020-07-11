@@ -6,7 +6,6 @@ package com.baidu.mapp.bcd.domain.meta;
        @Result(property = "certCode", column = "cert_code", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "certTime", column = "cert_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "sourceTable", column = "source_table", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
-       @Result(property = "uuid", column = "uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "sourceId", column = "source_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
@@ -72,20 +71,7 @@ public final class MetaCertificate {
     public static final String IS_KEY_SOURCETABLE = "false";
 
     /**
-     * 多链ID身份
-     */
-    public static final String UUID = "uuid";
-
-    public static final String COLUMN_NAME_UUID = "`uuid`";
-
-    public static final String JAVA_TYPE_UUID = "java.lang.String";
-
-    public static final String JDBC_TYPE_UUID = "VARCHAR";
-
-    public static final String IS_KEY_UUID = "false";
-
-    /**
-     * 存证来源表ID
+     * 原始记录ID
      */
     public static final String SOURCEID = "sourceId";
 
@@ -149,9 +135,6 @@ public final class MetaCertificate {
         if (columnName.equals(COLUMN_NAME_SOURCETABLE)) {
             return SOURCETABLE;
         }
-        if (columnName.equals(COLUMN_NAME_UUID)) {
-            return UUID;
-        }
         if (columnName.equals(COLUMN_NAME_SOURCEID)) {
             return SOURCEID;
         }
@@ -187,9 +170,6 @@ public final class MetaCertificate {
         if (fieldName.equals(SOURCETABLE)) {
             return COLUMN_NAME_SOURCETABLE;
         }
-        if (fieldName.equals(UUID)) {
-            return COLUMN_NAME_UUID;
-        }
         if (fieldName.equals(SOURCEID)) {
             return COLUMN_NAME_SOURCEID;
         }
@@ -224,9 +204,6 @@ public final class MetaCertificate {
         }
         if (fieldName.equals(SOURCETABLE)) {
             return COLUMN_NAME_SOURCETABLE.replace("`", "");
-        }
-        if (fieldName.equals(UUID)) {
-            return COLUMN_NAME_UUID.replace("`", "");
         }
         if (fieldName.equals(SOURCEID)) {
             return COLUMN_NAME_SOURCEID.replace("`", "");

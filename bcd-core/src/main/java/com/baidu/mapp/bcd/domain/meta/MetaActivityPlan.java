@@ -3,8 +3,7 @@ package com.baidu.mapp.bcd.domain.meta;
 /*
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
-       @Result(property = "uuid", column = "uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
-       @Result(property = "activityUuid", column = "activity_uuid", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "activityId", column = "activity_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "description", column = "description", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "type", column = "type", javaType = java.lang.Byte.class, jdbcType = JdbcType.TINYINT),
        @Result(property = "unit", column = "unit", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
@@ -39,30 +38,17 @@ public final class MetaActivityPlan {
     public static final String IS_KEY_ID = "true";
 
     /**
-     * 多链ID身份
-     */
-    public static final String UUID = "uuid";
-
-    public static final String COLUMN_NAME_UUID = "`uuid`";
-
-    public static final String JAVA_TYPE_UUID = "java.lang.String";
-
-    public static final String JDBC_TYPE_UUID = "VARCHAR";
-
-    public static final String IS_KEY_UUID = "false";
-
-    /**
      * 活动ID
      */
-    public static final String ACTIVITYUUID = "activityUuid";
+    public static final String ACTIVITYID = "activityId";
 
-    public static final String COLUMN_NAME_ACTIVITYUUID = "`activity_uuid`";
+    public static final String COLUMN_NAME_ACTIVITYID = "`activity_id`";
 
-    public static final String JAVA_TYPE_ACTIVITYUUID = "java.lang.String";
+    public static final String JAVA_TYPE_ACTIVITYID = "java.lang.Long";
 
-    public static final String JDBC_TYPE_ACTIVITYUUID = "VARCHAR";
+    public static final String JDBC_TYPE_ACTIVITYID = "BIGINT";
 
-    public static final String IS_KEY_ACTIVITYUUID = "false";
+    public static final String IS_KEY_ACTIVITYID = "false";
 
     /**
      * 计划描述
@@ -224,11 +210,8 @@ public final class MetaActivityPlan {
         if (columnName.equals(COLUMN_NAME_ID)) {
             return ID;
         }
-        if (columnName.equals(COLUMN_NAME_UUID)) {
-            return UUID;
-        }
-        if (columnName.equals(COLUMN_NAME_ACTIVITYUUID)) {
-            return ACTIVITYUUID;
+        if (columnName.equals(COLUMN_NAME_ACTIVITYID)) {
+            return ACTIVITYID;
         }
         if (columnName.equals(COLUMN_NAME_DESCRIPTION)) {
             return DESCRIPTION;
@@ -280,11 +263,8 @@ public final class MetaActivityPlan {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID;
         }
-        if (fieldName.equals(UUID)) {
-            return COLUMN_NAME_UUID;
-        }
-        if (fieldName.equals(ACTIVITYUUID)) {
-            return COLUMN_NAME_ACTIVITYUUID;
+        if (fieldName.equals(ACTIVITYID)) {
+            return COLUMN_NAME_ACTIVITYID;
         }
         if (fieldName.equals(DESCRIPTION)) {
             return COLUMN_NAME_DESCRIPTION;
@@ -336,11 +316,8 @@ public final class MetaActivityPlan {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID.replace("`", "");
         }
-        if (fieldName.equals(UUID)) {
-            return COLUMN_NAME_UUID.replace("`", "");
-        }
-        if (fieldName.equals(ACTIVITYUUID)) {
-            return COLUMN_NAME_ACTIVITYUUID.replace("`", "");
+        if (fieldName.equals(ACTIVITYID)) {
+            return COLUMN_NAME_ACTIVITYID.replace("`", "");
         }
         if (fieldName.equals(DESCRIPTION)) {
             return COLUMN_NAME_DESCRIPTION.replace("`", "");
