@@ -7,7 +7,7 @@ package com.baidu.mapp.bcd.domain.meta;
        @Result(property = "activityPlanId", column = "activity_plan_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "donatoryLevel", column = "donatory_level", javaType = java.lang.Byte.class, jdbcType = JdbcType.TINYINT),
        @Result(property = "quantity", column = "quantity", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
-       @Result(property = "donateDetailId", column = "donate_detail_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
+       @Result(property = "amount", column = "amount", javaType = java.lang.Integer.class, jdbcType = JdbcType.INTEGER),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
 })
@@ -85,17 +85,17 @@ public final class MetaActivityPlanConfig {
     public static final String IS_KEY_QUANTITY = "false";
 
     /**
-     * 捐赠明细ID
+     * 份数
      */
-    public static final String DONATEDETAILID = "donateDetailId";
+    public static final String AMOUNT = "amount";
 
-    public static final String COLUMN_NAME_DONATEDETAILID = "`donate_detail_id`";
+    public static final String COLUMN_NAME_AMOUNT = "`amount`";
 
-    public static final String JAVA_TYPE_DONATEDETAILID = "java.lang.Long";
+    public static final String JAVA_TYPE_AMOUNT = "java.lang.Integer";
 
-    public static final String JDBC_TYPE_DONATEDETAILID = "BIGINT";
+    public static final String JDBC_TYPE_AMOUNT = "INTEGER";
 
-    public static final String IS_KEY_DONATEDETAILID = "false";
+    public static final String IS_KEY_AMOUNT = "false";
 
     /**
      * 创建时间
@@ -152,8 +152,8 @@ public final class MetaActivityPlanConfig {
         if (columnName.equals(COLUMN_NAME_QUANTITY)) {
             return QUANTITY;
         }
-        if (columnName.equals(COLUMN_NAME_DONATEDETAILID)) {
-            return DONATEDETAILID;
+        if (columnName.equals(COLUMN_NAME_AMOUNT)) {
+            return AMOUNT;
         }
         if (columnName.equals(COLUMN_NAME_CREATETIME)) {
             return CREATETIME;
@@ -190,8 +190,8 @@ public final class MetaActivityPlanConfig {
         if (fieldName.equals(QUANTITY)) {
             return COLUMN_NAME_QUANTITY;
         }
-        if (fieldName.equals(DONATEDETAILID)) {
-            return COLUMN_NAME_DONATEDETAILID;
+        if (fieldName.equals(AMOUNT)) {
+            return COLUMN_NAME_AMOUNT;
         }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME;
@@ -228,8 +228,8 @@ public final class MetaActivityPlanConfig {
         if (fieldName.equals(QUANTITY)) {
             return COLUMN_NAME_QUANTITY.replace("`", "");
         }
-        if (fieldName.equals(DONATEDETAILID)) {
-            return COLUMN_NAME_DONATEDETAILID.replace("`", "");
+        if (fieldName.equals(AMOUNT)) {
+            return COLUMN_NAME_AMOUNT.replace("`", "");
         }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME.replace("`", "");

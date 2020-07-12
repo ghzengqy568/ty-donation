@@ -29,6 +29,13 @@ public class Assign implements Serializable {
     private Long donatoryId;
 
     /**
+     * column-name:config_id
+     * 计划配置ID
+     */
+    @Schema(description = "计划配置ID")
+    private Long configId;
+
+    /**
      * column-name:donatory_level
      * 受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入
      */
@@ -63,6 +70,7 @@ public class Assign implements Serializable {
         this.id = builder.id;
         this.activityPlanId = builder.activityPlanId;
         this.donatoryId = builder.donatoryId;
+        this.configId = builder.configId;
         this.donatoryLevel = builder.donatoryLevel;
         this.createTime = builder.createTime;
         this.lastModifyTime = builder.lastModifyTime;
@@ -115,6 +123,20 @@ public class Assign implements Serializable {
     }
 
     /**
+     * 计划配置ID
+     */
+    public Long getConfigId() {
+        return configId;
+    }
+
+    /**
+     * 计划配置ID
+     */
+    public void setConfigId(Long configId) {
+        this.configId = configId;
+    }
+
+    /**
      * 受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入
      */
     public Byte getDonatoryLevel() {
@@ -160,6 +182,7 @@ public class Assign implements Serializable {
         this.id = other.id;
         this.activityPlanId = other.activityPlanId;
         this.donatoryId = other.donatoryId;
+        this.configId = other.configId;
         this.donatoryLevel = other.donatoryLevel;
         this.createTime = other.createTime;
         this.lastModifyTime = other.lastModifyTime;
@@ -173,6 +196,7 @@ public class Assign implements Serializable {
         to.setId(from.id);
         to.setActivityPlanId(from.activityPlanId);
         to.setDonatoryId(from.donatoryId);
+        to.setConfigId(from.configId);
         to.setDonatoryLevel(from.donatoryLevel);
         to.setCreateTime(from.createTime);
         to.setLastModifyTime(from.lastModifyTime);
@@ -185,13 +209,14 @@ public class Assign implements Serializable {
             id: '',
             activityPlanId: '',
             donatoryId: '',
+            configId: '',
             donatoryLevel: '',
             createTime: '',
             lastModifyTime: ''
         }
         */
         
-        return "{\"id\": \"\",\"activityPlanId\": \"\",\"donatoryId\": \"\",\"donatoryLevel\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"activityPlanId\": \"\",\"donatoryId\": \"\",\"configId\": \"\",\"donatoryLevel\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -203,6 +228,7 @@ public class Assign implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", activityPlanId=").append(activityPlanId);
         sb.append(", donatoryId=").append(donatoryId);
+        sb.append(", configId=").append(configId);
         sb.append(", donatoryLevel=").append(donatoryLevel);
         sb.append(", createTime=").append(createTime);
         sb.append(", lastModifyTime=").append(lastModifyTime);
@@ -226,6 +252,11 @@ public class Assign implements Serializable {
          * 受赠人ID
          */
         private Long donatoryId;
+
+        /**
+         * 计划配置ID
+         */
+        private Long configId;
 
         /**
          * 受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入
@@ -267,6 +298,14 @@ public class Assign implements Serializable {
          */
         public XBuilder donatoryId(Long donatoryId) {
             this.donatoryId = donatoryId;
+            return this;
+        }
+
+        /**
+         * 计划配置ID
+         */
+        public XBuilder configId(Long configId) {
+            this.configId = configId;
             return this;
         }
 

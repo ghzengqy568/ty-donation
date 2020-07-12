@@ -2,6 +2,7 @@ package com.baidu.mapp.bcd.domain.base;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.function.Consumer;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -20,24 +21,38 @@ public class Pagination<T> implements Serializable {
     @Schema(description = "数据列表")
     private List<T> dataList;
 
-    @Schema(description = "总记录数")
+    private Object ext;
+
     public void setTotal(Long total) {
         this.total = total;
     }
 
-    @Schema(description = "总记录数")
     public Long getTotal() {
         return total;
     }
 
-    @Schema(description = "数据列表")
     public void setDataList(List<T> dataList) {
         this.dataList = dataList;
     }
 
-    @Schema(description = "数据列表")
     public List<T> getDataList() {
         return dataList;
+    }
+
+    public Object getExt() {
+        return ext;
+    }
+
+    public void setExt(Object ext) {
+        this.ext = ext;
+    }
+
+    public void each(Consumer<T> consumer) {
+        if (dataList != null && !dataList.isEmpty()) {
+            for (T t : dataList) {
+                consumer.accept(t);
+            }
+        }
     }
 
     public String toString() {

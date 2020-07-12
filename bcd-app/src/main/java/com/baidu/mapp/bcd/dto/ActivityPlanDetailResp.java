@@ -3,11 +3,19 @@ package com.baidu.mapp.bcd.dto;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Schema(description = "活动计划")
-public class ActivityPlanReq {
+@Schema(description = "活动计划详情响应")
+@Builder
+public class ActivityPlanDetailResp {
+
+    /**
+     * 活动计划ID
+     */
+    @Schema(description = "活动计划ID")
+    private Long id;
 
     /**
      * 活动ID
@@ -52,12 +60,12 @@ public class ActivityPlanReq {
     private Long amount;
 
     /**
+     * column-name:need_purchase
      * 是否需要采购
      */
     @Schema(description = "是否需要采购")
     private Byte needPurchase;
 
-    @Schema(description = "计划配置")
-    private List<ActivityPlanConfigReq> configs;
+    private List<ActivityPlanConfigResp> configs;
 
 }

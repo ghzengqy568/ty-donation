@@ -616,105 +616,105 @@ public class ActivityPlanConfigExample extends BaseExample {
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdIsNull() {
-            addCriterion("donate_detail_id is null");
+        public Criteria andAmountIsNull() {
+            addCriterion("amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdIsNotNull() {
-            addCriterion("donate_detail_id is not null");
+        public Criteria andAmountIsNotNull() {
+            addCriterion("amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdEqualTo(Long value) {
-            return andDonateDetailIdEqualTo(value, Boolean.TRUE);
+        public Criteria andAmountEqualTo(Integer value) {
+            return andAmountEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdEqualTo(Long value, Boolean condition) {
+        public Criteria andAmountEqualTo(Integer value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id =", value, "donateDetailId");
+            addCriterion("amount =", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdNotEqualTo(Long value) {
-            return andDonateDetailIdNotEqualTo(value, Boolean.TRUE);
+        public Criteria andAmountNotEqualTo(Integer value) {
+            return andAmountNotEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdNotEqualTo(Long value, Boolean condition) {
+        public Criteria andAmountNotEqualTo(Integer value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id <>", value, "donateDetailId");
+            addCriterion("amount <>", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdGreaterThan(Long value) {
-            return andDonateDetailIdGreaterThan(value, Boolean.TRUE);
+        public Criteria andAmountGreaterThan(Integer value) {
+            return andAmountGreaterThan(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdGreaterThan(Long value, Boolean condition) {
+        public Criteria andAmountGreaterThan(Integer value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id >", value, "donateDetailId");
+            addCriterion("amount >", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdGreaterThanOrEqualTo(Long value) {
-            return andDonateDetailIdGreaterThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andAmountGreaterThanOrEqualTo(Integer value) {
+            return andAmountGreaterThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdGreaterThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andAmountGreaterThanOrEqualTo(Integer value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id >=", value, "donateDetailId");
+            addCriterion("amount >=", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdLessThan(Long value) {
-            return andDonateDetailIdLessThan(value, Boolean.TRUE);
+        public Criteria andAmountLessThan(Integer value) {
+            return andAmountLessThan(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdLessThan(Long value, Boolean condition) {
+        public Criteria andAmountLessThan(Integer value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id <", value, "donateDetailId");
+            addCriterion("amount <", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdLessThanOrEqualTo(Long value) {
-            return andDonateDetailIdLessThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andAmountLessThanOrEqualTo(Integer value) {
+            return andAmountLessThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateDetailIdLessThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andAmountLessThanOrEqualTo(Integer value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_detail_id <=", value, "donateDetailId");
+            addCriterion("amount <=", value, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdIn(Collection<Long> values) {
-            addCriterion("donate_detail_id in", values, "donateDetailId");
+        public Criteria andAmountIn(Collection<Integer> values) {
+            addCriterion("amount in", values, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdNotIn(Collection<Long> values) {
-            addCriterion("donate_detail_id not in", values, "donateDetailId");
+        public Criteria andAmountNotIn(Collection<Integer> values) {
+            addCriterion("amount not in", values, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdBetween(Long value1, Long value2) {
-            addCriterion("donate_detail_id between", value1, value2, "donateDetailId");
+        public Criteria andAmountBetween(Integer value1, Integer value2) {
+            addCriterion("amount between", value1, value2, "amount");
             return (Criteria) this;
         }
 
-        public Criteria andDonateDetailIdNotBetween(Long value1, Long value2) {
-            addCriterion("donate_detail_id not between", value1, value2, "donateDetailId");
+        public Criteria andAmountNotBetween(Integer value1, Integer value2) {
+            addCriterion("amount not between", value1, value2, "amount");
             return (Criteria) this;
         }
 

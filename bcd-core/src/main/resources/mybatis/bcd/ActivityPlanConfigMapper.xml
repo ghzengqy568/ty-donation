@@ -7,7 +7,7 @@
     <result column="activity_plan_id" jdbcType="BIGINT" property="activityPlanId" />
     <result column="donatory_level" jdbcType="TINYINT" property="donatoryLevel" />
     <result column="quantity" jdbcType="BIGINT" property="quantity" />
-    <result column="donate_detail_id" jdbcType="BIGINT" property="donateDetailId" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
   </resultMap>
@@ -70,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, activity_id, activity_plan_id, donatory_level, quantity, donate_detail_id, create_time, 
+    id, activity_id, activity_plan_id, donatory_level, quantity, amount, create_time, 
     last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.ActivityPlanConfigExample" resultMap="BaseResultMap">
@@ -122,10 +122,10 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_activity_plan_config (activity_id, activity_plan_id, donatory_level, 
-      quantity, donate_detail_id, create_time, 
+      quantity, amount, create_time, 
       last_modify_time)
     values (#{activityId,jdbcType=BIGINT}, #{activityPlanId,jdbcType=BIGINT}, #{donatoryLevel,jdbcType=TINYINT}, 
-      #{quantity,jdbcType=BIGINT}, #{donateDetailId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{quantity,jdbcType=BIGINT}, #{amount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.ActivityPlanConfig">
@@ -146,8 +146,8 @@
       <if test="quantity != null">
         quantity,
       </if>
-      <if test="donateDetailId != null">
-        donate_detail_id,
+      <if test="amount != null">
+        amount,
       </if>
       <if test="createTime != null">
         create_time,
@@ -169,8 +169,8 @@
       <if test="quantity != null">
         #{quantity,jdbcType=BIGINT},
       </if>
-      <if test="donateDetailId != null">
-        #{donateDetailId,jdbcType=BIGINT},
+      <if test="amount != null">
+        #{amount,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -204,8 +204,8 @@
       <if test="record.quantity != null">
         quantity = #{record.quantity,jdbcType=BIGINT},
       </if>
-      <if test="record.donateDetailId != null">
-        donate_detail_id = #{record.donateDetailId,jdbcType=BIGINT},
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -225,7 +225,7 @@
       activity_plan_id = #{record.activityPlanId,jdbcType=BIGINT},
       donatory_level = #{record.donatoryLevel,jdbcType=TINYINT},
       quantity = #{record.quantity,jdbcType=BIGINT},
-      donate_detail_id = #{record.donateDetailId,jdbcType=BIGINT},
+      amount = #{record.amount,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -247,8 +247,8 @@
       <if test="quantity != null">
         quantity = #{quantity,jdbcType=BIGINT},
       </if>
-      <if test="donateDetailId != null">
-        donate_detail_id = #{donateDetailId,jdbcType=BIGINT},
+      <if test="amount != null">
+        amount = #{amount,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -265,7 +265,7 @@
       activity_plan_id = #{activityPlanId,jdbcType=BIGINT},
       donatory_level = #{donatoryLevel,jdbcType=TINYINT},
       quantity = #{quantity,jdbcType=BIGINT},
-      donate_detail_id = #{donateDetailId,jdbcType=BIGINT},
+      amount = #{amount,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

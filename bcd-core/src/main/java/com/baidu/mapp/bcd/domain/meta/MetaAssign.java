@@ -5,6 +5,7 @@ package com.baidu.mapp.bcd.domain.meta;
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
        @Result(property = "activityPlanId", column = "activity_plan_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "donatoryId", column = "donatory_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
+       @Result(property = "configId", column = "config_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "donatoryLevel", column = "donatory_level", javaType = java.lang.Byte.class, jdbcType = JdbcType.TINYINT),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
@@ -55,6 +56,19 @@ public final class MetaAssign {
     public static final String JDBC_TYPE_DONATORYID = "BIGINT";
 
     public static final String IS_KEY_DONATORYID = "false";
+
+    /**
+     * 计划配置ID
+     */
+    public static final String CONFIGID = "configId";
+
+    public static final String COLUMN_NAME_CONFIGID = "`config_id`";
+
+    public static final String JAVA_TYPE_CONFIGID = "java.lang.Long";
+
+    public static final String JDBC_TYPE_CONFIGID = "BIGINT";
+
+    public static final String IS_KEY_CONFIGID = "false";
 
     /**
      * 受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入
@@ -118,6 +132,9 @@ public final class MetaAssign {
         if (columnName.equals(COLUMN_NAME_DONATORYID)) {
             return DONATORYID;
         }
+        if (columnName.equals(COLUMN_NAME_CONFIGID)) {
+            return CONFIGID;
+        }
         if (columnName.equals(COLUMN_NAME_DONATORYLEVEL)) {
             return DONATORYLEVEL;
         }
@@ -150,6 +167,9 @@ public final class MetaAssign {
         if (fieldName.equals(DONATORYID)) {
             return COLUMN_NAME_DONATORYID;
         }
+        if (fieldName.equals(CONFIGID)) {
+            return COLUMN_NAME_CONFIGID;
+        }
         if (fieldName.equals(DONATORYLEVEL)) {
             return COLUMN_NAME_DONATORYLEVEL;
         }
@@ -181,6 +201,9 @@ public final class MetaAssign {
         }
         if (fieldName.equals(DONATORYID)) {
             return COLUMN_NAME_DONATORYID.replace("`", "");
+        }
+        if (fieldName.equals(CONFIGID)) {
+            return COLUMN_NAME_CONFIGID.replace("`", "");
         }
         if (fieldName.equals(DONATORYLEVEL)) {
             return COLUMN_NAME_DONATORYLEVEL.replace("`", "");

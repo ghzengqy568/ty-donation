@@ -43,11 +43,11 @@ public class ActivityPlanConfig implements Serializable {
     private Long quantity;
 
     /**
-     * column-name:donate_detail_id
-     * 捐赠明细ID
+     * column-name:amount
+     * 份数
      */
-    @Schema(description = "捐赠明细ID")
-    private Long donateDetailId;
+    @Schema(description = "份数")
+    private Integer amount;
 
     /**
      * column-name:create_time
@@ -79,7 +79,7 @@ public class ActivityPlanConfig implements Serializable {
         this.activityPlanId = builder.activityPlanId;
         this.donatoryLevel = builder.donatoryLevel;
         this.quantity = builder.quantity;
-        this.donateDetailId = builder.donateDetailId;
+        this.amount = builder.amount;
         this.createTime = builder.createTime;
         this.lastModifyTime = builder.lastModifyTime;
     }
@@ -159,17 +159,17 @@ public class ActivityPlanConfig implements Serializable {
     }
 
     /**
-     * 捐赠明细ID
+     * 份数
      */
-    public Long getDonateDetailId() {
-        return donateDetailId;
+    public Integer getAmount() {
+        return amount;
     }
 
     /**
-     * 捐赠明细ID
+     * 份数
      */
-    public void setDonateDetailId(Long donateDetailId) {
-        this.donateDetailId = donateDetailId;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 
     /**
@@ -206,7 +206,7 @@ public class ActivityPlanConfig implements Serializable {
         this.activityPlanId = other.activityPlanId;
         this.donatoryLevel = other.donatoryLevel;
         this.quantity = other.quantity;
-        this.donateDetailId = other.donateDetailId;
+        this.amount = other.amount;
         this.createTime = other.createTime;
         this.lastModifyTime = other.lastModifyTime;
         return this;
@@ -221,7 +221,7 @@ public class ActivityPlanConfig implements Serializable {
         to.setActivityPlanId(from.activityPlanId);
         to.setDonatoryLevel(from.donatoryLevel);
         to.setQuantity(from.quantity);
-        to.setDonateDetailId(from.donateDetailId);
+        to.setAmount(from.amount);
         to.setCreateTime(from.createTime);
         to.setLastModifyTime(from.lastModifyTime);
         return to;
@@ -235,13 +235,13 @@ public class ActivityPlanConfig implements Serializable {
             activityPlanId: '',
             donatoryLevel: '',
             quantity: '',
-            donateDetailId: '',
+            amount: '',
             createTime: '',
             lastModifyTime: ''
         }
         */
         
-        return "{\"id\": \"\",\"activityId\": \"\",\"activityPlanId\": \"\",\"donatoryLevel\": \"\",\"quantity\": \"\",\"donateDetailId\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"activityId\": \"\",\"activityPlanId\": \"\",\"donatoryLevel\": \"\",\"quantity\": \"\",\"amount\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -255,7 +255,7 @@ public class ActivityPlanConfig implements Serializable {
         sb.append(", activityPlanId=").append(activityPlanId);
         sb.append(", donatoryLevel=").append(donatoryLevel);
         sb.append(", quantity=").append(quantity);
-        sb.append(", donateDetailId=").append(donateDetailId);
+        sb.append(", amount=").append(amount);
         sb.append(", createTime=").append(createTime);
         sb.append(", lastModifyTime=").append(lastModifyTime);
         sb.append("]");
@@ -290,9 +290,9 @@ public class ActivityPlanConfig implements Serializable {
         private Long quantity;
 
         /**
-         * 捐赠明细ID
+         * 份数
          */
-        private Long donateDetailId;
+        private Integer amount;
 
         /**
          * 创建时间
@@ -349,10 +349,10 @@ public class ActivityPlanConfig implements Serializable {
         }
 
         /**
-         * 捐赠明细ID
+         * 份数
          */
-        public XBuilder donateDetailId(Long donateDetailId) {
-            this.donateDetailId = donateDetailId;
+        public XBuilder amount(Integer amount) {
+            this.amount = amount;
             return this;
         }
 

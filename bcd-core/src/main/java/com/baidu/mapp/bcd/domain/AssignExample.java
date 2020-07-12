@@ -412,6 +412,108 @@ public class AssignExample extends BaseExample {
             return (Criteria) this;
         }
 
+        public Criteria andConfigIdIsNull() {
+            addCriterion("config_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdIsNotNull() {
+            addCriterion("config_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdEqualTo(Long value) {
+            return andConfigIdEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andConfigIdEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("config_id =", value, "configId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdNotEqualTo(Long value) {
+            return andConfigIdNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andConfigIdNotEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("config_id <>", value, "configId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdGreaterThan(Long value) {
+            return andConfigIdGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andConfigIdGreaterThan(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("config_id >", value, "configId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdGreaterThanOrEqualTo(Long value) {
+            return andConfigIdGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andConfigIdGreaterThanOrEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("config_id >=", value, "configId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdLessThan(Long value) {
+            return andConfigIdLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andConfigIdLessThan(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("config_id <", value, "configId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdLessThanOrEqualTo(Long value) {
+            return andConfigIdLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andConfigIdLessThanOrEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("config_id <=", value, "configId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdIn(Collection<Long> values) {
+            addCriterion("config_id in", values, "configId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdNotIn(Collection<Long> values) {
+            addCriterion("config_id not in", values, "configId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdBetween(Long value1, Long value2) {
+            addCriterion("config_id between", value1, value2, "configId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfigIdNotBetween(Long value1, Long value2) {
+            addCriterion("config_id not between", value1, value2, "configId");
+            return (Criteria) this;
+        }
+
         public Criteria andDonatoryLevelIsNull() {
             addCriterion("donatory_level is null");
             return (Criteria) this;
