@@ -8,6 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
+import com.baidu.mapp.bcd.common.utils.SignUtils;
+import com.baidu.mapp.bcd.domain.*;
+import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
+import com.baidu.mapp.bcd.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,27 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baidu.mapp.bcd.domain.Activity;
-import com.baidu.mapp.bcd.domain.ActivityPlanConfig;
-import com.baidu.mapp.bcd.domain.Assign;
-import com.baidu.mapp.bcd.domain.AssignExample;
-import com.baidu.mapp.bcd.domain.Donatory;
-import com.baidu.mapp.bcd.domain.DrawRecord;
-import com.baidu.mapp.bcd.domain.DrawRecordDetail;
-import com.baidu.mapp.bcd.domain.DrawRecordExample;
-import com.baidu.mapp.bcd.domain.PlanAllocationRel;
-import com.baidu.mapp.bcd.domain.PlanAllocationRelExample;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
 import com.baidu.mapp.bcd.dto.DrawReq;
-import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
-import com.baidu.mapp.bcd.service.ActivityService;
-import com.baidu.mapp.bcd.service.AllocationService;
-import com.baidu.mapp.bcd.service.AssignService;
-import com.baidu.mapp.bcd.service.DonatoryService;
-import com.baidu.mapp.bcd.service.DrawRecordDetailService;
-import com.baidu.mapp.bcd.service.DrawRecordService;
-import com.baidu.mapp.bcd.service.PlanAllocationRelService;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -54,10 +41,19 @@ public class DrawController {
     DrawRecordService drawRecordService;
 
     @Autowired
+    CertService certService;
+
+    @Autowired
     DrawRecordDetailService drawRecordDetailService;
 
     @Autowired
+    DrawRecordFlowService drawRecordFlowService;
+
+    @Autowired
     AssignService assignService;
+
+    @Autowired
+    ActivityPlanService activityPlanService;
 
     @Autowired
     ActivityPlanConfigService activityPlanConfigService;
@@ -69,7 +65,7 @@ public class DrawController {
     PlanAllocationRelService planAllocationRelService;
 
     @PostMapping("draw")
-    public R draw(@RequestBody DrawReq drawReq) {
+    public R<String> draw(@RequestBody DrawReq drawReq) {
         Long activityId = drawReq.getActivityId();
         Long donatoryId = drawReq.getDonatoryId();
 
@@ -111,12 +107,39 @@ public class DrawController {
             return R.error(100102, "受捐人已领取过了");
         }
 
+        Date drawTime = new Date();
+        String sign = SignUtils.sign(donatoryId, activityId, DateTimeUtils.toDateTimeString(drawTime,
+                "yyyyMMddHHmmss"));
+        DrawRecordFlow drawRecordFlow = DrawRecordFlow.newBuilder()
+                .drawTime(new Date())
+                .activityId(activityId)
+                .donatoryId(donatoryId)
+                .sign(sign)
+                .createTime(new Date())
+                .lastModifyTime(new Date())
+                .build();
+        drawRecordFlowService.insertSelective(drawRecordFlow);
+
+        String flowCertCode = certService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME, drawRecordFlow.getId
+                        (),
+                sign);
+        drawRecordFlow.setCertCode(flowCertCode);
+        drawRecordFlow.setLastModifyTime(new Date());
+        drawRecordFlowService.updateByPrimaryKeySelective(drawRecordFlow);
+
+        Long drawFlowId = drawRecordFlow.getId();
+
         Map<Long, ActivityPlanConfig> configMap = activityPlanConfigService.selectMapByPrimaryKeys(
                 assigns.stream().map(Assign :: getConfigId).collect(Collectors.toList()),
                 ActivityPlanConfig :: getId
         );
 
-        //
+        Map<Long, ActivityPlan> activityPlanMap =
+                activityPlanService.selectMapByExample(ActivityPlanExample.newBuilder().build().createCriteria().
+                                andActivityIdEqualTo(activityId).toExample(),
+                        ActivityPlan::getId
+                );
+
         for (Assign assign : assigns) {
             Long configId = assign.getConfigId();
             ActivityPlanConfig activityPlanConfig = configMap.get(configId);
@@ -175,8 +198,35 @@ public class DrawController {
             if (!over) {
                 return R.error("余额不足");
             }
+
+            ActivityPlan activityPlan = activityPlanMap.get(activityPlanId);
+            Byte type = activityPlan.getType();
+            String unit = activityPlan.getUnit();
+            Long personalQuantity = configMap.get(configId).getQuantity();
+            String name = activityPlan.getName();
+            String drSign = SignUtils.sign(drawFlowId, activityId, donatoryId, type, unit, personalQuantity, name);
+            // 新增t_draw_record
+            DrawRecord drawRecord = DrawRecord.newBuilder()
+                    .drawRecordFlowId(drawFlowId)
+                    .activityId(activityId)
+                    .donatoryId(donatoryId)
+                    .type(type)
+                    .unit(unit)
+                    .quantity(personalQuantity)
+                    .name(name)
+                    .sign(drSign)
+                    .createTime(new Date())
+                    .lastModifyTime(new Date())
+                    .build();
+            drawRecordService.insertSelective(drawRecord);
+
+            String drCert = certService.writeChain(donatoryId, MetaDrawRecord.TABLE_NAME, drawRecord.getId(), sign);
+            drawRecord.setCertCode(drCert);
+            drawRecord.setLastModifyTime(new Date());
+            drawRecordService.updateByPrimaryKeySelective(drawRecord);
         }
-        return R.ok();
+
+        return R.ok(flowCertCode);
     }
 
     /**
