@@ -9,20 +9,21 @@ import com.baidu.mapp.bcd.domain.*;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateDetail;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
+import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
 import com.baidu.mapp.bcd.dto.DonateDetailReq;
+import com.baidu.mapp.bcd.dto.DonateFlowResp;
 import com.baidu.mapp.bcd.dto.DonateReq;
 import com.baidu.mapp.bcd.service.CertService;
 import com.baidu.mapp.bcd.service.DonateDetailService;
 import com.baidu.mapp.bcd.service.DonateFlowService;
 import com.baidu.mapp.bcd.service.DonorService;
+import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Schema(description = "捐赠接口", name = "DonateController")
 @RestController
@@ -105,49 +106,98 @@ public class DonateController {
         return R.ok(certCode);
     }
 
-    @GetMapping("/fetch")
-    public R fetchDonationDetail(@RequestParam String certCode) {
-        Certificate certificate = certService.queryCert(certCode);
+    @GetMapping("/genSearch")
+    public R<List<DonateFlowResp>> genericSearch(@RequestParam String queryString) {
+        // 先精准匹配证书号
+        Certificate certificate = certService.queryCert(queryString);
         // 验证证书记录是否存在
-        if (Objects.isNull(certificate)) {
-            return R.error(100201, "该证书号不存在");
+        // 如果证书记录存在, 则查询证书对应的捐赠/受捐详情
+        if (Objects.nonNull(certificate)) {
+            String sourceTable = certificate.getSourceTable();
+            Long sourceId = certificate.getSourceId();
+            if (sourceTable.equalsIgnoreCase(MetaDonateFlow.TABLE_NAME)) {
+                // 捐赠人通过捐赠流水证书查询
+                // sourceId 捐赠流水ID
+                DonateFlow donateFlow = donateFlowService.selectByPrimaryKey(sourceId);
+                if (Objects.isNull(donateFlow)) {
+                    return R.error(100202, "该笔捐赠流水不存在");
+                }
+                List<DonateFlowResp> dfResps = Lists.newArrayList();
+                dfResps.add(DonateFlowResp.builder()
+                        .id(donateFlow.getId())
+                        .donorId(donateFlow.getDonorId())
+                        .donateTime(donateFlow.getDonateTime())
+                        .certCode(queryString)
+                        .build());
+                return R.ok(dfResps);
+            } else if (sourceTable.equalsIgnoreCase(MetaDrawRecord.TABLE_NAME)) {
+                // 受捐人通过领取记录证书查询
+
+
+                return R.ok();
+            } else {
+                // 其他证书类型查询, 暂不受理
+                return R.ok();
+            }
+
+        } else {
+            // 如果证书记录不存在, 则模糊匹配捐赠记录
+            return R.ok(queryDonationsByDonar(queryString));
         }
-
-        String sourceTable = certificate.getSourceTable();
-        Long sourceId = certificate.getSourceId();
-        // 捐赠人通过捐赠流水证书查询
-        if (sourceTable.equalsIgnoreCase(MetaDonateFlow.TABLE_NAME)) {
-            // sourceId 捐赠流水ID
-            DonateFlow donateFlow = donateFlowService.selectByPrimaryKey(sourceId);
-            if (Objects.isNull(donateFlow)) {
-                return R.error(100202, "该笔捐赠流水不存在");
-            }
-
-            String donateFlowCertCode = donateFlow.getCertCode();
-            Long donorId = donateFlow.getDonorId();
-            Date donateTime = donateFlow.getDonateTime();
-            String donateFlowSign = donateFlow.getSign();
-
-            String donateFlowSignToCmp = SignUtils.sign(donorId, DateTimeUtils.toDateTimeString(donateTime,
-                    "yyyyMMddHHmmss"));
-            // 验证签名1：本地库中存储的签名验证
-            if (!donateFlowSignToCmp.equalsIgnoreCase(donateFlowSign)) {
-                return R.error(100202, "该笔捐赠流水签名验证失败");
-            }
-            // 通过证书查询链上实际存储数据
-            String donateFlowSignOnChain = certService.readChain(certCode);
-            // 签名验证2：本地库中存储的签名验证 及 链上读取的数据签名 对比
-            if (!donateFlowSign.equals(donateFlowSignOnChain)) {
-                return R.error(100202, "该笔捐赠流水签名验证失败");
-            }
-
-            // 签名验证通过
-
-
-        }
-
-        return R.ok();
     }
+
+    /**
+     * 按模糊匹配捐赠人名称, 查询捐赠记录
+     */
+    private List<DonateFlowResp> queryDonationsByDonar(String queryString) {
+        Map<Long, Donor> donorIdMap = donorService.selectMapByExample(DonorExample.newBuilder()
+                .build()
+                .createCriteria()
+                .andDonorNameLike("%" + queryString + "%")
+                .toExample(), Donor::getId);
+        if (CollectionUtils.isEmpty(donorIdMap)) {
+            return Lists.newArrayList();
+        }
+
+        Set<Long> donorIds = donorIdMap.keySet();
+
+        List<DonateFlowResp> donateFlowResps = donateFlowService.selectByExample(DonateFlowExample.newBuilder()
+                .build()
+                .createCriteria()
+                .andDonorIdIn(donorIds)
+                .toExample(), (DonateFlow df) -> {
+            return DonateFlowResp.builder()
+                    .id(df.getId())
+                    .donorId(df.getDonorId())
+                    .donorName(donorIdMap.get(df.getDonorId()).getDonorName())
+                    .donateTime(df.getDonateTime())
+                    .certCode(df.getCertCode())
+                    .build();
+        });
+        return donateFlowResps;
+    }
+
+    /**
+     * 按精确匹配证书号, 查询捐款流程
+     * @param queryString
+     * @return
+     */
+    private List<DonateFlowResp> queryDonationsByDonorCertCode(String queryString) {
+
+
+
+
+        List<DonateFlow> donateFlows = donateFlowService
+                .selectByExample(DonateFlowExample.newBuilder().build().createCriteria().andCertCodeEqualTo
+                        (queryString).toExample());
+
+        // todo
+
+        return null;
+
+    }
+
+
 
 
 }

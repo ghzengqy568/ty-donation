@@ -3,6 +3,7 @@
  */
 package com.baidu.mapp.bcd.controller;
 
+import com.baidu.mapp.bcd.common.utils.ActivityStatus;
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.domain.*;
@@ -60,6 +61,7 @@ public class ActivityController {
                 .startTime(startTime)
                 .endTime(endTime)
                 .theme(theme)
+                .status(ActivityStatus.INIT.getStatus())
                 .sign(actSign)
                 .build();
 
@@ -146,43 +148,45 @@ public class ActivityController {
                             .description(act.getDescription())
                             .startTime(act.getStartTime())
                             .endTime(act.getEndTime())
+                            .status(act.getStatus())
                             .build();
                     return actRep;
                 }
         );
 
-        if (activityPagination.getTotal() == 0 || actIds.isEmpty()) {
-            return R.ok(activityPagination);
-        }
-
-        Map<Long, List<ActivityPlanResp>> actPlanMap =
-                activityPlanService.selectMapListByExample(ActivityPlanExample.newBuilder()
-                                .build()
-                                .createCriteria()
-                                .andActivityIdIn(actIds)
-                                .toExample(),
-                        ActivityPlan :: getActivityId,
-                        item -> {
-                            ActivityPlanResp planResp = ActivityPlanResp.builder()
-                                    .id(item.getId())
-                                    .activityId(item.getActivityId())
-                                    .type(item.getType())
-                                    .unit(item.getUnit())
-                                    .quantity(item.getQuantity())
-                                    .name(item.getName())
-                                    .amount(item.getAmount())
-                                    .build();
-
-                            return planResp;
-                        }
-                );
-
-        activityPagination.each(activityResp -> {
-            Long actId = activityResp.getId();
-            List<ActivityPlanResp> activityPlanResps = actPlanMap.get(actId);
-            activityResp.setActivityPlanRespList(activityPlanResps);
-        });
         return R.ok(activityPagination);
+//        if (activityPagination.getTotal() == 0 || actIds.isEmpty()) {
+//            return R.ok(activityPagination);
+//        }
+//
+//        Map<Long, List<ActivityPlanResp>> actPlanMap =
+//                activityPlanService.selectMapListByExample(ActivityPlanExample.newBuilder()
+//                                .build()
+//                                .createCriteria()
+//                                .andActivityIdIn(actIds)
+//                                .toExample(),
+//                        ActivityPlan :: getActivityId,
+//                        item -> {
+//                            ActivityPlanResp planResp = ActivityPlanResp.builder()
+//                                    .id(item.getId())
+//                                    .activityId(item.getActivityId())
+//                                    .type(item.getType())
+//                                    .unit(item.getUnit())
+//                                    .quantity(item.getQuantity())
+//                                    .name(item.getName())
+//                                    .amount(item.getAmount())
+//                                    .build();
+//
+//                            return planResp;
+//                        }
+//                );
+//
+//        activityPagination.each(activityResp -> {
+//            Long actId = activityResp.getId();
+//            List<ActivityPlanResp> activityPlanResps = actPlanMap.get(actId);
+//            activityResp.setActivityPlanRespList(activityPlanResps);
+//        });
+//        return R.ok(activityPagination);
     }
 
     @GetMapping("/detail/{actId}")
@@ -195,6 +199,7 @@ public class ActivityController {
                         .description(act.getDescription())
                         .startTime(act.getStartTime())
                         .endTime(act.getEndTime())
+                        .status(act.getStatus())
                         .build()
         );
 
