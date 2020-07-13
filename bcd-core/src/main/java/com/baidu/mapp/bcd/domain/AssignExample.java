@@ -208,6 +208,108 @@ public class AssignExample extends BaseExample {
             return (Criteria) this;
         }
 
+        public Criteria andActivityIdIsNull() {
+            addCriterion("activity_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdIsNotNull() {
+            addCriterion("activity_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdEqualTo(Long value) {
+            return andActivityIdEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andActivityIdEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("activity_id =", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdNotEqualTo(Long value) {
+            return andActivityIdNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andActivityIdNotEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("activity_id <>", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdGreaterThan(Long value) {
+            return andActivityIdGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andActivityIdGreaterThan(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("activity_id >", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdGreaterThanOrEqualTo(Long value) {
+            return andActivityIdGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andActivityIdGreaterThanOrEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("activity_id >=", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdLessThan(Long value) {
+            return andActivityIdLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andActivityIdLessThan(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("activity_id <", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdLessThanOrEqualTo(Long value) {
+            return andActivityIdLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andActivityIdLessThanOrEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("activity_id <=", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdIn(Collection<Long> values) {
+            addCriterion("activity_id in", values, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdNotIn(Collection<Long> values) {
+            addCriterion("activity_id not in", values, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdBetween(Long value1, Long value2) {
+            addCriterion("activity_id between", value1, value2, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdNotBetween(Long value1, Long value2) {
+            addCriterion("activity_id not between", value1, value2, "activityId");
+            return (Criteria) this;
+        }
+
         public Criteria andActivityPlanIdIsNull() {
             addCriterion("activity_plan_id is null");
             return (Criteria) this;

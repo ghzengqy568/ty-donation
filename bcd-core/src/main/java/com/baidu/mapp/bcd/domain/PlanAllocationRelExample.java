@@ -412,6 +412,210 @@ public class PlanAllocationRelExample extends BaseExample {
             return (Criteria) this;
         }
 
+        public Criteria andBalanceIsNull() {
+            addCriterion("balance is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceIsNotNull() {
+            addCriterion("balance is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceEqualTo(Long value) {
+            return andBalanceEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance =", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceNotEqualTo(Long value) {
+            return andBalanceNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceNotEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance <>", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceGreaterThan(Long value) {
+            return andBalanceGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceGreaterThan(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance >", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceGreaterThanOrEqualTo(Long value) {
+            return andBalanceGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceGreaterThanOrEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance >=", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceLessThan(Long value) {
+            return andBalanceLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceLessThan(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance <", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceLessThanOrEqualTo(Long value) {
+            return andBalanceLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andBalanceLessThanOrEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("balance <=", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceIn(Collection<Long> values) {
+            addCriterion("balance in", values, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceNotIn(Collection<Long> values) {
+            addCriterion("balance not in", values, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceBetween(Long value1, Long value2) {
+            addCriterion("balance between", value1, value2, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceNotBetween(Long value1, Long value2) {
+            addCriterion("balance not between", value1, value2, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedIsNull() {
+            addCriterion("used is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedIsNotNull() {
+            addCriterion("used is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedEqualTo(Long value) {
+            return andUsedEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andUsedEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("used =", value, "used");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedNotEqualTo(Long value) {
+            return andUsedNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andUsedNotEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("used <>", value, "used");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedGreaterThan(Long value) {
+            return andUsedGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andUsedGreaterThan(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("used >", value, "used");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedGreaterThanOrEqualTo(Long value) {
+            return andUsedGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andUsedGreaterThanOrEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("used >=", value, "used");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedLessThan(Long value) {
+            return andUsedLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andUsedLessThan(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("used <", value, "used");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedLessThanOrEqualTo(Long value) {
+            return andUsedLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andUsedLessThanOrEqualTo(Long value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("used <=", value, "used");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedIn(Collection<Long> values) {
+            addCriterion("used in", values, "used");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedNotIn(Collection<Long> values) {
+            addCriterion("used not in", values, "used");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedBetween(Long value1, Long value2) {
+            addCriterion("used between", value1, value2, "used");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsedNotBetween(Long value1, Long value2) {
+            addCriterion("used not between", value1, value2, "used");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

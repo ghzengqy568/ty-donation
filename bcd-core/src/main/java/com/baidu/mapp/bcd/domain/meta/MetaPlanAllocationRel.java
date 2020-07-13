@@ -5,6 +5,8 @@ package com.baidu.mapp.bcd.domain.meta;
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
        @Result(property = "activityPlanId", column = "activity_plan_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "allocationId", column = "allocation_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
+       @Result(property = "balance", column = "balance", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
+       @Result(property = "used", column = "used", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
 })
@@ -56,6 +58,32 @@ public final class MetaPlanAllocationRel {
     public static final String IS_KEY_ALLOCATIONID = "false";
 
     /**
+     * 分配后余额
+     */
+    public static final String BALANCE = "balance";
+
+    public static final String COLUMN_NAME_BALANCE = "`balance`";
+
+    public static final String JAVA_TYPE_BALANCE = "java.lang.Long";
+
+    public static final String JDBC_TYPE_BALANCE = "BIGINT";
+
+    public static final String IS_KEY_BALANCE = "false";
+
+    /**
+     * 使用量
+     */
+    public static final String USED = "used";
+
+    public static final String COLUMN_NAME_USED = "`used`";
+
+    public static final String JAVA_TYPE_USED = "java.lang.Long";
+
+    public static final String JDBC_TYPE_USED = "BIGINT";
+
+    public static final String IS_KEY_USED = "false";
+
+    /**
      * 创建时间
      */
     public static final String CREATETIME = "createTime";
@@ -104,6 +132,12 @@ public final class MetaPlanAllocationRel {
         if (columnName.equals(COLUMN_NAME_ALLOCATIONID)) {
             return ALLOCATIONID;
         }
+        if (columnName.equals(COLUMN_NAME_BALANCE)) {
+            return BALANCE;
+        }
+        if (columnName.equals(COLUMN_NAME_USED)) {
+            return USED;
+        }
         if (columnName.equals(COLUMN_NAME_CREATETIME)) {
             return CREATETIME;
         }
@@ -133,6 +167,12 @@ public final class MetaPlanAllocationRel {
         if (fieldName.equals(ALLOCATIONID)) {
             return COLUMN_NAME_ALLOCATIONID;
         }
+        if (fieldName.equals(BALANCE)) {
+            return COLUMN_NAME_BALANCE;
+        }
+        if (fieldName.equals(USED)) {
+            return COLUMN_NAME_USED;
+        }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME;
         }
@@ -161,6 +201,12 @@ public final class MetaPlanAllocationRel {
         }
         if (fieldName.equals(ALLOCATIONID)) {
             return COLUMN_NAME_ALLOCATIONID.replace("`", "");
+        }
+        if (fieldName.equals(BALANCE)) {
+            return COLUMN_NAME_BALANCE.replace("`", "");
+        }
+        if (fieldName.equals(USED)) {
+            return COLUMN_NAME_USED.replace("`", "");
         }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME.replace("`", "");

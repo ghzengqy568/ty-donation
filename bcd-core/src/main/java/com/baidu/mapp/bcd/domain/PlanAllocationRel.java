@@ -29,6 +29,20 @@ public class PlanAllocationRel implements Serializable {
     private Long allocationId;
 
     /**
+     * column-name:balance
+     * 分配后余额
+     */
+    @Schema(description = "分配后余额")
+    private Long balance;
+
+    /**
+     * column-name:used
+     * 使用量
+     */
+    @Schema(description = "使用量")
+    private Long used;
+
+    /**
      * column-name:create_time
      * 创建时间
      */
@@ -56,6 +70,8 @@ public class PlanAllocationRel implements Serializable {
         this.id = builder.id;
         this.activityPlanId = builder.activityPlanId;
         this.allocationId = builder.allocationId;
+        this.balance = builder.balance;
+        this.used = builder.used;
         this.createTime = builder.createTime;
         this.lastModifyTime = builder.lastModifyTime;
     }
@@ -107,6 +123,34 @@ public class PlanAllocationRel implements Serializable {
     }
 
     /**
+     * 分配后余额
+     */
+    public Long getBalance() {
+        return balance;
+    }
+
+    /**
+     * 分配后余额
+     */
+    public void setBalance(Long balance) {
+        this.balance = balance;
+    }
+
+    /**
+     * 使用量
+     */
+    public Long getUsed() {
+        return used;
+    }
+
+    /**
+     * 使用量
+     */
+    public void setUsed(Long used) {
+        this.used = used;
+    }
+
+    /**
      * 创建时间
      */
     public Date getCreateTime() {
@@ -138,6 +182,8 @@ public class PlanAllocationRel implements Serializable {
         this.id = other.id;
         this.activityPlanId = other.activityPlanId;
         this.allocationId = other.allocationId;
+        this.balance = other.balance;
+        this.used = other.used;
         this.createTime = other.createTime;
         this.lastModifyTime = other.lastModifyTime;
         return this;
@@ -150,6 +196,8 @@ public class PlanAllocationRel implements Serializable {
         to.setId(from.id);
         to.setActivityPlanId(from.activityPlanId);
         to.setAllocationId(from.allocationId);
+        to.setBalance(from.balance);
+        to.setUsed(from.used);
         to.setCreateTime(from.createTime);
         to.setLastModifyTime(from.lastModifyTime);
         return to;
@@ -161,12 +209,14 @@ public class PlanAllocationRel implements Serializable {
             id: '',
             activityPlanId: '',
             allocationId: '',
+            balance: '',
+            used: '',
             createTime: '',
             lastModifyTime: ''
         }
         */
         
-        return "{\"id\": \"\",\"activityPlanId\": \"\",\"allocationId\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"activityPlanId\": \"\",\"allocationId\": \"\",\"balance\": \"\",\"used\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -178,6 +228,8 @@ public class PlanAllocationRel implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", activityPlanId=").append(activityPlanId);
         sb.append(", allocationId=").append(allocationId);
+        sb.append(", balance=").append(balance);
+        sb.append(", used=").append(used);
         sb.append(", createTime=").append(createTime);
         sb.append(", lastModifyTime=").append(lastModifyTime);
         sb.append("]");
@@ -200,6 +252,16 @@ public class PlanAllocationRel implements Serializable {
          * 拨款记录ID
          */
         private Long allocationId;
+
+        /**
+         * 分配后余额
+         */
+        private Long balance;
+
+        /**
+         * 使用量
+         */
+        private Long used;
 
         /**
          * 创建时间
@@ -236,6 +298,22 @@ public class PlanAllocationRel implements Serializable {
          */
         public XBuilder allocationId(Long allocationId) {
             this.allocationId = allocationId;
+            return this;
+        }
+
+        /**
+         * 分配后余额
+         */
+        public XBuilder balance(Long balance) {
+            this.balance = balance;
+            return this;
+        }
+
+        /**
+         * 使用量
+         */
+        public XBuilder used(Long used) {
+            this.used = used;
             return this;
         }
 

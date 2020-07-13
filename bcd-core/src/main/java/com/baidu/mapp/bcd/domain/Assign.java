@@ -15,6 +15,13 @@ public class Assign implements Serializable {
     private Long id;
 
     /**
+     * column-name:activity_id
+     * 活动ID
+     */
+    @Schema(description = "活动ID")
+    private Long activityId;
+
+    /**
      * column-name:activity_plan_id
      * 活动计划ID
      */
@@ -60,7 +67,6 @@ public class Assign implements Serializable {
      * 指派关系表
      */
     public Assign() {
-        
     }
 
     /**
@@ -68,6 +74,7 @@ public class Assign implements Serializable {
      */
     private Assign(XBuilder builder) {
         this.id = builder.id;
+        this.activityId = builder.activityId;
         this.activityPlanId = builder.activityPlanId;
         this.donatoryId = builder.donatoryId;
         this.configId = builder.configId;
@@ -92,6 +99,20 @@ public class Assign implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * 活动ID
+     */
+    public Long getActivityId() {
+        return activityId;
+    }
+
+    /**
+     * 活动ID
+     */
+    public void setActivityId(Long activityId) {
+        this.activityId = activityId;
     }
 
     /**
@@ -180,6 +201,7 @@ public class Assign implements Serializable {
 
     public Assign copyFrom(Assign other) {
         this.id = other.id;
+        this.activityId = other.activityId;
         this.activityPlanId = other.activityPlanId;
         this.donatoryId = other.donatoryId;
         this.configId = other.configId;
@@ -194,6 +216,7 @@ public class Assign implements Serializable {
             throw new RuntimeException("`to` must not be null");
         }
         to.setId(from.id);
+        to.setActivityId(from.activityId);
         to.setActivityPlanId(from.activityPlanId);
         to.setDonatoryId(from.donatoryId);
         to.setConfigId(from.configId);
@@ -207,6 +230,7 @@ public class Assign implements Serializable {
         /*
         {
             id: '',
+            activityId: '',
             activityPlanId: '',
             donatoryId: '',
             configId: '',
@@ -215,8 +239,8 @@ public class Assign implements Serializable {
             lastModifyTime: ''
         }
         */
-        
-        return "{\"id\": \"\",\"activityPlanId\": \"\",\"donatoryId\": \"\",\"configId\": \"\",\"donatoryLevel\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+
+        return "{\"id\": \"\",\"activityId\": \"\",\"activityPlanId\": \"\",\"donatoryId\": \"\",\"configId\": \"\",\"donatoryLevel\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -226,6 +250,7 @@ public class Assign implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", activityId=").append(activityId);
         sb.append(", activityPlanId=").append(activityPlanId);
         sb.append(", donatoryId=").append(donatoryId);
         sb.append(", configId=").append(configId);
@@ -242,6 +267,11 @@ public class Assign implements Serializable {
          * 领取和捐赠明细关系ID
          */
         private Long id;
+
+        /**
+         * 活动ID
+         */
+        private Long activityId;
 
         /**
          * 活动计划ID
@@ -274,7 +304,7 @@ public class Assign implements Serializable {
         private Date lastModifyTime;
 
         private XBuilder() {
-            
+
         }
 
         /**
@@ -282,6 +312,14 @@ public class Assign implements Serializable {
          */
         public XBuilder id(Long id) {
             this.id = id;
+            return this;
+        }
+
+        /**
+         * 活动ID
+         */
+        public XBuilder activityId(Long activityId) {
+            this.activityId = activityId;
             return this;
         }
 

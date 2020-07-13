@@ -3,6 +3,7 @@ package com.baidu.mapp.bcd.domain.meta;
 /*
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
+       @Result(property = "activityId", column = "activity_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "activityPlanId", column = "activity_plan_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "donatoryId", column = "donatory_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "configId", column = "config_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
@@ -30,6 +31,19 @@ public final class MetaAssign {
     public static final String JDBC_TYPE_ID = "BIGINT";
 
     public static final String IS_KEY_ID = "true";
+
+    /**
+     * 活动ID
+     */
+    public static final String ACTIVITYID = "activityId";
+
+    public static final String COLUMN_NAME_ACTIVITYID = "`activity_id`";
+
+    public static final String JAVA_TYPE_ACTIVITYID = "java.lang.Long";
+
+    public static final String JDBC_TYPE_ACTIVITYID = "BIGINT";
+
+    public static final String IS_KEY_ACTIVITYID = "false";
 
     /**
      * 活动计划ID
@@ -126,6 +140,9 @@ public final class MetaAssign {
         if (columnName.equals(COLUMN_NAME_ID)) {
             return ID;
         }
+        if (columnName.equals(COLUMN_NAME_ACTIVITYID)) {
+            return ACTIVITYID;
+        }
         if (columnName.equals(COLUMN_NAME_ACTIVITYPLANID)) {
             return ACTIVITYPLANID;
         }
@@ -161,6 +178,9 @@ public final class MetaAssign {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID;
         }
+        if (fieldName.equals(ACTIVITYID)) {
+            return COLUMN_NAME_ACTIVITYID;
+        }
         if (fieldName.equals(ACTIVITYPLANID)) {
             return COLUMN_NAME_ACTIVITYPLANID;
         }
@@ -195,6 +215,9 @@ public final class MetaAssign {
         }
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID.replace("`", "");
+        }
+        if (fieldName.equals(ACTIVITYID)) {
+            return COLUMN_NAME_ACTIVITYID.replace("`", "");
         }
         if (fieldName.equals(ACTIVITYPLANID)) {
             return COLUMN_NAME_ACTIVITYPLANID.replace("`", "");

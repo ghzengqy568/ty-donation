@@ -3,6 +3,7 @@
 <mapper namespace="com.baidu.mapp.bcd.dao.AssignMapper">
   <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.Assign">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
     <result column="activity_plan_id" jdbcType="BIGINT" property="activityPlanId" />
     <result column="donatory_id" jdbcType="BIGINT" property="donatoryId" />
     <result column="config_id" jdbcType="BIGINT" property="configId" />
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, activity_plan_id, donatory_id, config_id, donatory_level, create_time, last_modify_time
+    id, activity_id, activity_plan_id, donatory_id, config_id, donatory_level, create_time, 
+    last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.AssignExample" resultMap="BaseResultMap">
     select
@@ -119,12 +121,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_assign (activity_plan_id, donatory_id, config_id, 
-      donatory_level, create_time, last_modify_time
-      )
-    values (#{activityPlanId,jdbcType=BIGINT}, #{donatoryId,jdbcType=BIGINT}, #{configId,jdbcType=BIGINT}, 
-      #{donatoryLevel,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
-      )
+    insert into t_assign (activity_id, activity_plan_id, donatory_id, 
+      config_id, donatory_level, create_time, 
+      last_modify_time)
+    values (#{activityId,jdbcType=BIGINT}, #{activityPlanId,jdbcType=BIGINT}, #{donatoryId,jdbcType=BIGINT}, 
+      #{configId,jdbcType=BIGINT}, #{donatoryLevel,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.Assign">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -132,6 +134,9 @@
     </selectKey>
     insert into t_assign
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        activity_id,
+      </if>
       <if test="activityPlanId != null">
         activity_plan_id,
       </if>
@@ -152,6 +157,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        #{activityId,jdbcType=BIGINT},
+      </if>
       <if test="activityPlanId != null">
         #{activityPlanId,jdbcType=BIGINT},
       </if>
@@ -184,6 +192,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.activityId != null">
+        activity_id = #{record.activityId,jdbcType=BIGINT},
+      </if>
       <if test="record.activityPlanId != null">
         activity_plan_id = #{record.activityPlanId,jdbcType=BIGINT},
       </if>
@@ -210,6 +221,7 @@
   <update id="updateByExample" parameterType="map">
     update t_assign
     set id = #{record.id,jdbcType=BIGINT},
+      activity_id = #{record.activityId,jdbcType=BIGINT},
       activity_plan_id = #{record.activityPlanId,jdbcType=BIGINT},
       donatory_id = #{record.donatoryId,jdbcType=BIGINT},
       config_id = #{record.configId,jdbcType=BIGINT},
@@ -223,6 +235,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.Assign">
     update t_assign
     <set>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=BIGINT},
+      </if>
       <if test="activityPlanId != null">
         activity_plan_id = #{activityPlanId,jdbcType=BIGINT},
       </if>
@@ -246,7 +261,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.Assign">
     update t_assign
-    set activity_plan_id = #{activityPlanId,jdbcType=BIGINT},
+    set activity_id = #{activityId,jdbcType=BIGINT},
+      activity_plan_id = #{activityPlanId,jdbcType=BIGINT},
       donatory_id = #{donatoryId,jdbcType=BIGINT},
       config_id = #{configId,jdbcType=BIGINT},
       donatory_level = #{donatoryLevel,jdbcType=TINYINT},

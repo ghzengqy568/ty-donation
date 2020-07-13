@@ -1,0 +1,199 @@
+/*
+ * Copyright (C) 2020 Baidu, Inc. All Rights Reserved.
+ */
+package com.baidu.mapp.bcd.controller;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.baidu.mapp.bcd.domain.Activity;
+import com.baidu.mapp.bcd.domain.ActivityPlanConfig;
+import com.baidu.mapp.bcd.domain.Assign;
+import com.baidu.mapp.bcd.domain.AssignExample;
+import com.baidu.mapp.bcd.domain.Donatory;
+import com.baidu.mapp.bcd.domain.DrawRecord;
+import com.baidu.mapp.bcd.domain.DrawRecordDetail;
+import com.baidu.mapp.bcd.domain.DrawRecordExample;
+import com.baidu.mapp.bcd.domain.PlanAllocationRel;
+import com.baidu.mapp.bcd.domain.PlanAllocationRelExample;
+import com.baidu.mapp.bcd.domain.base.R;
+import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
+import com.baidu.mapp.bcd.dto.DrawReq;
+import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
+import com.baidu.mapp.bcd.service.ActivityService;
+import com.baidu.mapp.bcd.service.AllocationService;
+import com.baidu.mapp.bcd.service.AssignService;
+import com.baidu.mapp.bcd.service.DonatoryService;
+import com.baidu.mapp.bcd.service.DrawRecordDetailService;
+import com.baidu.mapp.bcd.service.DrawRecordService;
+import com.baidu.mapp.bcd.service.PlanAllocationRelService;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "领取接口")
+@RestController
+@RequestMapping("/draw")
+public class DrawController {
+
+    @Autowired
+    ActivityService activityService;
+
+    @Autowired
+    DonatoryService donatoryService;
+
+    @Autowired
+    DrawRecordService drawRecordService;
+
+    @Autowired
+    DrawRecordDetailService drawRecordDetailService;
+
+    @Autowired
+    AssignService assignService;
+
+    @Autowired
+    ActivityPlanConfigService activityPlanConfigService;
+
+    @Autowired
+    AllocationService allocationService;
+
+    @Autowired
+    PlanAllocationRelService planAllocationRelService;
+
+    @PostMapping("draw")
+    public R draw(@RequestBody DrawReq drawReq) {
+        Long activityId = drawReq.getActivityId();
+        Long donatoryId = drawReq.getDonatoryId();
+
+        if (activityId == null || activityId <= 0) {
+            return R.error(100101, "活动ID不能为空");
+        }
+        if (donatoryId == null || donatoryId <= 0) {
+            return R.error(100101, "受捐人ID不能为空");
+        }
+
+        Activity activity = activityService.selectByPrimaryKey(activityId);
+        if (activity == null) {
+            return R.error(100102, "活动不存在");
+        }
+        Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
+        if (donatory == null) {
+            return R.error(100102, "受捐人不存在");
+        }
+
+        List<Assign> assigns = assignService.selectByExample(AssignExample.newBuilder().build().createCriteria()
+                .andActivityIdEqualTo(activityId)
+                .andDonatoryIdEqualTo(donatoryId)
+                .toExample());
+        if (CollectionUtils.isEmpty(assigns)) {
+            return R.error(100102, "受捐人不是本次受捐对象");
+        }
+
+        // 是否已领取过了
+        List<DrawRecord> drawRecords = drawRecordService.selectByExample(
+                DrawRecordExample.newBuilder()
+                        .build()
+                        .createCriteria()
+                        .andActivityIdEqualTo(activityId)
+                        .andDonatoryIdEqualTo(donatoryId)
+                        .toExample(),
+                MetaDrawRecord.COLUMN_NAME_ID
+        );
+        if (!CollectionUtils.isEmpty(drawRecords)) {
+            return R.error(100102, "受捐人已领取过了");
+        }
+
+        Map<Long, ActivityPlanConfig> configMap = activityPlanConfigService.selectMapByPrimaryKeys(
+                assigns.stream().map(Assign :: getConfigId).collect(Collectors.toList()),
+                ActivityPlanConfig :: getId
+        );
+
+        //
+        for (Assign assign : assigns) {
+            Long configId = assign.getConfigId();
+            ActivityPlanConfig activityPlanConfig = configMap.get(configId);
+            // 计划ID
+            Long activityPlanId = activityPlanConfig.getActivityPlanId();
+            // 领取份量
+            Long quantity = activityPlanConfig.getQuantity();
+
+            List<PlanAllocationRel> balance = balance(activityPlanId);
+
+            boolean over = false;
+            long needQuantity = quantity.longValue();
+            while (!over && !CollectionUtils.isEmpty(balance)) {
+                for (PlanAllocationRel planAllocationRel : balance) {
+                    long balance1 = planAllocationRel.getBalance() == null ? 0 :
+                            planAllocationRel.getBalance().longValue();
+                    if (needQuantity <= balance1) {
+                        planAllocationRel.setBalance(balance1 - needQuantity);
+                        planAllocationRel.setUsed(planAllocationRel.getUsed().longValue() + needQuantity);
+                        planAllocationRel.setLastModifyTime(new Date());
+                        planAllocationRelService.updateByPrimaryKeySelective(planAllocationRel);
+                        // 记录扣款详情
+                        drawRecordDetailService.insertSelective(DrawRecordDetail.newBuilder()
+                                .activityId(activityId)
+                                .activityPlanId(activityPlanId)
+                                .donatoryId(donatoryId)
+                                .used(needQuantity)
+                                .allocationId(planAllocationRel.getAllocationId())
+                                .build());
+                        needQuantity = 0;
+                        over = true;
+                    } else {
+                        planAllocationRel.setBalance(0L);
+                        planAllocationRel.setLastModifyTime(new Date());
+                        planAllocationRel.setUsed(planAllocationRel.getUsed().longValue() + balance1);
+                        planAllocationRelService.updateByPrimaryKeySelective(planAllocationRel);
+
+                        // 记录扣款详情
+                        drawRecordDetailService.insertSelective(DrawRecordDetail.newBuilder()
+                                .activityId(activityId)
+                                .activityPlanId(activityPlanId)
+                                .donatoryId(donatoryId)
+                                .used(balance1)
+                                .allocationId(planAllocationRel.getAllocationId())
+                                .build());
+                        needQuantity -= balance1 ;
+                    }
+                }
+                if (!over) {
+                    balance = balance(activityPlanId);
+                    if (CollectionUtils.isEmpty(balance)) {
+                        return R.error("余额不足");
+                    }
+                }
+            }
+            if (!over) {
+                return R.error("余额不足");
+            }
+        }
+        return R.ok();
+    }
+
+    /**
+     * 获取10条存在余额的数据
+     * @param activityPlanId
+     * @return
+     */
+    private List<PlanAllocationRel> balance(Long activityPlanId) {
+        List<PlanAllocationRel> planAllocationRels = planAllocationRelService
+                .selectByExample(PlanAllocationRelExample.newBuilder()
+                        .limit(10)
+                        .build()
+                        .createCriteria()
+                        .andBalanceGreaterThan(0L)
+                        .andActivityPlanIdEqualTo(activityPlanId)
+                        .toExample());
+        return planAllocationRels;
+    }
+
+}

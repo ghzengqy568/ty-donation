@@ -5,6 +5,8 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="activity_plan_id" jdbcType="BIGINT" property="activityPlanId" />
     <result column="allocation_id" jdbcType="BIGINT" property="allocationId" />
+    <result column="balance" jdbcType="BIGINT" property="balance" />
+    <result column="used" jdbcType="BIGINT" property="used" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
   </resultMap>
@@ -67,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, activity_plan_id, allocation_id, create_time, last_modify_time
+    id, activity_plan_id, allocation_id, balance, used, create_time, last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.PlanAllocationRelExample" resultMap="BaseResultMap">
     select
@@ -117,10 +119,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_plan_allocation_rel (activity_plan_id, allocation_id, create_time, 
-      last_modify_time)
-    values (#{activityPlanId,jdbcType=BIGINT}, #{allocationId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{lastModifyTime,jdbcType=TIMESTAMP})
+    insert into t_plan_allocation_rel (activity_plan_id, allocation_id, balance, 
+      used, create_time, last_modify_time
+      )
+    values (#{activityPlanId,jdbcType=BIGINT}, #{allocationId,jdbcType=BIGINT}, #{balance,jdbcType=BIGINT}, 
+      #{used,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.PlanAllocationRel">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -133,6 +137,12 @@
       </if>
       <if test="allocationId != null">
         allocation_id,
+      </if>
+      <if test="balance != null">
+        balance,
+      </if>
+      <if test="used != null">
+        used,
       </if>
       <if test="createTime != null">
         create_time,
@@ -147,6 +157,12 @@
       </if>
       <if test="allocationId != null">
         #{allocationId,jdbcType=BIGINT},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=BIGINT},
+      </if>
+      <if test="used != null">
+        #{used,jdbcType=BIGINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -174,6 +190,12 @@
       <if test="record.allocationId != null">
         allocation_id = #{record.allocationId,jdbcType=BIGINT},
       </if>
+      <if test="record.balance != null">
+        balance = #{record.balance,jdbcType=BIGINT},
+      </if>
+      <if test="record.used != null">
+        used = #{record.used,jdbcType=BIGINT},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -190,6 +212,8 @@
     set id = #{record.id,jdbcType=BIGINT},
       activity_plan_id = #{record.activityPlanId,jdbcType=BIGINT},
       allocation_id = #{record.allocationId,jdbcType=BIGINT},
+      balance = #{record.balance,jdbcType=BIGINT},
+      used = #{record.used,jdbcType=BIGINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -205,6 +229,12 @@
       <if test="allocationId != null">
         allocation_id = #{allocationId,jdbcType=BIGINT},
       </if>
+      <if test="balance != null">
+        balance = #{balance,jdbcType=BIGINT},
+      </if>
+      <if test="used != null">
+        used = #{used,jdbcType=BIGINT},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -218,6 +248,8 @@
     update t_plan_allocation_rel
     set activity_plan_id = #{activityPlanId,jdbcType=BIGINT},
       allocation_id = #{allocationId,jdbcType=BIGINT},
+      balance = #{balance,jdbcType=BIGINT},
+      used = #{used,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

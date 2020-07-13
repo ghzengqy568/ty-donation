@@ -178,6 +178,8 @@ public class AllocationController {
                 PlanAllocationRel rel = PlanAllocationRel.newBuilder()
                         .activityPlanId(planId)
                         .createTime(new Date())
+                        .balance(used)
+                        .used(0L)
                         .lastModifyTime(new Date())
                         .allocationId(allocationId)
                         .build();
