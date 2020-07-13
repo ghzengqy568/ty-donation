@@ -22,6 +22,13 @@ public class DrawRecordFlow implements Serializable {
     private Long donatoryId;
 
     /**
+     * column-name:activity_id
+     * 活动ID
+     */
+    @Schema(description = "活动ID")
+    private Long activityId;
+
+    /**
      * column-name:draw_time
      * 领取时间
      */
@@ -69,6 +76,7 @@ public class DrawRecordFlow implements Serializable {
     private DrawRecordFlow(XBuilder builder) {
         this.id = builder.id;
         this.donatoryId = builder.donatoryId;
+        this.activityId = builder.activityId;
         this.drawTime = builder.drawTime;
         this.certCode = builder.certCode;
         this.sign = builder.sign;
@@ -106,6 +114,20 @@ public class DrawRecordFlow implements Serializable {
      */
     public void setDonatoryId(Long donatoryId) {
         this.donatoryId = donatoryId;
+    }
+
+    /**
+     * 活动ID
+     */
+    public Long getActivityId() {
+        return activityId;
+    }
+
+    /**
+     * 活动ID
+     */
+    public void setActivityId(Long activityId) {
+        this.activityId = activityId;
     }
 
     /**
@@ -181,6 +203,7 @@ public class DrawRecordFlow implements Serializable {
     public DrawRecordFlow copyFrom(DrawRecordFlow other) {
         this.id = other.id;
         this.donatoryId = other.donatoryId;
+        this.activityId = other.activityId;
         this.drawTime = other.drawTime;
         this.certCode = other.certCode;
         this.sign = other.sign;
@@ -195,6 +218,7 @@ public class DrawRecordFlow implements Serializable {
         }
         to.setId(from.id);
         to.setDonatoryId(from.donatoryId);
+        to.setActivityId(from.activityId);
         to.setDrawTime(from.drawTime);
         to.setCertCode(from.certCode);
         to.setSign(from.sign);
@@ -208,6 +232,7 @@ public class DrawRecordFlow implements Serializable {
         {
             id: '',
             donatoryId: '',
+            activityId: '',
             drawTime: '',
             certCode: '',
             sign: '',
@@ -216,7 +241,7 @@ public class DrawRecordFlow implements Serializable {
         }
         */
         
-        return "{\"id\": \"\",\"donatoryId\": \"\",\"drawTime\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"donatoryId\": \"\",\"activityId\": \"\",\"drawTime\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -227,6 +252,7 @@ public class DrawRecordFlow implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", donatoryId=").append(donatoryId);
+        sb.append(", activityId=").append(activityId);
         sb.append(", drawTime=").append(drawTime);
         sb.append(", certCode=").append(certCode);
         sb.append(", sign=").append(sign);
@@ -247,6 +273,11 @@ public class DrawRecordFlow implements Serializable {
          * 受赠人ID
          */
         private Long donatoryId;
+
+        /**
+         * 活动ID
+         */
+        private Long activityId;
 
         /**
          * 领取时间
@@ -290,6 +321,14 @@ public class DrawRecordFlow implements Serializable {
          */
         public XBuilder donatoryId(Long donatoryId) {
             this.donatoryId = donatoryId;
+            return this;
+        }
+
+        /**
+         * 活动ID
+         */
+        public XBuilder activityId(Long activityId) {
+            this.activityId = activityId;
             return this;
         }
 

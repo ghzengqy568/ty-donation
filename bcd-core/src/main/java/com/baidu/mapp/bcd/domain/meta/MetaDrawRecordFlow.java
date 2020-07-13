@@ -4,6 +4,7 @@ package com.baidu.mapp.bcd.domain.meta;
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
        @Result(property = "donatoryId", column = "donatory_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
+       @Result(property = "activityId", column = "activity_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "drawTime", column = "draw_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "certCode", column = "cert_code", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "sign", column = "sign", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
@@ -43,6 +44,19 @@ public final class MetaDrawRecordFlow {
     public static final String JDBC_TYPE_DONATORYID = "BIGINT";
 
     public static final String IS_KEY_DONATORYID = "false";
+
+    /**
+     * 活动ID
+     */
+    public static final String ACTIVITYID = "activityId";
+
+    public static final String COLUMN_NAME_ACTIVITYID = "`activity_id`";
+
+    public static final String JAVA_TYPE_ACTIVITYID = "java.lang.Long";
+
+    public static final String JDBC_TYPE_ACTIVITYID = "BIGINT";
+
+    public static final String IS_KEY_ACTIVITYID = "false";
 
     /**
      * 领取时间
@@ -129,6 +143,9 @@ public final class MetaDrawRecordFlow {
         if (columnName.equals(COLUMN_NAME_DONATORYID)) {
             return DONATORYID;
         }
+        if (columnName.equals(COLUMN_NAME_ACTIVITYID)) {
+            return ACTIVITYID;
+        }
         if (columnName.equals(COLUMN_NAME_DRAWTIME)) {
             return DRAWTIME;
         }
@@ -164,6 +181,9 @@ public final class MetaDrawRecordFlow {
         if (fieldName.equals(DONATORYID)) {
             return COLUMN_NAME_DONATORYID;
         }
+        if (fieldName.equals(ACTIVITYID)) {
+            return COLUMN_NAME_ACTIVITYID;
+        }
         if (fieldName.equals(DRAWTIME)) {
             return COLUMN_NAME_DRAWTIME;
         }
@@ -198,6 +218,9 @@ public final class MetaDrawRecordFlow {
         }
         if (fieldName.equals(DONATORYID)) {
             return COLUMN_NAME_DONATORYID.replace("`", "");
+        }
+        if (fieldName.equals(ACTIVITYID)) {
+            return COLUMN_NAME_ACTIVITYID.replace("`", "");
         }
         if (fieldName.equals(DRAWTIME)) {
             return COLUMN_NAME_DRAWTIME.replace("`", "");
