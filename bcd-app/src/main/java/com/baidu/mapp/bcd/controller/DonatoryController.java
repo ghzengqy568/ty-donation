@@ -3,16 +3,6 @@
  */
 package com.baidu.mapp.bcd.controller;
 
-import java.util.Date;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.domain.Donatory;
 import com.baidu.mapp.bcd.domain.DonatoryExample;
@@ -21,8 +11,16 @@ import com.baidu.mapp.bcd.domain.meta.MetaDonatory;
 import com.baidu.mapp.bcd.dto.DonatoryReq;
 import com.baidu.mapp.bcd.service.CertService;
 import com.baidu.mapp.bcd.service.DonatoryService;
-
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 @Schema(description = "受捐人接口", name = "DonatoryController")
 @RestController

@@ -3,43 +3,20 @@
  */
 package com.baidu.mapp.bcd.controller;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.baidu.mapp.bcd.domain.Activity;
-import com.baidu.mapp.bcd.domain.ActivityExample;
-import com.baidu.mapp.bcd.domain.ActivityPlan;
-import com.baidu.mapp.bcd.domain.ActivityPlanConfig;
-import com.baidu.mapp.bcd.domain.ActivityPlanConfigExample;
-import com.baidu.mapp.bcd.domain.ActivityPlanExample;
-import com.baidu.mapp.bcd.domain.AssignExample;
+import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
+import com.baidu.mapp.bcd.common.utils.SignUtils;
+import com.baidu.mapp.bcd.domain.*;
 import com.baidu.mapp.bcd.domain.base.Pagination;
 import com.baidu.mapp.bcd.domain.base.R;
-import com.baidu.mapp.bcd.dto.ActivityDetailResp;
-import com.baidu.mapp.bcd.dto.ActivityPlanConfigReq;
-import com.baidu.mapp.bcd.dto.ActivityPlanConfigResp;
-import com.baidu.mapp.bcd.dto.ActivityPlanDetailResp;
-import com.baidu.mapp.bcd.dto.ActivityPlanReq;
-import com.baidu.mapp.bcd.dto.ActivityPlanResp;
-import com.baidu.mapp.bcd.dto.ActivityReq;
-import com.baidu.mapp.bcd.dto.ActivityResp;
-import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
-import com.baidu.mapp.bcd.service.ActivityPlanService;
-import com.baidu.mapp.bcd.service.ActivityService;
-import com.baidu.mapp.bcd.service.AssignService;
+import com.baidu.mapp.bcd.domain.meta.MetaActivity;
+import com.baidu.mapp.bcd.domain.meta.MetaActivityPlan;
+import com.baidu.mapp.bcd.dto.*;
+import com.baidu.mapp.bcd.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 @RestController
 @RequestMapping("/activity")
@@ -57,6 +34,9 @@ public class ActivityController {
     @Autowired
     private AssignService assignService;
 
+    @Autowired
+    CertService certService;
+
     @PostMapping("/create")
     public R createActive(@RequestBody ActivityReq act) {
 
@@ -65,25 +45,45 @@ public class ActivityController {
             return R.error(100200, "请填写活动计划详情");
         }
 
+        String desc = act.getDescription();
+        String theme = act.getTheme();
+        Date startTime = act.getStartTime();
+        Date endTime = act.getEndTime();
+        String startTimeInStr = DateTimeUtils.toDateTimeString(startTime, "yyyyMMddHHmmss");
+        String endTimeInStr = DateTimeUtils.toDateTimeString(endTime, "yyyyMMddHHmmss");
+        String actSign = SignUtils.sign(desc, theme, startTimeInStr, endTimeInStr);
+
         Activity activity = Activity.newBuilder()
-                //                .certCode("123")
-                .description(act.getDescription())
+                .description(desc)
                 .createTime(new Date())
-                .endTime(new Date())
-                //                .sign("123")
                 .lastModifyTime(new Date())
-                .startTime(act.getStartTime())
-                .endTime(act.getEndTime())
-                .theme(act.getTheme())
+                .startTime(startTime)
+                .endTime(endTime)
+                .theme(theme)
+                .sign(actSign)
                 .build();
 
         activityService.insertSelective(activity);
 
         Long activityId = activity.getId();
+
+        // 存证
+        String actCertCode = certService.writeChain(9900000L, MetaActivity.TABLE_NAME, activityId, actSign);
+        activity.setCertCode(actCertCode);
+        activity.setLastModifyTime(new Date());
+        activityService.updateByPrimaryKeySelective(activity);
+
         activityPlanReqs.forEach((ActivityPlanReq req) -> {
+            String actPlanDesc = req.getDescription();
+            Byte type = req.getType();
+            String unit = req.getUnit();
+            Long quantity = req.getQuantity();
+            String name = req.getName();
+            Long amount = req.getAmount();
+            String actPlanSign = SignUtils.sign(activityId, actPlanDesc, type, unit, quantity, name, amount);
             ActivityPlan plan = ActivityPlan.newBuilder()
                     .activityId(activityId)
-                    .description(req.getDescription())
+                    .description(actPlanDesc)
                     .type(req.getType())
                     .unit(req.getUnit())
                     .quantity(req.getQuantity())
@@ -91,22 +91,29 @@ public class ActivityController {
                     .amount(req.getAmount())
                     .createTime(new Date())
                     .lastModifyTime(new Date())
+                    .sign(actPlanSign)
                     .build();
             activityPlanService.insertSelective(plan);
-
             Long planId = plan.getId();
+
+            String actPlanCertCode = certService.writeChain(9900000L, MetaActivityPlan.TABLE_NAME, planId,
+                    actPlanSign);
+            plan.setCertCode(actPlanCertCode);
+            plan.setLastModifyTime(new Date());
+            activityPlanService.updateByPrimaryKeySelective(plan);
+
             List<ActivityPlanConfigReq> configs = req.getConfigs();
             if (!CollectionUtils.isEmpty(configs)) {
                 for (ActivityPlanConfigReq config : configs) {
-                    Integer amount = config.getAmount();
+                    Integer confAmount = config.getAmount();
                     Byte donatoryLevel = config.getDonatoryLevel();
-                    Long quantity = config.getQuantity();
+                    Long confQuantity = config.getQuantity();
 
                     activityPlanConfigService.insertSelective(ActivityPlanConfig.newBuilder()
                             .activityId(activityId)
-                            .amount(amount)
+                            .amount(confAmount)
                             .donatoryLevel(donatoryLevel)
-                            .quantity(quantity)
+                            .quantity(confQuantity)
                             .activityPlanId(planId)
                             .createTime(new Date())
                             .lastModifyTime(new Date())
@@ -119,6 +126,7 @@ public class ActivityController {
         return R.ok(activity.getId());
     }
 
+    // todo 查询活动和计划的时候需不需要验证链上数据和本地数据
     @GetMapping("/query")
     public R<Pagination<ActivityResp>> getActivities(@RequestParam(defaultValue = "1") Integer pageNo,
                                                      @RequestParam(defaultValue = "10") Integer pageSize) {

@@ -3,9 +3,15 @@
  */
 package com.baidu.mapp.bcd.controller;
 
-import java.util.Date;
-import java.util.UUID;
-
+import com.baidu.mapp.bcd.common.utils.SignUtils;
+import com.baidu.mapp.bcd.domain.Donor;
+import com.baidu.mapp.bcd.domain.DonorExample;
+import com.baidu.mapp.bcd.domain.base.R;
+import com.baidu.mapp.bcd.domain.meta.MetaDonor;
+import com.baidu.mapp.bcd.dto.DonorReq;
+import com.baidu.mapp.bcd.service.CertService;
+import com.baidu.mapp.bcd.service.DonorService;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
@@ -14,18 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
-import com.baidu.mapp.bcd.common.utils.SignUtils;
-import com.baidu.mapp.bcd.domain.Donor;
-import com.baidu.mapp.bcd.domain.DonorExample;
-import com.baidu.mapp.bcd.domain.base.R;
-import com.baidu.mapp.bcd.domain.meta.MetaDonateDetail;
-import com.baidu.mapp.bcd.domain.meta.MetaDonor;
-import com.baidu.mapp.bcd.dto.DonorReq;
-import com.baidu.mapp.bcd.service.CertService;
-import com.baidu.mapp.bcd.service.DonorService;
-
-import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
 
 @Schema(description = "捐赠人接口")
 @RestController
@@ -87,7 +82,5 @@ public class DonorController {
         donorService.updateByPrimaryKeySelective(donor);
         return R.ok(certCode);
     }
-
-
 
 }

@@ -3,10 +3,15 @@
  */
 package com.baidu.mapp.bcd.controller;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
+import com.baidu.mapp.bcd.common.gson.GsonUtils;
+import com.baidu.mapp.bcd.domain.*;
+import com.baidu.mapp.bcd.domain.base.R;
+import com.baidu.mapp.bcd.domain.meta.MetaDonatory;
+import com.baidu.mapp.bcd.dto.AssignConfigReq;
+import com.baidu.mapp.bcd.dto.AssignPlanReq;
+import com.baidu.mapp.bcd.dto.AssignReq;
+import com.baidu.mapp.bcd.service.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,26 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baidu.mapp.bcd.common.gson.GsonUtils;
-import com.baidu.mapp.bcd.domain.Activity;
-import com.baidu.mapp.bcd.domain.ActivityPlan;
-import com.baidu.mapp.bcd.domain.ActivityPlanConfig;
-import com.baidu.mapp.bcd.domain.Assign;
-import com.baidu.mapp.bcd.domain.AssignExample;
-import com.baidu.mapp.bcd.domain.Donatory;
-import com.baidu.mapp.bcd.domain.DonatoryExample;
-import com.baidu.mapp.bcd.domain.base.R;
-import com.baidu.mapp.bcd.domain.meta.MetaDonatory;
-import com.baidu.mapp.bcd.dto.AssignConfigReq;
-import com.baidu.mapp.bcd.dto.AssignPlanReq;
-import com.baidu.mapp.bcd.dto.AssignReq;
-import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
-import com.baidu.mapp.bcd.service.ActivityPlanService;
-import com.baidu.mapp.bcd.service.ActivityService;
-import com.baidu.mapp.bcd.service.AssignService;
-import com.baidu.mapp.bcd.service.DonatoryService;
-
-import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Schema(description = "指派关系接口", name = "AssignController")
 @RestController
