@@ -13,17 +13,17 @@ import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
 import com.baidu.mapp.bcd.dto.DonateDetailReq;
 import com.baidu.mapp.bcd.dto.DonateFlowResp;
 import com.baidu.mapp.bcd.dto.DonateReq;
-import com.baidu.mapp.bcd.service.CertService;
-import com.baidu.mapp.bcd.service.DonateDetailService;
-import com.baidu.mapp.bcd.service.DonateFlowService;
-import com.baidu.mapp.bcd.service.DonorService;
+import com.baidu.mapp.bcd.service.*;
 import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.OverridesAttribute;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Schema(description = "捐赠接口", name = "DonateController")
 @RestController
@@ -40,7 +40,16 @@ public class DonateController {
     DonorService donorService;
 
     @Autowired
+    AllocationService allocationService;
+
+    @Autowired
     CertService certService;
+
+    @Autowired
+    DrawRecordFlowService drawRecordFlowService;
+
+    @Autowired
+    DrawRecordDetailService drawRecordDetailService;
 
     @PostMapping("submit")
     public R<String> submit(@RequestBody DonateReq donateReq) {
@@ -63,7 +72,6 @@ public class DonateController {
         DonateFlow flow = DonateFlow.newBuilder()
                 .donorId(donorId)
                 .donateTime(donateTime)
-                .certCode("")
                 .sign(sign)
                 .createTime(new Date())
                 .lastModifyTime(new Date())
@@ -84,7 +92,6 @@ public class DonateController {
             sign = SignUtils.sign(donorId, name, quantity, type, unit);
 
             DonateDetail donateDetail = DonateDetail.newBuilder()
-                    .certCode("")
                     .flowId(flowId)
                     .createTime(new Date())
                     .lastModifyTime(new Date())
@@ -132,10 +139,56 @@ public class DonateController {
                 return R.ok(dfResps);
             } else if (sourceTable.equalsIgnoreCase(MetaDrawRecord.TABLE_NAME)) {
                 // 受捐人通过领取记录证书查询
+                DrawRecordFlow drawRecordFlow = drawRecordFlowService.selectByPrimaryKey(sourceId);
+                if (Objects.isNull(drawRecordFlow)) {
+                    return R.error(100203, "该笔受赠流水不存在");
+                }
 
+                Long activityId = drawRecordFlow.getActivityId();
+                Long donatoryId = drawRecordFlow.getDonatoryId();
+                List<DrawRecordDetail> drawRecordDetails =
+                        drawRecordDetailService.selectByExample(DrawRecordDetailExample.newBuilder()
+                                .build()
+                                .createCriteria()
+                                .andActivityIdEqualTo(activityId)
+                                .andDonatoryIdEqualTo(donatoryId)
+                                .toExample());
+                if (CollectionUtils.isEmpty(drawRecordDetails)) {
+                    // 不存在, 数据正常的情况下不应该走到这里
+                    return R.ok();
+                }
+                Set<Long> allocIds =
+                        drawRecordDetails.stream().map(DrawRecordDetail::getAllocationId).collect(Collectors.toSet());
+                if (!CollectionUtils.isEmpty(allocIds)) {
+                    Map<Long, List<Allocation>> donationsMap = allocationService.selectMapListByExample(
+                            AllocationExample
+                                    .newBuilder()
+                                    .build()
+                                    .createCriteria()
+                                    .andIdIn(allocIds)
+                                    .toExample(),
+                            Allocation::getDonateDetailId,
+                            item -> item);
+                    Set<Long> donationDetailIds = donationsMap.keySet();
+                    List<Long> donationFlowIds = donateDetailService.selectByExample(DonateDetailExample
+                            .newBuilder()
+                            .build()
+                            .createCriteria()
+                            .andIdIn(donationDetailIds)
+                            .toExample(), DonateDetail::getFlowId);
+                    if (!CollectionUtils.isEmpty(donationFlowIds)) {
+                        List<DonateFlowResp> dfResps = Lists.newArrayList();
+                        List<DonateFlow> donateFlows =
+                                donateFlowService.selectByExample(DonateFlowExample.newBuilder().build()
+                                        .createCriteria()
+                                        .andIdIn(donationFlowIds)
+                                        .toExample());
+                        // todo
 
-                return R.ok();
-            } else {
+                        }
+                    }
+                    return R.ok();
+                }  else {
                 // 其他证书类型查询, 暂不受理
                 return R.ok();
             }
@@ -144,6 +197,7 @@ public class DonateController {
             // 如果证书记录不存在, 则模糊匹配捐赠记录
             return R.ok(queryDonationsByDonar(queryString));
         }
+
     }
 
     /**
