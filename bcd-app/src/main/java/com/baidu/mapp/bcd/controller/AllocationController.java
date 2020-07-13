@@ -79,7 +79,7 @@ public class AllocationController {
             totalNeedCash += activityPlan.getAmount();
         }
 
-        BaseSQL sql = BaseSQL.newInstance().SELECT("sum(banlance)").FROM(MetaDonateDetail.TABLE_NAME).WHERE("banlance"
+        BaseSQL sql = BaseSQL.newInstance().SELECT("sum(balance)").FROM(MetaDonateDetail.TABLE_NAME).WHERE("balance"
                 + ">0 and type=1");
         Long totalBanlance = donateDetailService.selectOneLong(sql, SQLParam.newInstance());
         if (totalBanlance < totalNeedCash) {
