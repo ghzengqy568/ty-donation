@@ -6,6 +6,7 @@ package com.baidu.mapp.bcd.controller;
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.domain.*;
+import com.baidu.mapp.bcd.domain.base.Pagination;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateDetail;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
@@ -13,6 +14,7 @@ import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
 import com.baidu.mapp.bcd.dto.DonateDetailReq;
 import com.baidu.mapp.bcd.dto.DonateFlowResp;
 import com.baidu.mapp.bcd.dto.DonateReq;
+import com.baidu.mapp.bcd.dto.DonationFlowBriefResp;
 import com.baidu.mapp.bcd.service.*;
 import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.OverridesAttribute;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Schema(description = "捐赠接口", name = "DonateController")
 @RestController
@@ -50,6 +49,16 @@ public class DonateController {
 
     @Autowired
     DrawRecordDetailService drawRecordDetailService;
+
+    @Autowired
+    DrawRecordService drawRecordService;
+
+    @Autowired
+    DonatoryService donatoryService;
+
+    public static final String PARTICIPATION_DONATE = "捐赠";
+
+    public static final String PARTICIPATION_RECEIVE = "受捐";
 
     @PostMapping("submit")
     public R<String> submit(@RequestBody DonateReq donateReq) {
@@ -113,10 +122,38 @@ public class DonateController {
         return R.ok(certCode);
     }
 
-    @GetMapping("/genSearch")
-    public R<List<DonateFlowResp>> genericSearch(@RequestParam String queryString) {
+    @GetMapping("/allDonations")
+    public R<Pagination<DonationFlowBriefResp>> getAllDonations(@RequestParam(defaultValue = "1") Integer pageNo,
+                                                                @RequestParam(defaultValue = "10") Integer pageSize) {
+
+        int start = (pageNo - 1) * pageSize;
+
+        Pagination<DonationFlowBriefResp> pagination =
+                donateDetailService.pagination(DonateDetailExample.newBuilder().start(start).limit(pageSize).build(),
+                        donateDetail -> {
+                            Long donateFlowId = donateDetail.getFlowId();
+                            DonateFlow donateFlow = donateFlowService.selectByPrimaryKey(donateFlowId);
+                            Long donorId = donateFlow.getDonorId();
+                            Donor donor = donorService.selectByPrimaryKey(donorId);
+                            String donorName = donor.getDonorName();
+                            return DonationFlowBriefResp.builder()
+                                    .donorName(donorName)
+                                    .donateTime(donateFlow.getDonateTime())
+                                    .participation(PARTICIPATION_DONATE)
+                                    .type(donateDetail.getType())
+                                    .unit(donateDetail.getUnit())
+                                    .quantity(donateDetail.getQuantity())
+                                    .name(donateDetail.getName())
+                                    .build();
+
+                        });
+        return R.ok(pagination);
+    }
+
+    @GetMapping("/genericSearch")
+    public R<List<DonationFlowBriefResp>> genericSearch(@RequestParam String query) {
         // 先精准匹配证书号
-        Certificate certificate = certService.queryCert(queryString);
+        Certificate certificate = certService.queryCert(query);
         // 验证证书记录是否存在
         // 如果证书记录存在, 则查询证书对应的捐赠/受捐详情
         if (Objects.nonNull(certificate)) {
@@ -129,81 +166,68 @@ public class DonateController {
                 if (Objects.isNull(donateFlow)) {
                     return R.error(100202, "该笔捐赠流水不存在");
                 }
-                List<DonateFlowResp> dfResps = Lists.newArrayList();
-                dfResps.add(DonateFlowResp.builder()
-                        .id(donateFlow.getId())
-                        .donorId(donateFlow.getDonorId())
-                        .donateTime(donateFlow.getDonateTime())
-                        .certCode(queryString)
-                        .build());
-                return R.ok(dfResps);
+                Donor donor = donorService.selectByPrimaryKey(donateFlow.getDonorId());
+                String donorName = donor.getDonorName();
+                Date donateTime = donateFlow.getDonateTime();
+                List<DonationFlowBriefResp> donateDetails =
+                        donateDetailService.selectByExample(DonateDetailExample.newBuilder().build()
+                                .createCriteria()
+                                .andFlowIdEqualTo(sourceId)
+                                .toExample(), item -> {
+                            return DonationFlowBriefResp.builder()
+                                    .donorName(donorName)
+                                    .donateTime(donateTime)
+                                    .certCode(donateFlow.getCertCode())
+                                    .participation(PARTICIPATION_DONATE)
+                                    .type(item.getType())
+                                    .unit(item.getUnit())
+                                    .quantity(item.getQuantity())
+                                    .name(item.getName())
+                                    .build();
+                        });
+                return R.ok(donateDetails);
             } else if (sourceTable.equalsIgnoreCase(MetaDrawRecord.TABLE_NAME)) {
                 // 受捐人通过领取记录证书查询
+                // sourceId 领取流水ID
                 DrawRecordFlow drawRecordFlow = drawRecordFlowService.selectByPrimaryKey(sourceId);
-                if (Objects.isNull(drawRecordFlow)) {
-                    return R.error(100203, "该笔受赠流水不存在");
-                }
-
-                Long activityId = drawRecordFlow.getActivityId();
                 Long donatoryId = drawRecordFlow.getDonatoryId();
-                List<DrawRecordDetail> drawRecordDetails =
-                        drawRecordDetailService.selectByExample(DrawRecordDetailExample.newBuilder()
-                                .build()
-                                .createCriteria()
-                                .andActivityIdEqualTo(activityId)
-                                .andDonatoryIdEqualTo(donatoryId)
-                                .toExample());
-                if (CollectionUtils.isEmpty(drawRecordDetails)) {
-                    // 不存在, 数据正常的情况下不应该走到这里
-                    return R.ok();
-                }
-                Set<Long> allocIds =
-                        drawRecordDetails.stream().map(DrawRecordDetail::getAllocationId).collect(Collectors.toSet());
-                if (!CollectionUtils.isEmpty(allocIds)) {
-                    Map<Long, List<Allocation>> donationsMap = allocationService.selectMapListByExample(
-                            AllocationExample
-                                    .newBuilder()
-                                    .build()
-                                    .createCriteria()
-                                    .andIdIn(allocIds)
-                                    .toExample(),
-                            Allocation::getDonateDetailId,
-                            item -> item);
-                    Set<Long> donationDetailIds = donationsMap.keySet();
-                    List<Long> donationFlowIds = donateDetailService.selectByExample(DonateDetailExample
-                            .newBuilder()
-                            .build()
-                            .createCriteria()
-                            .andIdIn(donationDetailIds)
-                            .toExample(), DonateDetail::getFlowId);
-                    if (!CollectionUtils.isEmpty(donationFlowIds)) {
-                        List<DonateFlowResp> dfResps = Lists.newArrayList();
-                        List<DonateFlow> donateFlows =
-                                donateFlowService.selectByExample(DonateFlowExample.newBuilder().build()
-                                        .createCriteria()
-                                        .andIdIn(donationFlowIds)
-                                        .toExample());
-                        // todo
+                Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
 
-                        }
-                    }
-                    return R.ok();
-                }  else {
-                // 其他证书类型查询, 暂不受理
+                List<DonationFlowBriefResp> drawRecords = drawRecordService.selectByExample(DrawRecordExample.newBuilder().build()
+                        .createCriteria()
+                        .andDrawRecordFlowIdEqualTo(sourceId)
+                        .toExample(), item -> {
+                    return DonationFlowBriefResp.builder()
+                            .donorName(donatory.getDonatoryName())
+                            .donateTime(drawRecordFlow.getDrawTime())
+                            .certCode(drawRecordFlow.getCertCode())
+                            .participation(PARTICIPATION_RECEIVE)
+                            .type(item.getType())
+                            .unit(item.getUnit())
+                            .quantity(item.getQuantity())
+                            .name(item.getName())
+                            .build();
+                });
+                return R.ok(drawRecords);
+            } else {
                 return R.ok();
             }
-
         } else {
-            // 如果证书记录不存在, 则模糊匹配捐赠记录
-            return R.ok(queryDonationsByDonar(queryString));
+            // 模糊匹配捐赠人/受捐人名称
+            List<DonationFlowBriefResp> flowBriefResps = Lists.newArrayList();
+            // 模糊匹配捐赠人
+            flowBriefResps.addAll(queryDonationsByDonar(query));
+            // 模糊匹配受捐人
+            flowBriefResps.addAll(queryDrawRecordsByDonatory(query));
+            return R.ok(flowBriefResps);
         }
-
     }
+
 
     /**
      * 按模糊匹配捐赠人名称, 查询捐赠记录
      */
-    private List<DonateFlowResp> queryDonationsByDonar(String queryString) {
+    private List<DonationFlowBriefResp> queryDonationsByDonar(String queryString) {
         Map<Long, Donor> donorIdMap = donorService.selectMapByExample(DonorExample.newBuilder()
                 .build()
                 .createCriteria()
@@ -215,19 +239,82 @@ public class DonateController {
 
         Set<Long> donorIds = donorIdMap.keySet();
 
-        List<DonateFlowResp> donateFlowResps = donateFlowService.selectByExample(DonateFlowExample.newBuilder()
+        List<DonationFlowBriefResp> donateFlowResps = Lists.newArrayList();
+        List<DonateFlow> donateFlows = donateFlowService.selectByExample(DonateFlowExample.newBuilder()
                 .build()
                 .createCriteria()
                 .andDonorIdIn(donorIds)
-                .toExample(), (DonateFlow df) -> {
-            return DonateFlowResp.builder()
-                    .id(df.getId())
-                    .donorId(df.getDonorId())
-                    .donorName(donorIdMap.get(df.getDonorId()).getDonorName())
-                    .donateTime(df.getDonateTime())
-                    .certCode(df.getCertCode())
-                    .build();
-        });
+                .toExample());
+        if (!CollectionUtils.isEmpty(donateFlows)) {
+            donateFlows.forEach(df -> {
+                List<DonateDetail> donateDetails =
+                        donateDetailService.selectByExample(DonateDetailExample.newBuilder().build()
+                                .createCriteria()
+                                .andFlowIdEqualTo(df.getId())
+                                .toExample());
+                if (!CollectionUtils.isEmpty(donateDetails)) {
+                    donateDetails.forEach(item -> {
+                        donateFlowResps.add(DonationFlowBriefResp.builder()
+                                .donateTime(df.getDonateTime())
+                                .donorName(donorIdMap.get(df.getDonorId()).getDonorName())
+                                .certCode(df.getCertCode())
+                                .participation(PARTICIPATION_DONATE)
+                                .type(item.getType())
+                                .unit(item.getUnit())
+                                .quantity(item.getQuantity())
+                                .name(item.getName())
+                                .build());
+                    });
+                }
+            });
+        }
+        return donateFlowResps;
+    }
+
+    /**
+     * 按模糊匹配受捐人名称, 查询领取记录
+     */
+    private List<DonationFlowBriefResp> queryDrawRecordsByDonatory(String queryString) {
+        Map<Long, Donatory> donatoryIdMap = donatoryService.selectMapByExample(DonatoryExample.newBuilder()
+                .build()
+                .createCriteria()
+                .andDonatoryNameLike("%" + queryString + "%")
+                .toExample(), Donatory::getId);
+        if (CollectionUtils.isEmpty(donatoryIdMap)) {
+            return Lists.newArrayList();
+        }
+
+        Set<Long> donatoryIds = donatoryIdMap.keySet();
+
+        List<DonationFlowBriefResp> donateFlowResps = Lists.newArrayList();
+        List<DrawRecordFlow> drawRecordFlows = drawRecordFlowService.selectByExample(DrawRecordFlowExample.newBuilder()
+                .build()
+                .createCriteria()
+                .andDonatoryIdIn(donatoryIds)
+                .toExample());
+        if (!CollectionUtils.isEmpty(drawRecordFlows)) {
+            drawRecordFlows.forEach(drawRecordFlow -> {
+                List<DrawRecord> drawRecords =
+                        drawRecordService.selectByExample(DrawRecordExample.newBuilder().build()
+                                .createCriteria()
+                                .andDrawRecordFlowIdEqualTo(drawRecordFlow.getId())
+                                .toExample());
+                if (!CollectionUtils.isEmpty(drawRecords)) {
+                    drawRecords.forEach(item -> {
+                        donateFlowResps.add(DonationFlowBriefResp.builder()
+                                .donateTime(drawRecordFlow.getDrawTime())
+                                .donorName(donatoryIdMap.get(drawRecordFlow.getDonatoryId()).getDonatoryName())
+                                .certCode(drawRecordFlow.getCertCode())
+                                .participation(PARTICIPATION_RECEIVE)
+                                .type(item.getType())
+                                .unit(item.getUnit())
+                                .quantity(item.getQuantity())
+                                .name(item.getName())
+                                .build());
+                    });
+                }
+            });
+        }
         return donateFlowResps;
     }
 
@@ -250,6 +337,7 @@ public class DonateController {
         return null;
 
     }
+
 
 
 
