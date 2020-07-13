@@ -7,18 +7,18 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-public class DrawRecordExample extends BaseExample {
+public class DrawRecordFlowExample extends BaseExample {
 
     protected List<Criteria> oredCriteria;
 
-    private DrawRecordExample() {
+    private DrawRecordFlowExample() {
         oredCriteria = new ArrayList<>();
     }
 
     /**
-     * 领取记录
+     * 领取记录流水
      */
-    private DrawRecordExample(Builder builder) {
+    private DrawRecordFlowExample(Builder builder) {
         this.start = builder.getStart();
         this.limit = builder.getLimit();
         this.orderByClause = builder.getOrderByClause();
@@ -208,210 +208,6 @@ public class DrawRecordExample extends BaseExample {
             return (Criteria) this;
         }
 
-        public Criteria andDrawRecordFlowIdIsNull() {
-            addCriterion("draw_record_flow_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdIsNotNull() {
-            addCriterion("draw_record_flow_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdEqualTo(Long value) {
-            return andDrawRecordFlowIdEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andDrawRecordFlowIdEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("draw_record_flow_id =", value, "drawRecordFlowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdNotEqualTo(Long value) {
-            return andDrawRecordFlowIdNotEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andDrawRecordFlowIdNotEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("draw_record_flow_id <>", value, "drawRecordFlowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdGreaterThan(Long value) {
-            return andDrawRecordFlowIdGreaterThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andDrawRecordFlowIdGreaterThan(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("draw_record_flow_id >", value, "drawRecordFlowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdGreaterThanOrEqualTo(Long value) {
-            return andDrawRecordFlowIdGreaterThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andDrawRecordFlowIdGreaterThanOrEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("draw_record_flow_id >=", value, "drawRecordFlowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdLessThan(Long value) {
-            return andDrawRecordFlowIdLessThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andDrawRecordFlowIdLessThan(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("draw_record_flow_id <", value, "drawRecordFlowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdLessThanOrEqualTo(Long value) {
-            return andDrawRecordFlowIdLessThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andDrawRecordFlowIdLessThanOrEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("draw_record_flow_id <=", value, "drawRecordFlowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdIn(Collection<Long> values) {
-            addCriterion("draw_record_flow_id in", values, "drawRecordFlowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdNotIn(Collection<Long> values) {
-            addCriterion("draw_record_flow_id not in", values, "drawRecordFlowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdBetween(Long value1, Long value2) {
-            addCriterion("draw_record_flow_id between", value1, value2, "drawRecordFlowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrawRecordFlowIdNotBetween(Long value1, Long value2) {
-            addCriterion("draw_record_flow_id not between", value1, value2, "drawRecordFlowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdIsNull() {
-            addCriterion("activity_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdIsNotNull() {
-            addCriterion("activity_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdEqualTo(Long value) {
-            return andActivityIdEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andActivityIdEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("activity_id =", value, "activityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdNotEqualTo(Long value) {
-            return andActivityIdNotEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andActivityIdNotEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("activity_id <>", value, "activityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdGreaterThan(Long value) {
-            return andActivityIdGreaterThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andActivityIdGreaterThan(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("activity_id >", value, "activityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdGreaterThanOrEqualTo(Long value) {
-            return andActivityIdGreaterThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andActivityIdGreaterThanOrEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("activity_id >=", value, "activityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdLessThan(Long value) {
-            return andActivityIdLessThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andActivityIdLessThan(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("activity_id <", value, "activityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdLessThanOrEqualTo(Long value) {
-            return andActivityIdLessThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andActivityIdLessThanOrEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("activity_id <=", value, "activityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdIn(Collection<Long> values) {
-            addCriterion("activity_id in", values, "activityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdNotIn(Collection<Long> values) {
-            addCriterion("activity_id not in", values, "activityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdBetween(Long value1, Long value2) {
-            addCriterion("activity_id between", value1, value2, "activityId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityIdNotBetween(Long value1, Long value2) {
-            addCriterion("activity_id not between", value1, value2, "activityId");
-            return (Criteria) this;
-        }
-
         public Criteria andDonatoryIdIsNull() {
             addCriterion("donatory_id is null");
             return (Criteria) this;
@@ -514,651 +310,105 @@ public class DrawRecordExample extends BaseExample {
             return (Criteria) this;
         }
 
-        public Criteria andTypeIsNull() {
-            addCriterion("type is null");
+        public Criteria andDrawTimeIsNull() {
+            addCriterion("draw_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIsNotNull() {
-            addCriterion("type is not null");
+        public Criteria andDrawTimeIsNotNull() {
+            addCriterion("draw_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTypeEqualTo(Byte value) {
-            return andTypeEqualTo(value, Boolean.TRUE);
+        public Criteria andDrawTimeEqualTo(Date value) {
+            return andDrawTimeEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andTypeEqualTo(Byte value, Boolean condition) {
+        public Criteria andDrawTimeEqualTo(Date value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("type =", value, "type");
+            addCriterion("draw_time =", value, "drawTime");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotEqualTo(Byte value) {
-            return andTypeNotEqualTo(value, Boolean.TRUE);
+        public Criteria andDrawTimeNotEqualTo(Date value) {
+            return andDrawTimeNotEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andTypeNotEqualTo(Byte value, Boolean condition) {
+        public Criteria andDrawTimeNotEqualTo(Date value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("type <>", value, "type");
+            addCriterion("draw_time <>", value, "drawTime");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThan(Byte value) {
-            return andTypeGreaterThan(value, Boolean.TRUE);
+        public Criteria andDrawTimeGreaterThan(Date value) {
+            return andDrawTimeGreaterThan(value, Boolean.TRUE);
         }
 
-        public Criteria andTypeGreaterThan(Byte value, Boolean condition) {
+        public Criteria andDrawTimeGreaterThan(Date value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("type >", value, "type");
+            addCriterion("draw_time >", value, "drawTime");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThanOrEqualTo(Byte value) {
-            return andTypeGreaterThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andDrawTimeGreaterThanOrEqualTo(Date value) {
+            return andDrawTimeGreaterThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andTypeGreaterThanOrEqualTo(Byte value, Boolean condition) {
+        public Criteria andDrawTimeGreaterThanOrEqualTo(Date value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("type >=", value, "type");
+            addCriterion("draw_time >=", value, "drawTime");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThan(Byte value) {
-            return andTypeLessThan(value, Boolean.TRUE);
+        public Criteria andDrawTimeLessThan(Date value) {
+            return andDrawTimeLessThan(value, Boolean.TRUE);
         }
 
-        public Criteria andTypeLessThan(Byte value, Boolean condition) {
+        public Criteria andDrawTimeLessThan(Date value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("type <", value, "type");
+            addCriterion("draw_time <", value, "drawTime");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThanOrEqualTo(Byte value) {
-            return andTypeLessThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andDrawTimeLessThanOrEqualTo(Date value) {
+            return andDrawTimeLessThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andTypeLessThanOrEqualTo(Byte value, Boolean condition) {
+        public Criteria andDrawTimeLessThanOrEqualTo(Date value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("type <=", value, "type");
+            addCriterion("draw_time <=", value, "drawTime");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIn(Collection<Byte> values) {
-            addCriterion("type in", values, "type");
+        public Criteria andDrawTimeIn(Collection<Date> values) {
+            addCriterion("draw_time in", values, "drawTime");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotIn(Collection<Byte> values) {
-            addCriterion("type not in", values, "type");
+        public Criteria andDrawTimeNotIn(Collection<Date> values) {
+            addCriterion("draw_time not in", values, "drawTime");
             return (Criteria) this;
         }
 
-        public Criteria andTypeBetween(Byte value1, Byte value2) {
-            addCriterion("type between", value1, value2, "type");
+        public Criteria andDrawTimeBetween(Date value1, Date value2) {
+            addCriterion("draw_time between", value1, value2, "drawTime");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotBetween(Byte value1, Byte value2) {
-            addCriterion("type not between", value1, value2, "type");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitIsNull() {
-            addCriterion("unit is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitIsNotNull() {
-            addCriterion("unit is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitEqualTo(String value) {
-            return andUnitEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("unit =", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitNotEqualTo(String value) {
-            return andUnitNotEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitNotEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("unit <>", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitGreaterThan(String value) {
-            return andUnitGreaterThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitGreaterThan(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("unit >", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitGreaterThanOrEqualTo(String value) {
-            return andUnitGreaterThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitGreaterThanOrEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("unit >=", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitLessThan(String value) {
-            return andUnitLessThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitLessThan(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("unit <", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitLessThanOrEqualTo(String value) {
-            return andUnitLessThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitLessThanOrEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("unit <=", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitLike(String value) {
-            return andUnitLike(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitLike(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("unit like", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitLikeLeft(String value) {
-            return andUnitLikeLeft(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitLikeLeft(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            addCriterion("unit like", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitLikeRight(String value) {
-            return andUnitLikeRight(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitLikeRight(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("unit like", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitLikeBoth(String value) {
-            return andUnitLikeBoth(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitLikeBoth(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("unit like", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitNotLike(String value) {
-            return andUnitNotLike(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitNotLike(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("unit not like", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitNotLikeLeft(String value) {
-            return andUnitNotLikeLeft(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitNotLikeLeft(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            addCriterion("unit not like", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitNotLikeRight(String value) {
-            return andUnitNotLikeRight(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitNotLikeRight(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("unit not like", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitNotLikeBoth(String value) {
-            return andUnitNotLikeBoth(value, Boolean.TRUE);
-        }
-
-        public Criteria andUnitNotLikeBoth(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("unit not like", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitIn(Collection<String> values) {
-            addCriterion("unit in", values, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitNotIn(Collection<String> values) {
-            addCriterion("unit not in", values, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitBetween(String value1, String value2) {
-            addCriterion("unit between", value1, value2, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitNotBetween(String value1, String value2) {
-            addCriterion("unit not between", value1, value2, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityIsNull() {
-            addCriterion("quantity is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityIsNotNull() {
-            addCriterion("quantity is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityEqualTo(Long value) {
-            return andQuantityEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andQuantityEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("quantity =", value, "quantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityNotEqualTo(Long value) {
-            return andQuantityNotEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andQuantityNotEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("quantity <>", value, "quantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityGreaterThan(Long value) {
-            return andQuantityGreaterThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andQuantityGreaterThan(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("quantity >", value, "quantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityGreaterThanOrEqualTo(Long value) {
-            return andQuantityGreaterThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andQuantityGreaterThanOrEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("quantity >=", value, "quantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityLessThan(Long value) {
-            return andQuantityLessThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andQuantityLessThan(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("quantity <", value, "quantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityLessThanOrEqualTo(Long value) {
-            return andQuantityLessThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andQuantityLessThanOrEqualTo(Long value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("quantity <=", value, "quantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityIn(Collection<Long> values) {
-            addCriterion("quantity in", values, "quantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityNotIn(Collection<Long> values) {
-            addCriterion("quantity not in", values, "quantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityBetween(Long value1, Long value2) {
-            addCriterion("quantity between", value1, value2, "quantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andQuantityNotBetween(Long value1, Long value2) {
-            addCriterion("quantity not between", value1, value2, "quantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameIsNull() {
-            addCriterion("name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameIsNotNull() {
-            addCriterion("name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameEqualTo(String value) {
-            return andNameEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("name =", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameNotEqualTo(String value) {
-            return andNameNotEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameNotEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("name <>", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameGreaterThan(String value) {
-            return andNameGreaterThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameGreaterThan(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("name >", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameGreaterThanOrEqualTo(String value) {
-            return andNameGreaterThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameGreaterThanOrEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("name >=", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameLessThan(String value) {
-            return andNameLessThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameLessThan(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("name <", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameLessThanOrEqualTo(String value) {
-            return andNameLessThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameLessThanOrEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("name <=", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameLike(String value) {
-            return andNameLike(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameLike(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("name like", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameLikeLeft(String value) {
-            return andNameLikeLeft(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameLikeLeft(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            addCriterion("name like", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameLikeRight(String value) {
-            return andNameLikeRight(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameLikeRight(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("name like", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameLikeBoth(String value) {
-            return andNameLikeBoth(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameLikeBoth(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("name like", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameNotLike(String value) {
-            return andNameNotLike(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameNotLike(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("name not like", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameNotLikeLeft(String value) {
-            return andNameNotLikeLeft(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameNotLikeLeft(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            addCriterion("name not like", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameNotLikeRight(String value) {
-            return andNameNotLikeRight(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameNotLikeRight(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("name not like", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameNotLikeBoth(String value) {
-            return andNameNotLikeBoth(value, Boolean.TRUE);
-        }
-
-        public Criteria andNameNotLikeBoth(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("name not like", value, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameIn(Collection<String> values) {
-            addCriterion("name in", values, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameNotIn(Collection<String> values) {
-            addCriterion("name not in", values, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameBetween(String value1, String value2) {
-            addCriterion("name between", value1, value2, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andNameNotBetween(String value1, String value2) {
-            addCriterion("name not between", value1, value2, "name");
+        public Criteria andDrawTimeNotBetween(Date value1, Date value2) {
+            addCriterion("draw_time not between", value1, value2, "drawTime");
             return (Criteria) this;
         }
 
@@ -1813,14 +1063,14 @@ public class DrawRecordExample extends BaseExample {
 
     public static class Criteria extends GeneratedCriteria {
 
-        private DrawRecordExample example;
+        private DrawRecordFlowExample example;
 
-        protected Criteria(DrawRecordExample example) {
+        protected Criteria(DrawRecordFlowExample example) {
             super();
             this.example = example;
         }
 
-        public DrawRecordExample toExample() {
+        public DrawRecordFlowExample toExample() {
             return this.example;
         }
 
@@ -1933,7 +1183,7 @@ public class DrawRecordExample extends BaseExample {
         }
     }
 
-    public static final class Builder extends BaseExampleBuilder<Builder, DrawRecordExample> {
+    public static final class Builder extends BaseExampleBuilder<Builder, DrawRecordFlowExample> {
 
         protected List<Criteria> oredCriteria;
 
@@ -1947,8 +1197,8 @@ public class DrawRecordExample extends BaseExample {
         }
 
         @Override
-        public DrawRecordExample build() {
-            return new DrawRecordExample(this);
+        public DrawRecordFlowExample build() {
+            return new DrawRecordFlowExample(this);
         }
     }
 }

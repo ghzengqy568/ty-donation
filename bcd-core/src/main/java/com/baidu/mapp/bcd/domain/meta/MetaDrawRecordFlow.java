@@ -3,28 +3,23 @@ package com.baidu.mapp.bcd.domain.meta;
 /*
 @Results({
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
-       @Result(property = "drawRecordFlowId", column = "draw_record_flow_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
-       @Result(property = "activityId", column = "activity_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "donatoryId", column = "donatory_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
-       @Result(property = "type", column = "type", javaType = java.lang.Byte.class, jdbcType = JdbcType.TINYINT),
-       @Result(property = "unit", column = "unit", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
-       @Result(property = "quantity", column = "quantity", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
-       @Result(property = "name", column = "name", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "drawTime", column = "draw_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "certCode", column = "cert_code", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "sign", column = "sign", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
 })
 */
-public final class MetaDrawRecord {
+public final class MetaDrawRecordFlow {
 
     /**
-     * 领取记录
+     * 领取记录流水
      */
-    public static final String TABLE_NAME = "`t_draw_record`";
+    public static final String TABLE_NAME = "`t_draw_record_flow`";
 
     /**
-     * 领取记录ID
+     * 领取记录流水ID
      */
     public static final String ID = "id";
 
@@ -35,32 +30,6 @@ public final class MetaDrawRecord {
     public static final String JDBC_TYPE_ID = "BIGINT";
 
     public static final String IS_KEY_ID = "true";
-
-    /**
-     * 领取记录流水ID
-     */
-    public static final String DRAWRECORDFLOWID = "drawRecordFlowId";
-
-    public static final String COLUMN_NAME_DRAWRECORDFLOWID = "`draw_record_flow_id`";
-
-    public static final String JAVA_TYPE_DRAWRECORDFLOWID = "java.lang.Long";
-
-    public static final String JDBC_TYPE_DRAWRECORDFLOWID = "BIGINT";
-
-    public static final String IS_KEY_DRAWRECORDFLOWID = "false";
-
-    /**
-     * 活动ID
-     */
-    public static final String ACTIVITYID = "activityId";
-
-    public static final String COLUMN_NAME_ACTIVITYID = "`activity_id`";
-
-    public static final String JAVA_TYPE_ACTIVITYID = "java.lang.Long";
-
-    public static final String JDBC_TYPE_ACTIVITYID = "BIGINT";
-
-    public static final String IS_KEY_ACTIVITYID = "false";
 
     /**
      * 受赠人ID
@@ -76,56 +45,17 @@ public final class MetaDrawRecord {
     public static final String IS_KEY_DONATORYID = "false";
 
     /**
-     * 捐赠类别, 1-钱，2-物
+     * 领取时间
      */
-    public static final String TYPE = "type";
+    public static final String DRAWTIME = "drawTime";
 
-    public static final String COLUMN_NAME_TYPE = "`type`";
+    public static final String COLUMN_NAME_DRAWTIME = "`draw_time`";
 
-    public static final String JAVA_TYPE_TYPE = "java.lang.Byte";
+    public static final String JAVA_TYPE_DRAWTIME = "java.util.Date";
 
-    public static final String JDBC_TYPE_TYPE = "TINYINT";
+    public static final String JDBC_TYPE_DRAWTIME = "TIMESTAMP";
 
-    public static final String IS_KEY_TYPE = "false";
-
-    /**
-     * 单位
-     */
-    public static final String UNIT = "unit";
-
-    public static final String COLUMN_NAME_UNIT = "`unit`";
-
-    public static final String JAVA_TYPE_UNIT = "java.lang.String";
-
-    public static final String JDBC_TYPE_UNIT = "VARCHAR";
-
-    public static final String IS_KEY_UNIT = "false";
-
-    /**
-     * 数量
-     */
-    public static final String QUANTITY = "quantity";
-
-    public static final String COLUMN_NAME_QUANTITY = "`quantity`";
-
-    public static final String JAVA_TYPE_QUANTITY = "java.lang.Long";
-
-    public static final String JDBC_TYPE_QUANTITY = "BIGINT";
-
-    public static final String IS_KEY_QUANTITY = "false";
-
-    /**
-     * 物资名称
-     */
-    public static final String NAME = "name";
-
-    public static final String COLUMN_NAME_NAME = "`name`";
-
-    public static final String JAVA_TYPE_NAME = "java.lang.String";
-
-    public static final String JDBC_TYPE_NAME = "VARCHAR";
-
-    public static final String IS_KEY_NAME = "false";
+    public static final String IS_KEY_DRAWTIME = "false";
 
     /**
      * 证书编码
@@ -196,26 +126,11 @@ public final class MetaDrawRecord {
         if (columnName.equals(COLUMN_NAME_ID)) {
             return ID;
         }
-        if (columnName.equals(COLUMN_NAME_DRAWRECORDFLOWID)) {
-            return DRAWRECORDFLOWID;
-        }
-        if (columnName.equals(COLUMN_NAME_ACTIVITYID)) {
-            return ACTIVITYID;
-        }
         if (columnName.equals(COLUMN_NAME_DONATORYID)) {
             return DONATORYID;
         }
-        if (columnName.equals(COLUMN_NAME_TYPE)) {
-            return TYPE;
-        }
-        if (columnName.equals(COLUMN_NAME_UNIT)) {
-            return UNIT;
-        }
-        if (columnName.equals(COLUMN_NAME_QUANTITY)) {
-            return QUANTITY;
-        }
-        if (columnName.equals(COLUMN_NAME_NAME)) {
-            return NAME;
+        if (columnName.equals(COLUMN_NAME_DRAWTIME)) {
+            return DRAWTIME;
         }
         if (columnName.equals(COLUMN_NAME_CERTCODE)) {
             return CERTCODE;
@@ -246,26 +161,11 @@ public final class MetaDrawRecord {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID;
         }
-        if (fieldName.equals(DRAWRECORDFLOWID)) {
-            return COLUMN_NAME_DRAWRECORDFLOWID;
-        }
-        if (fieldName.equals(ACTIVITYID)) {
-            return COLUMN_NAME_ACTIVITYID;
-        }
         if (fieldName.equals(DONATORYID)) {
             return COLUMN_NAME_DONATORYID;
         }
-        if (fieldName.equals(TYPE)) {
-            return COLUMN_NAME_TYPE;
-        }
-        if (fieldName.equals(UNIT)) {
-            return COLUMN_NAME_UNIT;
-        }
-        if (fieldName.equals(QUANTITY)) {
-            return COLUMN_NAME_QUANTITY;
-        }
-        if (fieldName.equals(NAME)) {
-            return COLUMN_NAME_NAME;
+        if (fieldName.equals(DRAWTIME)) {
+            return COLUMN_NAME_DRAWTIME;
         }
         if (fieldName.equals(CERTCODE)) {
             return COLUMN_NAME_CERTCODE;
@@ -296,26 +196,11 @@ public final class MetaDrawRecord {
         if (fieldName.equals(ID)) {
             return COLUMN_NAME_ID.replace("`", "");
         }
-        if (fieldName.equals(DRAWRECORDFLOWID)) {
-            return COLUMN_NAME_DRAWRECORDFLOWID.replace("`", "");
-        }
-        if (fieldName.equals(ACTIVITYID)) {
-            return COLUMN_NAME_ACTIVITYID.replace("`", "");
-        }
         if (fieldName.equals(DONATORYID)) {
             return COLUMN_NAME_DONATORYID.replace("`", "");
         }
-        if (fieldName.equals(TYPE)) {
-            return COLUMN_NAME_TYPE.replace("`", "");
-        }
-        if (fieldName.equals(UNIT)) {
-            return COLUMN_NAME_UNIT.replace("`", "");
-        }
-        if (fieldName.equals(QUANTITY)) {
-            return COLUMN_NAME_QUANTITY.replace("`", "");
-        }
-        if (fieldName.equals(NAME)) {
-            return COLUMN_NAME_NAME.replace("`", "");
+        if (fieldName.equals(DRAWTIME)) {
+            return COLUMN_NAME_DRAWTIME.replace("`", "");
         }
         if (fieldName.equals(CERTCODE)) {
             return COLUMN_NAME_CERTCODE.replace("`", "");

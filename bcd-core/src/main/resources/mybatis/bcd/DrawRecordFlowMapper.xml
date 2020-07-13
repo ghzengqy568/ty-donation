@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.baidu.mapp.bcd.dao.DrawRecordMapper">
-  <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.DrawRecord">
+<mapper namespace="com.baidu.mapp.bcd.dao.DrawRecordFlowMapper">
+  <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.DrawRecordFlow">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="draw_record_flow_id" jdbcType="BIGINT" property="drawRecordFlowId" />
-    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
     <result column="donatory_id" jdbcType="BIGINT" property="donatoryId" />
-    <result column="type" jdbcType="TINYINT" property="type" />
-    <result column="unit" jdbcType="VARCHAR" property="unit" />
-    <result column="quantity" jdbcType="BIGINT" property="quantity" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="draw_time" jdbcType="TIMESTAMP" property="drawTime" />
     <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
     <result column="sign" jdbcType="VARCHAR" property="sign" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -74,10 +69,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, draw_record_flow_id, activity_id, donatory_id, type, unit, quantity, name, cert_code, 
-    sign, create_time, last_modify_time
+    id, donatory_id, draw_time, cert_code, sign, create_time, last_modify_time
   </sql>
-  <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.DrawRecordExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.DrawRecordFlowExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -90,7 +84,7 @@
     <if test="columns==null or columns.size() &lt;= 0">
       <include refid="Base_Column_List" />
     </if>
-    from t_draw_record
+    from t_draw_record_flow
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -108,58 +102,41 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from t_draw_record
+    from t_draw_record_flow
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_draw_record
+    delete from t_draw_record_flow
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.baidu.mapp.bcd.domain.DrawRecordExample">
-    delete from t_draw_record
+  <delete id="deleteByExample" parameterType="com.baidu.mapp.bcd.domain.DrawRecordFlowExample">
+    delete from t_draw_record_flow
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.baidu.mapp.bcd.domain.DrawRecord">
+  <insert id="insert" parameterType="com.baidu.mapp.bcd.domain.DrawRecordFlow">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_draw_record (draw_record_flow_id, activity_id, donatory_id, 
-      type, unit, quantity, 
-      name, cert_code, sign, 
-      create_time, last_modify_time)
-    values (#{drawRecordFlowId,jdbcType=BIGINT}, #{activityId,jdbcType=BIGINT}, #{donatoryId,jdbcType=BIGINT}, 
-      #{type,jdbcType=TINYINT}, #{unit,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, 
-      #{name,jdbcType=VARCHAR}, #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP})
+    insert into t_draw_record_flow (donatory_id, draw_time, cert_code, 
+      sign, create_time, last_modify_time
+      )
+    values (#{donatoryId,jdbcType=BIGINT}, #{drawTime,jdbcType=TIMESTAMP}, #{certCode,jdbcType=VARCHAR}, 
+      #{sign,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.DrawRecord">
+  <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.DrawRecordFlow">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_draw_record
+    insert into t_draw_record_flow
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="drawRecordFlowId != null">
-        draw_record_flow_id,
-      </if>
-      <if test="activityId != null">
-        activity_id,
-      </if>
       <if test="donatoryId != null">
         donatory_id,
       </if>
-      <if test="type != null">
-        type,
-      </if>
-      <if test="unit != null">
-        unit,
-      </if>
-      <if test="quantity != null">
-        quantity,
-      </if>
-      <if test="name != null">
-        name,
+      <if test="drawTime != null">
+        draw_time,
       </if>
       <if test="certCode != null">
         cert_code,
@@ -175,26 +152,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="drawRecordFlowId != null">
-        #{drawRecordFlowId,jdbcType=BIGINT},
-      </if>
-      <if test="activityId != null">
-        #{activityId,jdbcType=BIGINT},
-      </if>
       <if test="donatoryId != null">
         #{donatoryId,jdbcType=BIGINT},
       </if>
-      <if test="type != null">
-        #{type,jdbcType=TINYINT},
-      </if>
-      <if test="unit != null">
-        #{unit,jdbcType=VARCHAR},
-      </if>
-      <if test="quantity != null">
-        #{quantity,jdbcType=BIGINT},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="drawTime != null">
+        #{drawTime,jdbcType=TIMESTAMP},
       </if>
       <if test="certCode != null">
         #{certCode,jdbcType=VARCHAR},
@@ -210,38 +172,23 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.baidu.mapp.bcd.domain.DrawRecordExample" resultType="java.lang.Long">
-    select count(*) from t_draw_record
+  <select id="countByExample" parameterType="com.baidu.mapp.bcd.domain.DrawRecordFlowExample" resultType="java.lang.Long">
+    select count(*) from t_draw_record_flow
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update t_draw_record
+    update t_draw_record_flow
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.drawRecordFlowId != null">
-        draw_record_flow_id = #{record.drawRecordFlowId,jdbcType=BIGINT},
-      </if>
-      <if test="record.activityId != null">
-        activity_id = #{record.activityId,jdbcType=BIGINT},
-      </if>
       <if test="record.donatoryId != null">
         donatory_id = #{record.donatoryId,jdbcType=BIGINT},
       </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=TINYINT},
-      </if>
-      <if test="record.unit != null">
-        unit = #{record.unit,jdbcType=VARCHAR},
-      </if>
-      <if test="record.quantity != null">
-        quantity = #{record.quantity,jdbcType=BIGINT},
-      </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.drawTime != null">
+        draw_time = #{record.drawTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.certCode != null">
         cert_code = #{record.certCode,jdbcType=VARCHAR},
@@ -261,15 +208,10 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update t_draw_record
+    update t_draw_record_flow
     set id = #{record.id,jdbcType=BIGINT},
-      draw_record_flow_id = #{record.drawRecordFlowId,jdbcType=BIGINT},
-      activity_id = #{record.activityId,jdbcType=BIGINT},
       donatory_id = #{record.donatoryId,jdbcType=BIGINT},
-      type = #{record.type,jdbcType=TINYINT},
-      unit = #{record.unit,jdbcType=VARCHAR},
-      quantity = #{record.quantity,jdbcType=BIGINT},
-      name = #{record.name,jdbcType=VARCHAR},
+      draw_time = #{record.drawTime,jdbcType=TIMESTAMP},
       cert_code = #{record.certCode,jdbcType=VARCHAR},
       sign = #{record.sign,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -278,29 +220,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.DrawRecord">
-    update t_draw_record
+  <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.DrawRecordFlow">
+    update t_draw_record_flow
     <set>
-      <if test="drawRecordFlowId != null">
-        draw_record_flow_id = #{drawRecordFlowId,jdbcType=BIGINT},
-      </if>
-      <if test="activityId != null">
-        activity_id = #{activityId,jdbcType=BIGINT},
-      </if>
       <if test="donatoryId != null">
         donatory_id = #{donatoryId,jdbcType=BIGINT},
       </if>
-      <if test="type != null">
-        type = #{type,jdbcType=TINYINT},
-      </if>
-      <if test="unit != null">
-        unit = #{unit,jdbcType=VARCHAR},
-      </if>
-      <if test="quantity != null">
-        quantity = #{quantity,jdbcType=BIGINT},
-      </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+      <if test="drawTime != null">
+        draw_time = #{drawTime,jdbcType=TIMESTAMP},
       </if>
       <if test="certCode != null">
         cert_code = #{certCode,jdbcType=VARCHAR},
@@ -317,15 +244,10 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.DrawRecord">
-    update t_draw_record
-    set draw_record_flow_id = #{drawRecordFlowId,jdbcType=BIGINT},
-      activity_id = #{activityId,jdbcType=BIGINT},
-      donatory_id = #{donatoryId,jdbcType=BIGINT},
-      type = #{type,jdbcType=TINYINT},
-      unit = #{unit,jdbcType=VARCHAR},
-      quantity = #{quantity,jdbcType=BIGINT},
-      name = #{name,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.DrawRecordFlow">
+    update t_draw_record_flow
+    set donatory_id = #{donatoryId,jdbcType=BIGINT},
+      draw_time = #{drawTime,jdbcType=TIMESTAMP},
       cert_code = #{certCode,jdbcType=VARCHAR},
       sign = #{sign,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

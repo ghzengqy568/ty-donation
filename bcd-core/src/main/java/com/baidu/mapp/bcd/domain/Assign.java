@@ -67,6 +67,7 @@ public class Assign implements Serializable {
      * 指派关系表
      */
     public Assign() {
+        
     }
 
     /**
@@ -239,7 +240,7 @@ public class Assign implements Serializable {
             lastModifyTime: ''
         }
         */
-
+        
         return "{\"id\": \"\",\"activityId\": \"\",\"activityPlanId\": \"\",\"donatoryId\": \"\",\"configId\": \"\",\"donatoryLevel\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
@@ -304,7 +305,7 @@ public class Assign implements Serializable {
         private Date lastModifyTime;
 
         private XBuilder() {
-
+            
         }
 
         /**

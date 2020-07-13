@@ -4,29 +4,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "DrawRecord", description = "领取记录")
-public class DrawRecord implements Serializable {
+@Schema(name = "DrawRecordFlow", description = "领取记录流水")
+public class DrawRecordFlow implements Serializable {
 
     /**
      * column-name:id
-     * 领取记录ID
-     */
-    @Schema(description = "领取记录ID")
-    private Long id;
-
-    /**
-     * column-name:draw_record_flow_id
      * 领取记录流水ID
      */
     @Schema(description = "领取记录流水ID")
-    private Long drawRecordFlowId;
-
-    /**
-     * column-name:activity_id
-     * 活动ID
-     */
-    @Schema(description = "活动ID")
-    private Long activityId;
+    private Long id;
 
     /**
      * column-name:donatory_id
@@ -36,32 +22,11 @@ public class DrawRecord implements Serializable {
     private Long donatoryId;
 
     /**
-     * column-name:type
-     * 捐赠类别, 1-钱，2-物
+     * column-name:draw_time
+     * 领取时间
      */
-    @Schema(description = "捐赠类别, 1-钱，2-物")
-    private Byte type;
-
-    /**
-     * column-name:unit
-     * 单位
-     */
-    @Schema(description = "单位")
-    private String unit;
-
-    /**
-     * column-name:quantity
-     * 数量
-     */
-    @Schema(description = "数量")
-    private Long quantity;
-
-    /**
-     * column-name:name
-     * 物资名称
-     */
-    @Schema(description = "物资名称")
-    private String name;
+    @Schema(description = "领取时间")
+    private Date drawTime;
 
     /**
      * column-name:cert_code
@@ -92,24 +57,19 @@ public class DrawRecord implements Serializable {
     private Date lastModifyTime;
 
     /**
-     * 领取记录
+     * 领取记录流水
      */
-    public DrawRecord() {
+    public DrawRecordFlow() {
         
     }
 
     /**
-     * 领取记录
+     * 领取记录流水
      */
-    private DrawRecord(XBuilder builder) {
+    private DrawRecordFlow(XBuilder builder) {
         this.id = builder.id;
-        this.drawRecordFlowId = builder.drawRecordFlowId;
-        this.activityId = builder.activityId;
         this.donatoryId = builder.donatoryId;
-        this.type = builder.type;
-        this.unit = builder.unit;
-        this.quantity = builder.quantity;
-        this.name = builder.name;
+        this.drawTime = builder.drawTime;
         this.certCode = builder.certCode;
         this.sign = builder.sign;
         this.createTime = builder.createTime;
@@ -121,45 +81,17 @@ public class DrawRecord implements Serializable {
     }
 
     /**
-     * 领取记录ID
+     * 领取记录流水ID
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * 领取记录ID
+     * 领取记录流水ID
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * 领取记录流水ID
-     */
-    public Long getDrawRecordFlowId() {
-        return drawRecordFlowId;
-    }
-
-    /**
-     * 领取记录流水ID
-     */
-    public void setDrawRecordFlowId(Long drawRecordFlowId) {
-        this.drawRecordFlowId = drawRecordFlowId;
-    }
-
-    /**
-     * 活动ID
-     */
-    public Long getActivityId() {
-        return activityId;
-    }
-
-    /**
-     * 活动ID
-     */
-    public void setActivityId(Long activityId) {
-        this.activityId = activityId;
     }
 
     /**
@@ -177,59 +109,17 @@ public class DrawRecord implements Serializable {
     }
 
     /**
-     * 捐赠类别, 1-钱，2-物
+     * 领取时间
      */
-    public Byte getType() {
-        return type;
+    public Date getDrawTime() {
+        return drawTime;
     }
 
     /**
-     * 捐赠类别, 1-钱，2-物
+     * 领取时间
      */
-    public void setType(Byte type) {
-        this.type = type;
-    }
-
-    /**
-     * 单位
-     */
-    public String getUnit() {
-        return unit;
-    }
-
-    /**
-     * 单位
-     */
-    public void setUnit(String unit) {
-        this.unit = unit == null ? null : unit.trim();
-    }
-
-    /**
-     * 数量
-     */
-    public Long getQuantity() {
-        return quantity;
-    }
-
-    /**
-     * 数量
-     */
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
-    }
-
-    /**
-     * 物资名称
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 物资名称
-     */
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setDrawTime(Date drawTime) {
+        this.drawTime = drawTime;
     }
 
     /**
@@ -288,15 +178,10 @@ public class DrawRecord implements Serializable {
         this.lastModifyTime = lastModifyTime;
     }
 
-    public DrawRecord copyFrom(DrawRecord other) {
+    public DrawRecordFlow copyFrom(DrawRecordFlow other) {
         this.id = other.id;
-        this.drawRecordFlowId = other.drawRecordFlowId;
-        this.activityId = other.activityId;
         this.donatoryId = other.donatoryId;
-        this.type = other.type;
-        this.unit = other.unit;
-        this.quantity = other.quantity;
-        this.name = other.name;
+        this.drawTime = other.drawTime;
         this.certCode = other.certCode;
         this.sign = other.sign;
         this.createTime = other.createTime;
@@ -304,18 +189,13 @@ public class DrawRecord implements Serializable {
         return this;
     }
 
-    public static <T extends DrawRecord> T copyFrom(DrawRecord from, T to) {
+    public static <T extends DrawRecordFlow> T copyFrom(DrawRecordFlow from, T to) {
         if (to == null){
             throw new RuntimeException("`to` must not be null");
         }
         to.setId(from.id);
-        to.setDrawRecordFlowId(from.drawRecordFlowId);
-        to.setActivityId(from.activityId);
         to.setDonatoryId(from.donatoryId);
-        to.setType(from.type);
-        to.setUnit(from.unit);
-        to.setQuantity(from.quantity);
-        to.setName(from.name);
+        to.setDrawTime(from.drawTime);
         to.setCertCode(from.certCode);
         to.setSign(from.sign);
         to.setCreateTime(from.createTime);
@@ -327,13 +207,8 @@ public class DrawRecord implements Serializable {
         /*
         {
             id: '',
-            drawRecordFlowId: '',
-            activityId: '',
             donatoryId: '',
-            type: '',
-            unit: '',
-            quantity: '',
-            name: '',
+            drawTime: '',
             certCode: '',
             sign: '',
             createTime: '',
@@ -341,7 +216,7 @@ public class DrawRecord implements Serializable {
         }
         */
         
-        return "{\"id\": \"\",\"drawRecordFlowId\": \"\",\"activityId\": \"\",\"donatoryId\": \"\",\"type\": \"\",\"unit\": \"\",\"quantity\": \"\",\"name\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"donatoryId\": \"\",\"drawTime\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -351,13 +226,8 @@ public class DrawRecord implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", drawRecordFlowId=").append(drawRecordFlowId);
-        sb.append(", activityId=").append(activityId);
         sb.append(", donatoryId=").append(donatoryId);
-        sb.append(", type=").append(type);
-        sb.append(", unit=").append(unit);
-        sb.append(", quantity=").append(quantity);
-        sb.append(", name=").append(name);
+        sb.append(", drawTime=").append(drawTime);
         sb.append(", certCode=").append(certCode);
         sb.append(", sign=").append(sign);
         sb.append(", createTime=").append(createTime);
@@ -369,19 +239,9 @@ public class DrawRecord implements Serializable {
     public static final class XBuilder {
 
         /**
-         * 领取记录ID
-         */
-        private Long id;
-
-        /**
          * 领取记录流水ID
          */
-        private Long drawRecordFlowId;
-
-        /**
-         * 活动ID
-         */
-        private Long activityId;
+        private Long id;
 
         /**
          * 受赠人ID
@@ -389,24 +249,9 @@ public class DrawRecord implements Serializable {
         private Long donatoryId;
 
         /**
-         * 捐赠类别, 1-钱，2-物
+         * 领取时间
          */
-        private Byte type;
-
-        /**
-         * 单位
-         */
-        private String unit;
-
-        /**
-         * 数量
-         */
-        private Long quantity;
-
-        /**
-         * 物资名称
-         */
-        private String name;
+        private Date drawTime;
 
         /**
          * 证书编码
@@ -433,26 +278,10 @@ public class DrawRecord implements Serializable {
         }
 
         /**
-         * 领取记录ID
+         * 领取记录流水ID
          */
         public XBuilder id(Long id) {
             this.id = id;
-            return this;
-        }
-
-        /**
-         * 领取记录流水ID
-         */
-        public XBuilder drawRecordFlowId(Long drawRecordFlowId) {
-            this.drawRecordFlowId = drawRecordFlowId;
-            return this;
-        }
-
-        /**
-         * 活动ID
-         */
-        public XBuilder activityId(Long activityId) {
-            this.activityId = activityId;
             return this;
         }
 
@@ -465,34 +294,10 @@ public class DrawRecord implements Serializable {
         }
 
         /**
-         * 捐赠类别, 1-钱，2-物
+         * 领取时间
          */
-        public XBuilder type(Byte type) {
-            this.type = type;
-            return this;
-        }
-
-        /**
-         * 单位
-         */
-        public XBuilder unit(String unit) {
-            this.unit = unit;
-            return this;
-        }
-
-        /**
-         * 数量
-         */
-        public XBuilder quantity(Long quantity) {
-            this.quantity = quantity;
-            return this;
-        }
-
-        /**
-         * 物资名称
-         */
-        public XBuilder name(String name) {
-            this.name = name;
+        public XBuilder drawTime(Date drawTime) {
+            this.drawTime = drawTime;
             return this;
         }
 
@@ -528,8 +333,8 @@ public class DrawRecord implements Serializable {
             return this;
         }
 
-        public DrawRecord build() {
-            return new DrawRecord(this);
+        public DrawRecordFlow build() {
+            return new DrawRecordFlow(this);
         }
     }
 }
