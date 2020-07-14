@@ -231,7 +231,7 @@ public class DonateController {
         Map<Long, Donor> donorIdMap = donorService.selectMapByExample(DonorExample.newBuilder()
                 .build()
                 .createCriteria()
-                .andDonorNameLike("%" + queryString + "%")
+                .andDonorNameLikeBoth(queryString)
                 .toExample(), Donor::getId);
         if (CollectionUtils.isEmpty(donorIdMap)) {
             return Lists.newArrayList();
@@ -278,7 +278,7 @@ public class DonateController {
         Map<Long, Donatory> donatoryIdMap = donatoryService.selectMapByExample(DonatoryExample.newBuilder()
                 .build()
                 .createCriteria()
-                .andDonatoryNameLike("%" + queryString + "%")
+                .andDonatoryNameLikeBoth(queryString)
                 .toExample(), Donatory::getId);
         if (CollectionUtils.isEmpty(donatoryIdMap)) {
             return Lists.newArrayList();
