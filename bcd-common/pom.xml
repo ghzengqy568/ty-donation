@@ -14,6 +14,11 @@
 
     <artifactId>bcd-common</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

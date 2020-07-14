@@ -13,6 +13,8 @@
     <result column="province" jdbcType="VARCHAR" property="province" />
     <result column="city" jdbcType="VARCHAR" property="city" />
     <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="login_token" jdbcType="VARCHAR" property="loginToken" />
+    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
   </resultMap>
@@ -76,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, donor_user_name, donor_pwd, donor_name, cert_code, sign, idcard, mobile, province, 
-    city, address, create_time, last_modify_time
+    city, address, login_token, last_login_time, create_time, last_modify_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.DonorExample" resultMap="BaseResultMap">
     select
@@ -129,13 +131,13 @@
     insert into t_donor (donor_user_name, donor_pwd, donor_name, 
       cert_code, sign, idcard, 
       mobile, province, city, 
-      address, create_time, last_modify_time
-      )
+      address, login_token, last_login_time, 
+      create_time, last_modify_time)
     values (#{donorUserName,jdbcType=VARCHAR}, #{donorPwd,jdbcType=VARCHAR}, #{donorName,jdbcType=VARCHAR}, 
       #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, 
       #{mobile,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
-      #{address,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
-      )
+      #{address,jdbcType=VARCHAR}, #{loginToken,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.Donor">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -172,6 +174,12 @@
       </if>
       <if test="address != null">
         address,
+      </if>
+      <if test="loginToken != null">
+        login_token,
+      </if>
+      <if test="lastLoginTime != null">
+        last_login_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -210,6 +218,12 @@
       </if>
       <if test="address != null">
         #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="loginToken != null">
+        #{loginToken,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null">
+        #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -261,6 +275,12 @@
       <if test="record.address != null">
         address = #{record.address,jdbcType=VARCHAR},
       </if>
+      <if test="record.loginToken != null">
+        login_token = #{record.loginToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastLoginTime != null">
+        last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -285,6 +305,8 @@
       province = #{record.province,jdbcType=VARCHAR},
       city = #{record.city,jdbcType=VARCHAR},
       address = #{record.address,jdbcType=VARCHAR},
+      login_token = #{record.loginToken,jdbcType=VARCHAR},
+      last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -324,6 +346,12 @@
       <if test="address != null">
         address = #{address,jdbcType=VARCHAR},
       </if>
+      <if test="loginToken != null">
+        login_token = #{loginToken,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null">
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -345,6 +373,8 @@
       province = #{province,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
+      login_token = #{loginToken,jdbcType=VARCHAR},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

@@ -3,7 +3,7 @@
  */
 package com.baidu.mapp.bcd.common.utils;
 
-import com.baidu.mapp.bcd.common.utils.digest.DigestUtils;
+import com.baidu.mapp.bcd.common.utils.digest.Digest;
 
 public class SignUtils {
 
@@ -16,6 +16,6 @@ public class SignUtils {
         for (Object f : field) {
             sb.append(f == null ? "null" : f.toString()).append(":");
         }
-        return DigestUtils.md5DigestAsHex(sb.toString().getBytes());
+        return Digest.genMD5(sb.toString());
     }
 }

@@ -13,6 +13,8 @@ package com.baidu.mapp.bcd.domain.meta;
        @Result(property = "province", column = "province", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "city", column = "city", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "address", column = "address", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "loginToken", column = "login_token", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "lastLoginTime", column = "last_login_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
        @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
 })
@@ -168,6 +170,32 @@ public final class MetaDonor {
     public static final String IS_KEY_ADDRESS = "false";
 
     /**
+     * 登录token
+     */
+    public static final String LOGINTOKEN = "loginToken";
+
+    public static final String COLUMN_NAME_LOGINTOKEN = "`login_token`";
+
+    public static final String JAVA_TYPE_LOGINTOKEN = "java.lang.String";
+
+    public static final String JDBC_TYPE_LOGINTOKEN = "VARCHAR";
+
+    public static final String IS_KEY_LOGINTOKEN = "false";
+
+    /**
+     * 最后一次登录时间
+     */
+    public static final String LASTLOGINTIME = "lastLoginTime";
+
+    public static final String COLUMN_NAME_LASTLOGINTIME = "`last_login_time`";
+
+    public static final String JAVA_TYPE_LASTLOGINTIME = "java.util.Date";
+
+    public static final String JDBC_TYPE_LASTLOGINTIME = "TIMESTAMP";
+
+    public static final String IS_KEY_LASTLOGINTIME = "false";
+
+    /**
      * 创建时间
      */
     public static final String CREATETIME = "createTime";
@@ -240,6 +268,12 @@ public final class MetaDonor {
         if (columnName.equals(COLUMN_NAME_ADDRESS)) {
             return ADDRESS;
         }
+        if (columnName.equals(COLUMN_NAME_LOGINTOKEN)) {
+            return LOGINTOKEN;
+        }
+        if (columnName.equals(COLUMN_NAME_LASTLOGINTIME)) {
+            return LASTLOGINTIME;
+        }
         if (columnName.equals(COLUMN_NAME_CREATETIME)) {
             return CREATETIME;
         }
@@ -293,6 +327,12 @@ public final class MetaDonor {
         if (fieldName.equals(ADDRESS)) {
             return COLUMN_NAME_ADDRESS;
         }
+        if (fieldName.equals(LOGINTOKEN)) {
+            return COLUMN_NAME_LOGINTOKEN;
+        }
+        if (fieldName.equals(LASTLOGINTIME)) {
+            return COLUMN_NAME_LASTLOGINTIME;
+        }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME;
         }
@@ -345,6 +385,12 @@ public final class MetaDonor {
         }
         if (fieldName.equals(ADDRESS)) {
             return COLUMN_NAME_ADDRESS.replace("`", "");
+        }
+        if (fieldName.equals(LOGINTOKEN)) {
+            return COLUMN_NAME_LOGINTOKEN.replace("`", "");
+        }
+        if (fieldName.equals(LASTLOGINTIME)) {
+            return COLUMN_NAME_LASTLOGINTIME.replace("`", "");
         }
         if (fieldName.equals(CREATETIME)) {
             return COLUMN_NAME_CREATETIME.replace("`", "");

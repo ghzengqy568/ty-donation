@@ -85,6 +85,20 @@ public class Donor implements Serializable {
     private String address;
 
     /**
+     * column-name:login_token
+     * 登录token
+     */
+    @Schema(description = "登录token")
+    private String loginToken;
+
+    /**
+     * column-name:last_login_time
+     * 最后一次登录时间
+     */
+    @Schema(description = "最后一次登录时间")
+    private Date lastLoginTime;
+
+    /**
      * column-name:create_time
      * 创建时间
      */
@@ -120,6 +134,8 @@ public class Donor implements Serializable {
         this.province = builder.province;
         this.city = builder.city;
         this.address = builder.address;
+        this.loginToken = builder.loginToken;
+        this.lastLoginTime = builder.lastLoginTime;
         this.createTime = builder.createTime;
         this.lastModifyTime = builder.lastModifyTime;
     }
@@ -283,6 +299,34 @@ public class Donor implements Serializable {
     }
 
     /**
+     * 登录token
+     */
+    public String getLoginToken() {
+        return loginToken;
+    }
+
+    /**
+     * 登录token
+     */
+    public void setLoginToken(String loginToken) {
+        this.loginToken = loginToken == null ? null : loginToken.trim();
+    }
+
+    /**
+     * 最后一次登录时间
+     */
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    /**
+     * 最后一次登录时间
+     */
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    /**
      * 创建时间
      */
     public Date getCreateTime() {
@@ -322,6 +366,8 @@ public class Donor implements Serializable {
         this.province = other.province;
         this.city = other.city;
         this.address = other.address;
+        this.loginToken = other.loginToken;
+        this.lastLoginTime = other.lastLoginTime;
         this.createTime = other.createTime;
         this.lastModifyTime = other.lastModifyTime;
         return this;
@@ -342,6 +388,8 @@ public class Donor implements Serializable {
         to.setProvince(from.province);
         to.setCity(from.city);
         to.setAddress(from.address);
+        to.setLoginToken(from.loginToken);
+        to.setLastLoginTime(from.lastLoginTime);
         to.setCreateTime(from.createTime);
         to.setLastModifyTime(from.lastModifyTime);
         return to;
@@ -361,12 +409,14 @@ public class Donor implements Serializable {
             province: '',
             city: '',
             address: '',
+            loginToken: '',
+            lastLoginTime: '',
             createTime: '',
             lastModifyTime: ''
         }
         */
         
-        return "{\"id\": \"\",\"donorUserName\": \"\",\"donorPwd\": \"\",\"donorName\": \"\",\"certCode\": \"\",\"sign\": \"\",\"idcard\": \"\",\"mobile\": \"\",\"province\": \"\",\"city\": \"\",\"address\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"donorUserName\": \"\",\"donorPwd\": \"\",\"donorName\": \"\",\"certCode\": \"\",\"sign\": \"\",\"idcard\": \"\",\"mobile\": \"\",\"province\": \"\",\"city\": \"\",\"address\": \"\",\"loginToken\": \"\",\"lastLoginTime\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -386,6 +436,8 @@ public class Donor implements Serializable {
         sb.append(", province=").append(province);
         sb.append(", city=").append(city);
         sb.append(", address=").append(address);
+        sb.append(", loginToken=").append(loginToken);
+        sb.append(", lastLoginTime=").append(lastLoginTime);
         sb.append(", createTime=").append(createTime);
         sb.append(", lastModifyTime=").append(lastModifyTime);
         sb.append("]");
@@ -448,6 +500,16 @@ public class Donor implements Serializable {
          * 地址
          */
         private String address;
+
+        /**
+         * 登录token
+         */
+        private String loginToken;
+
+        /**
+         * 最后一次登录时间
+         */
+        private Date lastLoginTime;
 
         /**
          * 创建时间
@@ -548,6 +610,22 @@ public class Donor implements Serializable {
          */
         public XBuilder address(String address) {
             this.address = address;
+            return this;
+        }
+
+        /**
+         * 登录token
+         */
+        public XBuilder loginToken(String loginToken) {
+            this.loginToken = loginToken;
+            return this;
+        }
+
+        /**
+         * 最后一次登录时间
+         */
+        public XBuilder lastLoginTime(Date lastLoginTime) {
+            this.lastLoginTime = lastLoginTime;
             return this;
         }
 

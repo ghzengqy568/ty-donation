@@ -19,4 +19,10 @@ public class DonorReq {
     @Schema(description = "姓名", maxLength = 60, minLength = 2)
     private String name;
 
+    @Schema(description = "身份证号码，加密存储")
+    private String idcard;
+
+    @Schema(description = "手机号，加密存储")
+    private String mobile;
+
 }

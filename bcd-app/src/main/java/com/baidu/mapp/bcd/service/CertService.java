@@ -6,8 +6,12 @@ package com.baidu.mapp.bcd.service;
 import java.util.Date;
 import java.util.UUID;
 
+import com.baidu.mapp.bcd.common.utils.digest.Digest;
 import com.baidu.mapp.bcd.domain.CertificateExample;
+
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.baidu.mapp.bcd.domain.Certificate;
@@ -17,6 +21,9 @@ public class CertService {
 
     @Autowired
     CertificateService certificateService;
+
+    @Autowired
+    Digest digest;
 
     /**
      * @param userId,   流水+详情 -> 捐赠人ID，
@@ -30,7 +37,23 @@ public class CertService {
      */
     public String writeChain(Long userId, String tableName, Long id, String sign) {
         // 上链并返回证书
-        String certCode = chain(userId, tableName.concat(":").concat(id.toString()), sign);
+        String certCode = chain(userId, tableName.concat(":").concat(id.toString()), sign, null);
+        // 记录存证表
+        certificateService.insertSelective(Certificate.newBuilder()
+                .certCode(certCode)
+                .certTime(new Date())
+                .lastModifyTime(new Date())
+                .createTime(new Date())
+                .sourceId(id)
+                .sourceTable(tableName)
+                .build());
+        // 返回证书
+        return certCode;
+    }
+
+    public String writeChain(Long userId, String tableName, Long id, String sign, String content) {
+        // 上链并返回证书
+        String certCode = chain(userId, tableName.concat(":").concat(id.toString()), sign, content);
         // 记录存证表
         certificateService.insertSelective(Certificate.newBuilder()
                 .certCode(certCode)
@@ -65,6 +88,7 @@ public class CertService {
      */
     public String readChain(String certCode) {
         //
+
         return unchain(certCode);
     }
 
@@ -75,13 +99,16 @@ public class CertService {
      * @param fileName
      * @return
      */
-    private String chain(Long userId, String hashId, String fileName) {
+    private String chain(Long userId, String hashId, String fileName, String content) {
         // TODO 调用GO服务上链
+
         return UUID.randomUUID().toString();
     }
 
     private String unchain(String certCode) {
         // TODO 调用GO服务查询链上数据
+
         return UUID.randomUUID().toString();
     }
+
 }

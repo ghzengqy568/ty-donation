@@ -4,34 +4,48 @@
 package com.baidu.mapp.bcd.controller;
 
 import com.baidu.mapp.bcd.common.utils.SignUtils;
+import com.baidu.mapp.bcd.common.utils.digest.Digest;
 import com.baidu.mapp.bcd.domain.Donor;
 import com.baidu.mapp.bcd.domain.DonorExample;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaDonor;
 import com.baidu.mapp.bcd.dto.DonorReq;
+import com.baidu.mapp.bcd.dto.LoginParam;
+import com.baidu.mapp.bcd.dto.LoginResponse;
 import com.baidu.mapp.bcd.service.CertService;
 import com.baidu.mapp.bcd.service.DonorService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.WebUtils;
 
 import java.util.Date;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Schema(description = "捐赠人接口")
 @RestController
 @RequestMapping("/donor")
 public class DonorController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DonorController.class);
+
     @Autowired
     DonorService donorService;
 
     @Autowired
     CertService certService;
+
+    @Autowired
+    Digest digest;
 
     @PostMapping("register")
     public R<String> register(@RequestBody DonorReq donorReq) {
@@ -62,6 +76,16 @@ public class DonorController {
         }
         String sign = SignUtils.sign(userName,name);
         String pwd = DigestUtils.md5DigestAsHex(password.getBytes());
+
+        String idcard = donorReq.getIdcard();
+        String mobile = donorReq.getMobile();
+        try{
+            idcard = digest.encryptDes(idcard);
+            mobile = digest.encryptDes(mobile);
+        }catch(Exception ex){
+            LOGGER.error("digest error", ex);
+        }
+
         Donor donor = Donor.newBuilder()
                 .donorUserName(userName)
                 .donorName(name)
@@ -70,6 +94,8 @@ public class DonorController {
                 .certCode("")
                 .donorPwd(pwd)
                 .sign(password)
+                .idcard(idcard)
+                .mobile(mobile)
                 .build();
 
         donorService.insertSelective(donor);
@@ -81,6 +107,52 @@ public class DonorController {
         donor.setLastModifyTime(new Date());
         donorService.updateByPrimaryKeySelective(donor);
         return R.ok(certCode);
+    }
+
+    @PostMapping("login")
+    public R<LoginResponse> login(@RequestBody LoginParam loginParam, HttpServletRequest request) {
+        long now = System.currentTimeMillis()/1000L * 1000L;
+        String mobile = loginParam.getMobile();
+        String username = loginParam.getUsername();
+        String password = loginParam.getPassword();
+        if (StringUtils.isBlank(mobile) || StringUtils.isBlank(username)) {
+            return R.error(100100, "用户名或手机号不能为空");
+        }
+        if (StringUtils.isBlank(password)) {
+            return R.error(100100, "密码不能为空");
+        }
+        Donor donor = null;
+        if (!StringUtils.isBlank(username)) {
+            donor = donorService.selectOneByExample(
+                    DonorExample.newBuilder().build().createCriteria().andDonorUserNameEqualTo(username).toExample());
+        } else if (!StringUtils.isBlank(mobile)) {
+            try{
+                mobile = digest.encryptDes(mobile);
+            }catch(Exception ex){
+                LOGGER.error("digest error", ex);
+            }
+            donor = donorService.selectOneByExample(
+                    DonorExample.newBuilder().build().createCriteria().andMobileEqualTo(mobile).toExample());
+        }
+        if (donor == null) {
+            return R.error(100102, "用户不存在");
+        }
+
+        String encryptPassword = DigestUtils.md5DigestAsHex(password.getBytes());
+        if (!StringUtils.equals(encryptPassword, donor.getDonorPwd())) {
+            return R.error(100102, "密码错误");
+        }
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setUserId(donor.getId());
+        String token = UUID.randomUUID().toString();
+        loginResponse.setToken(token);
+        donor.setLoginToken(token);
+        donor.setLastLoginTime(new Date());
+        donor.setLastModifyTime(new Date());
+        donorService.updateByPrimaryKeySelective(donor);
+
+        return R.ok(loginResponse);
+
     }
 
 }

@@ -2428,6 +2428,330 @@ public class DonorExample extends BaseExample {
             return (Criteria) this;
         }
 
+        public Criteria andLoginTokenIsNull() {
+            addCriterion("login_token is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenIsNotNull() {
+            addCriterion("login_token is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenEqualTo(String value) {
+            return andLoginTokenEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token =", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotEqualTo(String value) {
+            return andLoginTokenNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenNotEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token <>", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenGreaterThan(String value) {
+            return andLoginTokenGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenGreaterThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token >", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenGreaterThanOrEqualTo(String value) {
+            return andLoginTokenGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenGreaterThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token >=", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLessThan(String value) {
+            return andLoginTokenLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLessThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token <", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLessThanOrEqualTo(String value) {
+            return andLoginTokenLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLessThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token <=", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLike(String value) {
+            return andLoginTokenLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLikeLeft(String value) {
+            return andLoginTokenLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("login_token like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLikeRight(String value) {
+            return andLoginTokenLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("login_token like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLikeBoth(String value) {
+            return andLoginTokenLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("login_token like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotLike(String value) {
+            return andLoginTokenNotLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenNotLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token not like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotLikeLeft(String value) {
+            return andLoginTokenNotLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenNotLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("login_token not like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotLikeRight(String value) {
+            return andLoginTokenNotLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenNotLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("login_token not like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotLikeBoth(String value) {
+            return andLoginTokenNotLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenNotLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("login_token not like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenIn(Collection<String> values) {
+            addCriterion("login_token in", values, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotIn(Collection<String> values) {
+            addCriterion("login_token not in", values, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenBetween(String value1, String value2) {
+            addCriterion("login_token between", value1, value2, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotBetween(String value1, String value2) {
+            addCriterion("login_token not between", value1, value2, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeIsNull() {
+            addCriterion("last_login_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeIsNotNull() {
+            addCriterion("last_login_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeEqualTo(Date value) {
+            return andLastLoginTimeEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeEqualTo(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time =", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeNotEqualTo(Date value) {
+            return andLastLoginTimeNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeNotEqualTo(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time <>", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeGreaterThan(Date value) {
+            return andLastLoginTimeGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeGreaterThan(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time >", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeGreaterThanOrEqualTo(Date value) {
+            return andLastLoginTimeGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeGreaterThanOrEqualTo(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time >=", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeLessThan(Date value) {
+            return andLastLoginTimeLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeLessThan(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time <", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeLessThanOrEqualTo(Date value) {
+            return andLastLoginTimeLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeLessThanOrEqualTo(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time <=", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeIn(Collection<Date> values) {
+            addCriterion("last_login_time in", values, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeNotIn(Collection<Date> values) {
+            addCriterion("last_login_time not in", values, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeBetween(Date value1, Date value2) {
+            addCriterion("last_login_time between", value1, value2, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeNotBetween(Date value1, Date value2) {
+            addCriterion("last_login_time not between", value1, value2, "lastLoginTime");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

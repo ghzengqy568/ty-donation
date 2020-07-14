@@ -74,6 +74,11 @@
                 <version>1.7.30</version>
             </dependency>
 
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.9</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
