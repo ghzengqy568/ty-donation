@@ -15,7 +15,6 @@
         <module>bcd-core</module>
         <module>bcd-common</module>
         <module>bcd-app</module>
-        <module>bcd-gen</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
