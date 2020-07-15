@@ -7,18 +7,18 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-public class DonateFlowExample extends BaseExample {
+public class AdminExample extends BaseExample {
 
     protected List<Criteria> oredCriteria;
 
-    private DonateFlowExample() {
+    private AdminExample() {
         oredCriteria = new ArrayList<>();
     }
 
     /**
-     * 捐赠流水
+     * 管理员
      */
-    private DonateFlowExample(Builder builder) {
+    private AdminExample(Builder builder) {
         this.start = builder.getStart();
         this.limit = builder.getLimit();
         this.orderByClause = builder.getOrderByClause();
@@ -208,441 +208,135 @@ public class DonateFlowExample extends BaseExample {
             return (Criteria) this;
         }
 
-        public Criteria andDonorIdIsNull() {
-            addCriterion("donor_id is null");
+        public Criteria andAdminUserNameIsNull() {
+            addCriterion("admin_user_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andDonorIdIsNotNull() {
-            addCriterion("donor_id is not null");
+        public Criteria andAdminUserNameIsNotNull() {
+            addCriterion("admin_user_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDonorIdEqualTo(Long value) {
-            return andDonorIdEqualTo(value, Boolean.TRUE);
+        public Criteria andAdminUserNameEqualTo(String value) {
+            return andAdminUserNameEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonorIdEqualTo(Long value, Boolean condition) {
+        public Criteria andAdminUserNameEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donor_id =", value, "donorId");
+            addCriterion("admin_user_name =", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andDonorIdNotEqualTo(Long value) {
-            return andDonorIdNotEqualTo(value, Boolean.TRUE);
+        public Criteria andAdminUserNameNotEqualTo(String value) {
+            return andAdminUserNameNotEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonorIdNotEqualTo(Long value, Boolean condition) {
+        public Criteria andAdminUserNameNotEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donor_id <>", value, "donorId");
+            addCriterion("admin_user_name <>", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andDonorIdGreaterThan(Long value) {
-            return andDonorIdGreaterThan(value, Boolean.TRUE);
+        public Criteria andAdminUserNameGreaterThan(String value) {
+            return andAdminUserNameGreaterThan(value, Boolean.TRUE);
         }
 
-        public Criteria andDonorIdGreaterThan(Long value, Boolean condition) {
+        public Criteria andAdminUserNameGreaterThan(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donor_id >", value, "donorId");
+            addCriterion("admin_user_name >", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andDonorIdGreaterThanOrEqualTo(Long value) {
-            return andDonorIdGreaterThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andAdminUserNameGreaterThanOrEqualTo(String value) {
+            return andAdminUserNameGreaterThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonorIdGreaterThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andAdminUserNameGreaterThanOrEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donor_id >=", value, "donorId");
+            addCriterion("admin_user_name >=", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andDonorIdLessThan(Long value) {
-            return andDonorIdLessThan(value, Boolean.TRUE);
+        public Criteria andAdminUserNameLessThan(String value) {
+            return andAdminUserNameLessThan(value, Boolean.TRUE);
         }
 
-        public Criteria andDonorIdLessThan(Long value, Boolean condition) {
+        public Criteria andAdminUserNameLessThan(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donor_id <", value, "donorId");
+            addCriterion("admin_user_name <", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andDonorIdLessThanOrEqualTo(Long value) {
-            return andDonorIdLessThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andAdminUserNameLessThanOrEqualTo(String value) {
+            return andAdminUserNameLessThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andDonorIdLessThanOrEqualTo(Long value, Boolean condition) {
+        public Criteria andAdminUserNameLessThanOrEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donor_id <=", value, "donorId");
+            addCriterion("admin_user_name <=", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andDonorIdIn(Collection<Long> values) {
-            addCriterion("donor_id in", values, "donorId");
-            return (Criteria) this;
+        public Criteria andAdminUserNameLike(String value) {
+            return andAdminUserNameLike(value, Boolean.TRUE);
         }
 
-        public Criteria andDonorIdNotIn(Collection<Long> values) {
-            addCriterion("donor_id not in", values, "donorId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonorIdBetween(Long value1, Long value2) {
-            addCriterion("donor_id between", value1, value2, "donorId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonorIdNotBetween(Long value1, Long value2) {
-            addCriterion("donor_id not between", value1, value2, "donorId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeIsNull() {
-            addCriterion("donate_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeIsNotNull() {
-            addCriterion("donate_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeEqualTo(Date value) {
-            return andDonateTimeEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andDonateTimeEqualTo(Date value, Boolean condition) {
+        public Criteria andAdminUserNameLike(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("donate_time =", value, "donateTime");
+            addCriterion("admin_user_name like", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andDonateTimeNotEqualTo(Date value) {
-            return andDonateTimeNotEqualTo(value, Boolean.TRUE);
+        public Criteria andAdminUserNameLikeLeft(String value) {
+            return andAdminUserNameLikeLeft(value, Boolean.TRUE);
         }
 
-        public Criteria andDonateTimeNotEqualTo(Date value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("donate_time <>", value, "donateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeGreaterThan(Date value) {
-            return andDonateTimeGreaterThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andDonateTimeGreaterThan(Date value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("donate_time >", value, "donateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeGreaterThanOrEqualTo(Date value) {
-            return andDonateTimeGreaterThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andDonateTimeGreaterThanOrEqualTo(Date value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("donate_time >=", value, "donateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeLessThan(Date value) {
-            return andDonateTimeLessThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andDonateTimeLessThan(Date value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("donate_time <", value, "donateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeLessThanOrEqualTo(Date value) {
-            return andDonateTimeLessThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andDonateTimeLessThanOrEqualTo(Date value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("donate_time <=", value, "donateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeIn(Collection<Date> values) {
-            addCriterion("donate_time in", values, "donateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeNotIn(Collection<Date> values) {
-            addCriterion("donate_time not in", values, "donateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeBetween(Date value1, Date value2) {
-            addCriterion("donate_time between", value1, value2, "donateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andDonateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("donate_time not between", value1, value2, "donateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousIsNull() {
-            addCriterion("is_anonymous is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousIsNotNull() {
-            addCriterion("is_anonymous is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousEqualTo(Byte value) {
-            return andIsAnonymousEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andIsAnonymousEqualTo(Byte value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("is_anonymous =", value, "isAnonymous");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousNotEqualTo(Byte value) {
-            return andIsAnonymousNotEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andIsAnonymousNotEqualTo(Byte value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("is_anonymous <>", value, "isAnonymous");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousGreaterThan(Byte value) {
-            return andIsAnonymousGreaterThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andIsAnonymousGreaterThan(Byte value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("is_anonymous >", value, "isAnonymous");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousGreaterThanOrEqualTo(Byte value) {
-            return andIsAnonymousGreaterThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andIsAnonymousGreaterThanOrEqualTo(Byte value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("is_anonymous >=", value, "isAnonymous");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousLessThan(Byte value) {
-            return andIsAnonymousLessThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andIsAnonymousLessThan(Byte value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("is_anonymous <", value, "isAnonymous");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousLessThanOrEqualTo(Byte value) {
-            return andIsAnonymousLessThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andIsAnonymousLessThanOrEqualTo(Byte value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("is_anonymous <=", value, "isAnonymous");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousIn(Collection<Byte> values) {
-            addCriterion("is_anonymous in", values, "isAnonymous");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousNotIn(Collection<Byte> values) {
-            addCriterion("is_anonymous not in", values, "isAnonymous");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousBetween(Byte value1, Byte value2) {
-            addCriterion("is_anonymous between", value1, value2, "isAnonymous");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsAnonymousNotBetween(Byte value1, Byte value2) {
-            addCriterion("is_anonymous not between", value1, value2, "isAnonymous");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityIsNull() {
-            addCriterion("anonymity is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityIsNotNull() {
-            addCriterion("anonymity is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityEqualTo(String value) {
-            return andAnonymityEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andAnonymityEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("anonymity =", value, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityNotEqualTo(String value) {
-            return andAnonymityNotEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andAnonymityNotEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("anonymity <>", value, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityGreaterThan(String value) {
-            return andAnonymityGreaterThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andAnonymityGreaterThan(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("anonymity >", value, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityGreaterThanOrEqualTo(String value) {
-            return andAnonymityGreaterThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andAnonymityGreaterThanOrEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("anonymity >=", value, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityLessThan(String value) {
-            return andAnonymityLessThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andAnonymityLessThan(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("anonymity <", value, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityLessThanOrEqualTo(String value) {
-            return andAnonymityLessThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andAnonymityLessThanOrEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("anonymity <=", value, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityLike(String value) {
-            return andAnonymityLike(value, Boolean.TRUE);
-        }
-
-        public Criteria andAnonymityLike(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("anonymity like", value, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityLikeLeft(String value) {
-            return andAnonymityLikeLeft(value, Boolean.TRUE);
-        }
-
-        public Criteria andAnonymityLikeLeft(String value, Boolean condition) {
+        public Criteria andAdminUserNameLikeLeft(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
             if (value != null && !value.startsWith("%")) {
                 value = "%".concat(value);
             }
-            addCriterion("anonymity like", value, "anonymity");
+            addCriterion("admin_user_name like", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andAnonymityLikeRight(String value) {
-            return andAnonymityLikeRight(value, Boolean.TRUE);
+        public Criteria andAdminUserNameLikeRight(String value) {
+            return andAdminUserNameLikeRight(value, Boolean.TRUE);
         }
 
-        public Criteria andAnonymityLikeRight(String value, Boolean condition) {
+        public Criteria andAdminUserNameLikeRight(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
             if (value != null && !value.endsWith("%")) {
                 value = value.concat("%");
             }
-            addCriterion("anonymity like", value, "anonymity");
+            addCriterion("admin_user_name like", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andAnonymityLikeBoth(String value) {
-            return andAnonymityLikeBoth(value, Boolean.TRUE);
+        public Criteria andAdminUserNameLikeBoth(String value) {
+            return andAdminUserNameLikeBoth(value, Boolean.TRUE);
         }
 
-        public Criteria andAnonymityLikeBoth(String value, Boolean condition) {
+        public Criteria andAdminUserNameLikeBoth(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
@@ -652,219 +346,57 @@ public class DonateFlowExample extends BaseExample {
             if (value != null && !value.endsWith("%")) {
                 value = value.concat("%");
             }
-            addCriterion("anonymity like", value, "anonymity");
+            addCriterion("admin_user_name like", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andAnonymityNotLike(String value) {
-            return andAnonymityNotLike(value, Boolean.TRUE);
+        public Criteria andAdminUserNameNotLike(String value) {
+            return andAdminUserNameNotLike(value, Boolean.TRUE);
         }
 
-        public Criteria andAnonymityNotLike(String value, Boolean condition) {
+        public Criteria andAdminUserNameNotLike(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("anonymity not like", value, "anonymity");
+            addCriterion("admin_user_name not like", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andAnonymityNotLikeLeft(String value) {
-            return andAnonymityNotLikeLeft(value, Boolean.TRUE);
+        public Criteria andAdminUserNameNotLikeLeft(String value) {
+            return andAdminUserNameNotLikeLeft(value, Boolean.TRUE);
         }
 
-        public Criteria andAnonymityNotLikeLeft(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            addCriterion("anonymity not like", value, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityNotLikeRight(String value) {
-            return andAnonymityNotLikeRight(value, Boolean.TRUE);
-        }
-
-        public Criteria andAnonymityNotLikeRight(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("anonymity not like", value, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityNotLikeBoth(String value) {
-            return andAnonymityNotLikeBoth(value, Boolean.TRUE);
-        }
-
-        public Criteria andAnonymityNotLikeBoth(String value, Boolean condition) {
+        public Criteria andAdminUserNameNotLikeLeft(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
             if (value != null && !value.startsWith("%")) {
                 value = "%".concat(value);
             }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("anonymity not like", value, "anonymity");
+            addCriterion("admin_user_name not like", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andAnonymityIn(Collection<String> values) {
-            addCriterion("anonymity in", values, "anonymity");
-            return (Criteria) this;
+        public Criteria andAdminUserNameNotLikeRight(String value) {
+            return andAdminUserNameNotLikeRight(value, Boolean.TRUE);
         }
 
-        public Criteria andAnonymityNotIn(Collection<String> values) {
-            addCriterion("anonymity not in", values, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityBetween(String value1, String value2) {
-            addCriterion("anonymity between", value1, value2, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andAnonymityNotBetween(String value1, String value2) {
-            addCriterion("anonymity not between", value1, value2, "anonymity");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeIsNull() {
-            addCriterion("cert_code is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeIsNotNull() {
-            addCriterion("cert_code is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeEqualTo(String value) {
-            return andCertCodeEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andCertCodeEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("cert_code =", value, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeNotEqualTo(String value) {
-            return andCertCodeNotEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andCertCodeNotEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("cert_code <>", value, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeGreaterThan(String value) {
-            return andCertCodeGreaterThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andCertCodeGreaterThan(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("cert_code >", value, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeGreaterThanOrEqualTo(String value) {
-            return andCertCodeGreaterThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andCertCodeGreaterThanOrEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("cert_code >=", value, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeLessThan(String value) {
-            return andCertCodeLessThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andCertCodeLessThan(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("cert_code <", value, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeLessThanOrEqualTo(String value) {
-            return andCertCodeLessThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andCertCodeLessThanOrEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("cert_code <=", value, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeLike(String value) {
-            return andCertCodeLike(value, Boolean.TRUE);
-        }
-
-        public Criteria andCertCodeLike(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("cert_code like", value, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeLikeLeft(String value) {
-            return andCertCodeLikeLeft(value, Boolean.TRUE);
-        }
-
-        public Criteria andCertCodeLikeLeft(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            addCriterion("cert_code like", value, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeLikeRight(String value) {
-            return andCertCodeLikeRight(value, Boolean.TRUE);
-        }
-
-        public Criteria andCertCodeLikeRight(String value, Boolean condition) {
+        public Criteria andAdminUserNameNotLikeRight(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
             if (value != null && !value.endsWith("%")) {
                 value = value.concat("%");
             }
-            addCriterion("cert_code like", value, "certCode");
+            addCriterion("admin_user_name not like", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andCertCodeLikeBoth(String value) {
-            return andCertCodeLikeBoth(value, Boolean.TRUE);
+        public Criteria andAdminUserNameNotLikeBoth(String value) {
+            return andAdminUserNameNotLikeBoth(value, Boolean.TRUE);
         }
 
-        public Criteria andCertCodeLikeBoth(String value, Boolean condition) {
+        public Criteria andAdminUserNameNotLikeBoth(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
@@ -874,219 +406,159 @@ public class DonateFlowExample extends BaseExample {
             if (value != null && !value.endsWith("%")) {
                 value = value.concat("%");
             }
-            addCriterion("cert_code like", value, "certCode");
+            addCriterion("admin_user_name not like", value, "adminUserName");
             return (Criteria) this;
         }
 
-        public Criteria andCertCodeNotLike(String value) {
-            return andCertCodeNotLike(value, Boolean.TRUE);
+        public Criteria andAdminUserNameIn(Collection<String> values) {
+            addCriterion("admin_user_name in", values, "adminUserName");
+            return (Criteria) this;
         }
 
-        public Criteria andCertCodeNotLike(String value, Boolean condition) {
+        public Criteria andAdminUserNameNotIn(Collection<String> values) {
+            addCriterion("admin_user_name not in", values, "adminUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminUserNameBetween(String value1, String value2) {
+            addCriterion("admin_user_name between", value1, value2, "adminUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminUserNameNotBetween(String value1, String value2) {
+            addCriterion("admin_user_name not between", value1, value2, "adminUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminPwdIsNull() {
+            addCriterion("admin_pwd is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminPwdIsNotNull() {
+            addCriterion("admin_pwd is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminPwdEqualTo(String value) {
+            return andAdminPwdEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminPwdEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("cert_code not like", value, "certCode");
+            addCriterion("admin_pwd =", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andCertCodeNotLikeLeft(String value) {
-            return andCertCodeNotLikeLeft(value, Boolean.TRUE);
+        public Criteria andAdminPwdNotEqualTo(String value) {
+            return andAdminPwdNotEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andCertCodeNotLikeLeft(String value, Boolean condition) {
+        public Criteria andAdminPwdNotEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            addCriterion("cert_code not like", value, "certCode");
+            addCriterion("admin_pwd <>", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andCertCodeNotLikeRight(String value) {
-            return andCertCodeNotLikeRight(value, Boolean.TRUE);
+        public Criteria andAdminPwdGreaterThan(String value) {
+            return andAdminPwdGreaterThan(value, Boolean.TRUE);
         }
 
-        public Criteria andCertCodeNotLikeRight(String value, Boolean condition) {
+        public Criteria andAdminPwdGreaterThan(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("cert_code not like", value, "certCode");
+            addCriterion("admin_pwd >", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andCertCodeNotLikeBoth(String value) {
-            return andCertCodeNotLikeBoth(value, Boolean.TRUE);
+        public Criteria andAdminPwdGreaterThanOrEqualTo(String value) {
+            return andAdminPwdGreaterThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andCertCodeNotLikeBoth(String value, Boolean condition) {
+        public Criteria andAdminPwdGreaterThanOrEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("cert_code not like", value, "certCode");
+            addCriterion("admin_pwd >=", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andCertCodeIn(Collection<String> values) {
-            addCriterion("cert_code in", values, "certCode");
-            return (Criteria) this;
+        public Criteria andAdminPwdLessThan(String value) {
+            return andAdminPwdLessThan(value, Boolean.TRUE);
         }
 
-        public Criteria andCertCodeNotIn(Collection<String> values) {
-            addCriterion("cert_code not in", values, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeBetween(String value1, String value2) {
-            addCriterion("cert_code between", value1, value2, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCertCodeNotBetween(String value1, String value2) {
-            addCriterion("cert_code not between", value1, value2, "certCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andSignIsNull() {
-            addCriterion("sign is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSignIsNotNull() {
-            addCriterion("sign is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSignEqualTo(String value) {
-            return andSignEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andSignEqualTo(String value, Boolean condition) {
+        public Criteria andAdminPwdLessThan(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("sign =", value, "sign");
+            addCriterion("admin_pwd <", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignNotEqualTo(String value) {
-            return andSignNotEqualTo(value, Boolean.TRUE);
+        public Criteria andAdminPwdLessThanOrEqualTo(String value) {
+            return andAdminPwdLessThanOrEqualTo(value, Boolean.TRUE);
         }
 
-        public Criteria andSignNotEqualTo(String value, Boolean condition) {
+        public Criteria andAdminPwdLessThanOrEqualTo(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("sign <>", value, "sign");
+            addCriterion("admin_pwd <=", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignGreaterThan(String value) {
-            return andSignGreaterThan(value, Boolean.TRUE);
+        public Criteria andAdminPwdLike(String value) {
+            return andAdminPwdLike(value, Boolean.TRUE);
         }
 
-        public Criteria andSignGreaterThan(String value, Boolean condition) {
+        public Criteria andAdminPwdLike(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("sign >", value, "sign");
+            addCriterion("admin_pwd like", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignGreaterThanOrEqualTo(String value) {
-            return andSignGreaterThanOrEqualTo(value, Boolean.TRUE);
+        public Criteria andAdminPwdLikeLeft(String value) {
+            return andAdminPwdLikeLeft(value, Boolean.TRUE);
         }
 
-        public Criteria andSignGreaterThanOrEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("sign >=", value, "sign");
-            return (Criteria) this;
-        }
-
-        public Criteria andSignLessThan(String value) {
-            return andSignLessThan(value, Boolean.TRUE);
-        }
-
-        public Criteria andSignLessThan(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("sign <", value, "sign");
-            return (Criteria) this;
-        }
-
-        public Criteria andSignLessThanOrEqualTo(String value) {
-            return andSignLessThanOrEqualTo(value, Boolean.TRUE);
-        }
-
-        public Criteria andSignLessThanOrEqualTo(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("sign <=", value, "sign");
-            return (Criteria) this;
-        }
-
-        public Criteria andSignLike(String value) {
-            return andSignLike(value, Boolean.TRUE);
-        }
-
-        public Criteria andSignLike(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            addCriterion("sign like", value, "sign");
-            return (Criteria) this;
-        }
-
-        public Criteria andSignLikeLeft(String value) {
-            return andSignLikeLeft(value, Boolean.TRUE);
-        }
-
-        public Criteria andSignLikeLeft(String value, Boolean condition) {
+        public Criteria andAdminPwdLikeLeft(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
             if (value != null && !value.startsWith("%")) {
                 value = "%".concat(value);
             }
-            addCriterion("sign like", value, "sign");
+            addCriterion("admin_pwd like", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignLikeRight(String value) {
-            return andSignLikeRight(value, Boolean.TRUE);
+        public Criteria andAdminPwdLikeRight(String value) {
+            return andAdminPwdLikeRight(value, Boolean.TRUE);
         }
 
-        public Criteria andSignLikeRight(String value, Boolean condition) {
+        public Criteria andAdminPwdLikeRight(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
             if (value != null && !value.endsWith("%")) {
                 value = value.concat("%");
             }
-            addCriterion("sign like", value, "sign");
+            addCriterion("admin_pwd like", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignLikeBoth(String value) {
-            return andSignLikeBoth(value, Boolean.TRUE);
+        public Criteria andAdminPwdLikeBoth(String value) {
+            return andAdminPwdLikeBoth(value, Boolean.TRUE);
         }
 
-        public Criteria andSignLikeBoth(String value, Boolean condition) {
+        public Criteria andAdminPwdLikeBoth(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
@@ -1096,87 +568,633 @@ public class DonateFlowExample extends BaseExample {
             if (value != null && !value.endsWith("%")) {
                 value = value.concat("%");
             }
-            addCriterion("sign like", value, "sign");
+            addCriterion("admin_pwd like", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignNotLike(String value) {
-            return andSignNotLike(value, Boolean.TRUE);
+        public Criteria andAdminPwdNotLike(String value) {
+            return andAdminPwdNotLike(value, Boolean.TRUE);
         }
 
-        public Criteria andSignNotLike(String value, Boolean condition) {
+        public Criteria andAdminPwdNotLike(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
-            addCriterion("sign not like", value, "sign");
+            addCriterion("admin_pwd not like", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignNotLikeLeft(String value) {
-            return andSignNotLikeLeft(value, Boolean.TRUE);
+        public Criteria andAdminPwdNotLikeLeft(String value) {
+            return andAdminPwdNotLikeLeft(value, Boolean.TRUE);
         }
 
-        public Criteria andSignNotLikeLeft(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.startsWith("%")) {
-                value = "%".concat(value);
-            }
-            addCriterion("sign not like", value, "sign");
-            return (Criteria) this;
-        }
-
-        public Criteria andSignNotLikeRight(String value) {
-            return andSignNotLikeRight(value, Boolean.TRUE);
-        }
-
-        public Criteria andSignNotLikeRight(String value, Boolean condition) {
-            if (condition == null || !condition){
-                return (Criteria) this;
-            }
-            if (value != null && !value.endsWith("%")) {
-                value = value.concat("%");
-            }
-            addCriterion("sign not like", value, "sign");
-            return (Criteria) this;
-        }
-
-        public Criteria andSignNotLikeBoth(String value) {
-            return andSignNotLikeBoth(value, Boolean.TRUE);
-        }
-
-        public Criteria andSignNotLikeBoth(String value, Boolean condition) {
+        public Criteria andAdminPwdNotLikeLeft(String value, Boolean condition) {
             if (condition == null || !condition){
                 return (Criteria) this;
             }
             if (value != null && !value.startsWith("%")) {
                 value = "%".concat(value);
             }
+            addCriterion("admin_pwd not like", value, "adminPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminPwdNotLikeRight(String value) {
+            return andAdminPwdNotLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminPwdNotLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
             if (value != null && !value.endsWith("%")) {
                 value = value.concat("%");
             }
-            addCriterion("sign not like", value, "sign");
+            addCriterion("admin_pwd not like", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignIn(Collection<String> values) {
-            addCriterion("sign in", values, "sign");
+        public Criteria andAdminPwdNotLikeBoth(String value) {
+            return andAdminPwdNotLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminPwdNotLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("admin_pwd not like", value, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignNotIn(Collection<String> values) {
-            addCriterion("sign not in", values, "sign");
+        public Criteria andAdminPwdIn(Collection<String> values) {
+            addCriterion("admin_pwd in", values, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignBetween(String value1, String value2) {
-            addCriterion("sign between", value1, value2, "sign");
+        public Criteria andAdminPwdNotIn(Collection<String> values) {
+            addCriterion("admin_pwd not in", values, "adminPwd");
             return (Criteria) this;
         }
 
-        public Criteria andSignNotBetween(String value1, String value2) {
-            addCriterion("sign not between", value1, value2, "sign");
+        public Criteria andAdminPwdBetween(String value1, String value2) {
+            addCriterion("admin_pwd between", value1, value2, "adminPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminPwdNotBetween(String value1, String value2) {
+            addCriterion("admin_pwd not between", value1, value2, "adminPwd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameIsNull() {
+            addCriterion("admin_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameIsNotNull() {
+            addCriterion("admin_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameEqualTo(String value) {
+            return andAdminNameEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("admin_name =", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameNotEqualTo(String value) {
+            return andAdminNameNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameNotEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("admin_name <>", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameGreaterThan(String value) {
+            return andAdminNameGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameGreaterThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("admin_name >", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameGreaterThanOrEqualTo(String value) {
+            return andAdminNameGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameGreaterThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("admin_name >=", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameLessThan(String value) {
+            return andAdminNameLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameLessThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("admin_name <", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameLessThanOrEqualTo(String value) {
+            return andAdminNameLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameLessThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("admin_name <=", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameLike(String value) {
+            return andAdminNameLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("admin_name like", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameLikeLeft(String value) {
+            return andAdminNameLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("admin_name like", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameLikeRight(String value) {
+            return andAdminNameLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("admin_name like", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameLikeBoth(String value) {
+            return andAdminNameLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("admin_name like", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameNotLike(String value) {
+            return andAdminNameNotLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameNotLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("admin_name not like", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameNotLikeLeft(String value) {
+            return andAdminNameNotLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameNotLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("admin_name not like", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameNotLikeRight(String value) {
+            return andAdminNameNotLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameNotLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("admin_name not like", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameNotLikeBoth(String value) {
+            return andAdminNameNotLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andAdminNameNotLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("admin_name not like", value, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameIn(Collection<String> values) {
+            addCriterion("admin_name in", values, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameNotIn(Collection<String> values) {
+            addCriterion("admin_name not in", values, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameBetween(String value1, String value2) {
+            addCriterion("admin_name between", value1, value2, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdminNameNotBetween(String value1, String value2) {
+            addCriterion("admin_name not between", value1, value2, "adminName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenIsNull() {
+            addCriterion("login_token is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenIsNotNull() {
+            addCriterion("login_token is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenEqualTo(String value) {
+            return andLoginTokenEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token =", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotEqualTo(String value) {
+            return andLoginTokenNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenNotEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token <>", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenGreaterThan(String value) {
+            return andLoginTokenGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenGreaterThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token >", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenGreaterThanOrEqualTo(String value) {
+            return andLoginTokenGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenGreaterThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token >=", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLessThan(String value) {
+            return andLoginTokenLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLessThan(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token <", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLessThanOrEqualTo(String value) {
+            return andLoginTokenLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLessThanOrEqualTo(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token <=", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLike(String value) {
+            return andLoginTokenLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLikeLeft(String value) {
+            return andLoginTokenLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("login_token like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLikeRight(String value) {
+            return andLoginTokenLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("login_token like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenLikeBoth(String value) {
+            return andLoginTokenLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("login_token like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotLike(String value) {
+            return andLoginTokenNotLike(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenNotLike(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("login_token not like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotLikeLeft(String value) {
+            return andLoginTokenNotLikeLeft(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenNotLikeLeft(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            addCriterion("login_token not like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotLikeRight(String value) {
+            return andLoginTokenNotLikeRight(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenNotLikeRight(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("login_token not like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotLikeBoth(String value) {
+            return andLoginTokenNotLikeBoth(value, Boolean.TRUE);
+        }
+
+        public Criteria andLoginTokenNotLikeBoth(String value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            if (value != null && !value.startsWith("%")) {
+                value = "%".concat(value);
+            }
+            if (value != null && !value.endsWith("%")) {
+                value = value.concat("%");
+            }
+            addCriterion("login_token not like", value, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenIn(Collection<String> values) {
+            addCriterion("login_token in", values, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotIn(Collection<String> values) {
+            addCriterion("login_token not in", values, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenBetween(String value1, String value2) {
+            addCriterion("login_token between", value1, value2, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginTokenNotBetween(String value1, String value2) {
+            addCriterion("login_token not between", value1, value2, "loginToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeIsNull() {
+            addCriterion("last_login_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeIsNotNull() {
+            addCriterion("last_login_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeEqualTo(Date value) {
+            return andLastLoginTimeEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeEqualTo(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time =", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeNotEqualTo(Date value) {
+            return andLastLoginTimeNotEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeNotEqualTo(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time <>", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeGreaterThan(Date value) {
+            return andLastLoginTimeGreaterThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeGreaterThan(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time >", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeGreaterThanOrEqualTo(Date value) {
+            return andLastLoginTimeGreaterThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeGreaterThanOrEqualTo(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time >=", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeLessThan(Date value) {
+            return andLastLoginTimeLessThan(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeLessThan(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time <", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeLessThanOrEqualTo(Date value) {
+            return andLastLoginTimeLessThanOrEqualTo(value, Boolean.TRUE);
+        }
+
+        public Criteria andLastLoginTimeLessThanOrEqualTo(Date value, Boolean condition) {
+            if (condition == null || !condition){
+                return (Criteria) this;
+            }
+            addCriterion("last_login_time <=", value, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeIn(Collection<Date> values) {
+            addCriterion("last_login_time in", values, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeNotIn(Collection<Date> values) {
+            addCriterion("last_login_time not in", values, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeBetween(Date value1, Date value2) {
+            addCriterion("last_login_time between", value1, value2, "lastLoginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastLoginTimeNotBetween(Date value1, Date value2) {
+            addCriterion("last_login_time not between", value1, value2, "lastLoginTime");
             return (Criteria) this;
         }
 
@@ -1387,14 +1405,14 @@ public class DonateFlowExample extends BaseExample {
 
     public static class Criteria extends GeneratedCriteria {
 
-        private DonateFlowExample example;
+        private AdminExample example;
 
-        protected Criteria(DonateFlowExample example) {
+        protected Criteria(AdminExample example) {
             super();
             this.example = example;
         }
 
-        public DonateFlowExample toExample() {
+        public AdminExample toExample() {
             return this.example;
         }
 
@@ -1507,7 +1525,7 @@ public class DonateFlowExample extends BaseExample {
         }
     }
 
-    public static final class Builder extends BaseExampleBuilder<Builder, DonateFlowExample> {
+    public static final class Builder extends BaseExampleBuilder<Builder, AdminExample> {
 
         protected List<Criteria> oredCriteria;
 
@@ -1521,8 +1539,8 @@ public class DonateFlowExample extends BaseExample {
         }
 
         @Override
-        public DonateFlowExample build() {
-            return new DonateFlowExample(this);
+        public AdminExample build() {
+            return new AdminExample(this);
         }
     }
 }

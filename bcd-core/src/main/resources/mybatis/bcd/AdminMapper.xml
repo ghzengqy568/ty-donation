@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.baidu.mapp.bcd.dao.DonateFlowMapper">
-  <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.DonateFlow">
+<mapper namespace="com.baidu.mapp.bcd.dao.AdminMapper">
+  <resultMap id="BaseResultMap" type="com.baidu.mapp.bcd.domain.Admin">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="donor_id" jdbcType="BIGINT" property="donorId" />
-    <result column="donate_time" jdbcType="TIMESTAMP" property="donateTime" />
-    <result column="is_anonymous" jdbcType="TINYINT" property="isAnonymous" />
-    <result column="anonymity" jdbcType="VARCHAR" property="anonymity" />
-    <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
-    <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="admin_user_name" jdbcType="VARCHAR" property="adminUserName" />
+    <result column="admin_pwd" jdbcType="VARCHAR" property="adminPwd" />
+    <result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+    <result column="login_token" jdbcType="VARCHAR" property="loginToken" />
+    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
   </resultMap>
@@ -71,10 +70,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, donor_id, donate_time, is_anonymous, anonymity, cert_code, sign, create_time, 
+    id, admin_user_name, admin_pwd, admin_name, login_token, last_login_time, create_time, 
     last_modify_time
   </sql>
-  <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.DonateFlowExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.AdminExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -87,7 +86,7 @@
     <if test="columns==null or columns.size() &lt;= 0">
       <include refid="Base_Column_List" />
     </if>
-    from t_donate_flow
+    from t_admin
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -105,53 +104,50 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from t_donate_flow
+    from t_admin
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_donate_flow
+    delete from t_admin
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.baidu.mapp.bcd.domain.DonateFlowExample">
-    delete from t_donate_flow
+  <delete id="deleteByExample" parameterType="com.baidu.mapp.bcd.domain.AdminExample">
+    delete from t_admin
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.baidu.mapp.bcd.domain.DonateFlow">
+  <insert id="insert" parameterType="com.baidu.mapp.bcd.domain.Admin">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_donate_flow (donor_id, donate_time, is_anonymous, 
-      anonymity, cert_code, sign, 
-      create_time, last_modify_time)
-    values (#{donorId,jdbcType=BIGINT}, #{donateTime,jdbcType=TIMESTAMP}, #{isAnonymous,jdbcType=TINYINT}, 
-      #{anonymity,jdbcType=VARCHAR}, #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP})
+    insert into t_admin (admin_user_name, admin_pwd, admin_name, 
+      login_token, last_login_time, create_time, 
+      last_modify_time)
+    values (#{adminUserName,jdbcType=VARCHAR}, #{adminPwd,jdbcType=VARCHAR}, #{adminName,jdbcType=VARCHAR}, 
+      #{loginToken,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastModifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.DonateFlow">
+  <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.Admin">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_donate_flow
+    insert into t_admin
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="donorId != null">
-        donor_id,
+      <if test="adminUserName != null">
+        admin_user_name,
       </if>
-      <if test="donateTime != null">
-        donate_time,
+      <if test="adminPwd != null">
+        admin_pwd,
       </if>
-      <if test="isAnonymous != null">
-        is_anonymous,
+      <if test="adminName != null">
+        admin_name,
       </if>
-      <if test="anonymity != null">
-        anonymity,
+      <if test="loginToken != null">
+        login_token,
       </if>
-      <if test="certCode != null">
-        cert_code,
-      </if>
-      <if test="sign != null">
-        sign,
+      <if test="lastLoginTime != null">
+        last_login_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -161,23 +157,20 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="donorId != null">
-        #{donorId,jdbcType=BIGINT},
+      <if test="adminUserName != null">
+        #{adminUserName,jdbcType=VARCHAR},
       </if>
-      <if test="donateTime != null">
-        #{donateTime,jdbcType=TIMESTAMP},
+      <if test="adminPwd != null">
+        #{adminPwd,jdbcType=VARCHAR},
       </if>
-      <if test="isAnonymous != null">
-        #{isAnonymous,jdbcType=TINYINT},
+      <if test="adminName != null">
+        #{adminName,jdbcType=VARCHAR},
       </if>
-      <if test="anonymity != null">
-        #{anonymity,jdbcType=VARCHAR},
+      <if test="loginToken != null">
+        #{loginToken,jdbcType=VARCHAR},
       </if>
-      <if test="certCode != null">
-        #{certCode,jdbcType=VARCHAR},
-      </if>
-      <if test="sign != null">
-        #{sign,jdbcType=VARCHAR},
+      <if test="lastLoginTime != null">
+        #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -187,35 +180,32 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.baidu.mapp.bcd.domain.DonateFlowExample" resultType="java.lang.Long">
-    select count(*) from t_donate_flow
+  <select id="countByExample" parameterType="com.baidu.mapp.bcd.domain.AdminExample" resultType="java.lang.Long">
+    select count(*) from t_admin
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update t_donate_flow
+    update t_admin
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.donorId != null">
-        donor_id = #{record.donorId,jdbcType=BIGINT},
+      <if test="record.adminUserName != null">
+        admin_user_name = #{record.adminUserName,jdbcType=VARCHAR},
       </if>
-      <if test="record.donateTime != null">
-        donate_time = #{record.donateTime,jdbcType=TIMESTAMP},
+      <if test="record.adminPwd != null">
+        admin_pwd = #{record.adminPwd,jdbcType=VARCHAR},
       </if>
-      <if test="record.isAnonymous != null">
-        is_anonymous = #{record.isAnonymous,jdbcType=TINYINT},
+      <if test="record.adminName != null">
+        admin_name = #{record.adminName,jdbcType=VARCHAR},
       </if>
-      <if test="record.anonymity != null">
-        anonymity = #{record.anonymity,jdbcType=VARCHAR},
+      <if test="record.loginToken != null">
+        login_token = #{record.loginToken,jdbcType=VARCHAR},
       </if>
-      <if test="record.certCode != null">
-        cert_code = #{record.certCode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.sign != null">
-        sign = #{record.sign,jdbcType=VARCHAR},
+      <if test="record.lastLoginTime != null">
+        last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -229,40 +219,36 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update t_donate_flow
+    update t_admin
     set id = #{record.id,jdbcType=BIGINT},
-      donor_id = #{record.donorId,jdbcType=BIGINT},
-      donate_time = #{record.donateTime,jdbcType=TIMESTAMP},
-      is_anonymous = #{record.isAnonymous,jdbcType=TINYINT},
-      anonymity = #{record.anonymity,jdbcType=VARCHAR},
-      cert_code = #{record.certCode,jdbcType=VARCHAR},
-      sign = #{record.sign,jdbcType=VARCHAR},
+      admin_user_name = #{record.adminUserName,jdbcType=VARCHAR},
+      admin_pwd = #{record.adminPwd,jdbcType=VARCHAR},
+      admin_name = #{record.adminName,jdbcType=VARCHAR},
+      login_token = #{record.loginToken,jdbcType=VARCHAR},
+      last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.DonateFlow">
-    update t_donate_flow
+  <update id="updateByPrimaryKeySelective" parameterType="com.baidu.mapp.bcd.domain.Admin">
+    update t_admin
     <set>
-      <if test="donorId != null">
-        donor_id = #{donorId,jdbcType=BIGINT},
+      <if test="adminUserName != null">
+        admin_user_name = #{adminUserName,jdbcType=VARCHAR},
       </if>
-      <if test="donateTime != null">
-        donate_time = #{donateTime,jdbcType=TIMESTAMP},
+      <if test="adminPwd != null">
+        admin_pwd = #{adminPwd,jdbcType=VARCHAR},
       </if>
-      <if test="isAnonymous != null">
-        is_anonymous = #{isAnonymous,jdbcType=TINYINT},
+      <if test="adminName != null">
+        admin_name = #{adminName,jdbcType=VARCHAR},
       </if>
-      <if test="anonymity != null">
-        anonymity = #{anonymity,jdbcType=VARCHAR},
+      <if test="loginToken != null">
+        login_token = #{loginToken,jdbcType=VARCHAR},
       </if>
-      <if test="certCode != null">
-        cert_code = #{certCode,jdbcType=VARCHAR},
-      </if>
-      <if test="sign != null">
-        sign = #{sign,jdbcType=VARCHAR},
+      <if test="lastLoginTime != null">
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -273,14 +259,13 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.DonateFlow">
-    update t_donate_flow
-    set donor_id = #{donorId,jdbcType=BIGINT},
-      donate_time = #{donateTime,jdbcType=TIMESTAMP},
-      is_anonymous = #{isAnonymous,jdbcType=TINYINT},
-      anonymity = #{anonymity,jdbcType=VARCHAR},
-      cert_code = #{certCode,jdbcType=VARCHAR},
-      sign = #{sign,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.baidu.mapp.bcd.domain.Admin">
+    update t_admin
+    set admin_user_name = #{adminUserName,jdbcType=VARCHAR},
+      admin_pwd = #{adminPwd,jdbcType=VARCHAR},
+      admin_name = #{adminName,jdbcType=VARCHAR},
+      login_token = #{loginToken,jdbcType=VARCHAR},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

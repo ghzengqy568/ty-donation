@@ -5,6 +5,8 @@ package com.baidu.mapp.bcd.domain.meta;
        @Result(property = "id", column = "id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT, id = true),
        @Result(property = "donorId", column = "donor_id", javaType = java.lang.Long.class, jdbcType = JdbcType.BIGINT),
        @Result(property = "donateTime", column = "donate_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
+       @Result(property = "isAnonymous", column = "is_anonymous", javaType = java.lang.Byte.class, jdbcType = JdbcType.TINYINT),
+       @Result(property = "anonymity", column = "anonymity", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "certCode", column = "cert_code", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "sign", column = "sign", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
@@ -56,6 +58,32 @@ public final class MetaDonateFlow {
     public static final String JDBC_TYPE_DONATETIME = "TIMESTAMP";
 
     public static final String IS_KEY_DONATETIME = "false";
+
+    /**
+     * 是否需要匿名捐赠,1-是,0-否
+     */
+    public static final String ISANONYMOUS = "isAnonymous";
+
+    public static final String COLUMN_NAME_ISANONYMOUS = "`is_anonymous`";
+
+    public static final String JAVA_TYPE_ISANONYMOUS = "java.lang.Byte";
+
+    public static final String JDBC_TYPE_ISANONYMOUS = "TINYINT";
+
+    public static final String IS_KEY_ISANONYMOUS = "false";
+
+    /**
+     * 捐赠人隐匿名称
+     */
+    public static final String ANONYMITY = "anonymity";
+
+    public static final String COLUMN_NAME_ANONYMITY = "`anonymity`";
+
+    public static final String JAVA_TYPE_ANONYMITY = "java.lang.String";
+
+    public static final String JDBC_TYPE_ANONYMITY = "VARCHAR";
+
+    public static final String IS_KEY_ANONYMITY = "false";
 
     /**
      * 证书编码
@@ -132,6 +160,12 @@ public final class MetaDonateFlow {
         if (columnName.equals(COLUMN_NAME_DONATETIME)) {
             return DONATETIME;
         }
+        if (columnName.equals(COLUMN_NAME_ISANONYMOUS)) {
+            return ISANONYMOUS;
+        }
+        if (columnName.equals(COLUMN_NAME_ANONYMITY)) {
+            return ANONYMITY;
+        }
         if (columnName.equals(COLUMN_NAME_CERTCODE)) {
             return CERTCODE;
         }
@@ -167,6 +201,12 @@ public final class MetaDonateFlow {
         if (fieldName.equals(DONATETIME)) {
             return COLUMN_NAME_DONATETIME;
         }
+        if (fieldName.equals(ISANONYMOUS)) {
+            return COLUMN_NAME_ISANONYMOUS;
+        }
+        if (fieldName.equals(ANONYMITY)) {
+            return COLUMN_NAME_ANONYMITY;
+        }
         if (fieldName.equals(CERTCODE)) {
             return COLUMN_NAME_CERTCODE;
         }
@@ -201,6 +241,12 @@ public final class MetaDonateFlow {
         }
         if (fieldName.equals(DONATETIME)) {
             return COLUMN_NAME_DONATETIME.replace("`", "");
+        }
+        if (fieldName.equals(ISANONYMOUS)) {
+            return COLUMN_NAME_ISANONYMOUS.replace("`", "");
+        }
+        if (fieldName.equals(ANONYMITY)) {
+            return COLUMN_NAME_ANONYMITY.replace("`", "");
         }
         if (fieldName.equals(CERTCODE)) {
             return COLUMN_NAME_CERTCODE.replace("`", "");

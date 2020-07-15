@@ -115,8 +115,8 @@ public class DonorController {
         String mobile = loginParam.getMobile();
         String username = loginParam.getUsername();
         String password = loginParam.getPassword();
-        if (StringUtils.isBlank(mobile) || StringUtils.isBlank(username)) {
-            return R.error(100100, "用户名或手机号不能为空");
+        if (StringUtils.isBlank(mobile) && StringUtils.isBlank(username)) {
+            return R.error(100100, "用户名和手机号不能同时为空");
         }
         if (StringUtils.isBlank(password)) {
             return R.error(100100, "密码不能为空");

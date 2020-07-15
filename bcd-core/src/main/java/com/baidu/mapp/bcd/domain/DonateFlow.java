@@ -29,6 +29,20 @@ public class DonateFlow implements Serializable {
     private Date donateTime;
 
     /**
+     * column-name:is_anonymous
+     * 是否需要匿名捐赠,1-是,0-否
+     */
+    @Schema(description = "是否需要匿名捐赠,1-是,0-否")
+    private Byte isAnonymous;
+
+    /**
+     * column-name:anonymity
+     * 捐赠人隐匿名称
+     */
+    @Schema(description = "捐赠人隐匿名称")
+    private String anonymity;
+
+    /**
      * column-name:cert_code
      * 证书编码
      */
@@ -70,6 +84,8 @@ public class DonateFlow implements Serializable {
         this.id = builder.id;
         this.donorId = builder.donorId;
         this.donateTime = builder.donateTime;
+        this.isAnonymous = builder.isAnonymous;
+        this.anonymity = builder.anonymity;
         this.certCode = builder.certCode;
         this.sign = builder.sign;
         this.createTime = builder.createTime;
@@ -120,6 +136,34 @@ public class DonateFlow implements Serializable {
      */
     public void setDonateTime(Date donateTime) {
         this.donateTime = donateTime;
+    }
+
+    /**
+     * 是否需要匿名捐赠,1-是,0-否
+     */
+    public Byte getIsAnonymous() {
+        return isAnonymous;
+    }
+
+    /**
+     * 是否需要匿名捐赠,1-是,0-否
+     */
+    public void setIsAnonymous(Byte isAnonymous) {
+        this.isAnonymous = isAnonymous;
+    }
+
+    /**
+     * 捐赠人隐匿名称
+     */
+    public String getAnonymity() {
+        return anonymity;
+    }
+
+    /**
+     * 捐赠人隐匿名称
+     */
+    public void setAnonymity(String anonymity) {
+        this.anonymity = anonymity == null ? null : anonymity.trim();
     }
 
     /**
@@ -182,6 +226,8 @@ public class DonateFlow implements Serializable {
         this.id = other.id;
         this.donorId = other.donorId;
         this.donateTime = other.donateTime;
+        this.isAnonymous = other.isAnonymous;
+        this.anonymity = other.anonymity;
         this.certCode = other.certCode;
         this.sign = other.sign;
         this.createTime = other.createTime;
@@ -196,6 +242,8 @@ public class DonateFlow implements Serializable {
         to.setId(from.id);
         to.setDonorId(from.donorId);
         to.setDonateTime(from.donateTime);
+        to.setIsAnonymous(from.isAnonymous);
+        to.setAnonymity(from.anonymity);
         to.setCertCode(from.certCode);
         to.setSign(from.sign);
         to.setCreateTime(from.createTime);
@@ -209,6 +257,8 @@ public class DonateFlow implements Serializable {
             id: '',
             donorId: '',
             donateTime: '',
+            isAnonymous: '',
+            anonymity: '',
             certCode: '',
             sign: '',
             createTime: '',
@@ -216,7 +266,7 @@ public class DonateFlow implements Serializable {
         }
         */
         
-        return "{\"id\": \"\",\"donorId\": \"\",\"donateTime\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"donorId\": \"\",\"donateTime\": \"\",\"isAnonymous\": \"\",\"anonymity\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
     @Override
@@ -228,6 +278,8 @@ public class DonateFlow implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", donorId=").append(donorId);
         sb.append(", donateTime=").append(donateTime);
+        sb.append(", isAnonymous=").append(isAnonymous);
+        sb.append(", anonymity=").append(anonymity);
         sb.append(", certCode=").append(certCode);
         sb.append(", sign=").append(sign);
         sb.append(", createTime=").append(createTime);
@@ -252,6 +304,16 @@ public class DonateFlow implements Serializable {
          * 捐赠时间
          */
         private Date donateTime;
+
+        /**
+         * 是否需要匿名捐赠,1-是,0-否
+         */
+        private Byte isAnonymous;
+
+        /**
+         * 捐赠人隐匿名称
+         */
+        private String anonymity;
 
         /**
          * 证书编码
@@ -298,6 +360,22 @@ public class DonateFlow implements Serializable {
          */
         public XBuilder donateTime(Date donateTime) {
             this.donateTime = donateTime;
+            return this;
+        }
+
+        /**
+         * 是否需要匿名捐赠,1-是,0-否
+         */
+        public XBuilder isAnonymous(Byte isAnonymous) {
+            this.isAnonymous = isAnonymous;
+            return this;
+        }
+
+        /**
+         * 捐赠人隐匿名称
+         */
+        public XBuilder anonymity(String anonymity) {
+            this.anonymity = anonymity;
             return this;
         }
 
