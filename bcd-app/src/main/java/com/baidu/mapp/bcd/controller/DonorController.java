@@ -3,6 +3,7 @@
  */
 package com.baidu.mapp.bcd.controller;
 
+import com.baidu.mapp.bcd.common.gson.GsonUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.common.utils.digest.Digest;
 import com.baidu.mapp.bcd.domain.Admin;
@@ -18,6 +19,8 @@ import com.baidu.mapp.bcd.dto.LoginResponse;
 import com.baidu.mapp.bcd.service.AdminService;
 import com.baidu.mapp.bcd.service.CertService;
 import com.baidu.mapp.bcd.service.DonorService;
+import com.google.gson.JsonObject;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -25,7 +28,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -106,8 +113,11 @@ public class DonorController {
         donorService.insertSelective(donor);
 
         Long donorId = donor.getId();
-
-        String certCode = certService.writeChain(donorId, MetaDonor.TABLE_NAME, donorId, sign);
+        JsonObject chainContent = new JsonObject();
+        chainContent.addProperty("userName", userName);
+        chainContent.addProperty("name", name);
+        String certCode = certService.writeChain(donorId, MetaDonor.TABLE_NAME, donorId, sign,
+                GsonUtils.toJsonString(chainContent));
         donor.setCertCode(certCode);
         donor.setLastModifyTime(new Date());
         donorService.updateByPrimaryKeySelective(donor);
@@ -116,9 +126,8 @@ public class DonorController {
 
     @PostMapping("login")
     public R<LoginResponse> login(@RequestBody LoginParam loginParam, HttpServletRequest request) {
-        long now = System.currentTimeMillis()/1000L * 1000L;
         String mobile = loginParam.getMobile();
-        String username = loginParam.getUsername();
+        String username = loginParam.getUserName();
         String password = loginParam.getPassword();
         if (StringUtils.isBlank(mobile) && StringUtils.isBlank(username)) {
             return R.error(100100, "用户名和手机号不能同时为空");
@@ -163,7 +172,7 @@ public class DonorController {
     @PostMapping("adminLogin")
     public R<LoginResponse> adminLogin(@RequestBody LoginParam loginParam, HttpServletRequest request) {
         long now = System.currentTimeMillis()/1000L * 1000L;
-        String username = loginParam.getUsername();
+        String username = loginParam.getUserName();
         String password = loginParam.getPassword();
         if (StringUtils.isBlank(username)) {
             return R.error(100100, "用户名不能为空");

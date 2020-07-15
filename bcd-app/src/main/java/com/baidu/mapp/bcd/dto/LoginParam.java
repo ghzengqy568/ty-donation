@@ -10,7 +10,7 @@ import lombok.Data;
 public class LoginParam {
 
     @Schema(description = "用户名")
-    private String username;
+    private String userName;
 
     @Schema(description = "手机号")
     private String mobile;

@@ -139,7 +139,7 @@
             <appender-ref ref="RollingFileError"/>
         </root>
         <!--记录druid-sql的记录-->
-        <logger name="com.qyz.db.interceptor.MyLogMybatisPlugin" level="DEBUG" additivity="false" includeLocation="true">
+        <logger name="com.baidu.mapp.bcd.interceptor.MyLogMybatisPlugin" level="DEBUG" additivity="false" includeLocation="true">
             <appender-ref ref="druidSqlRollingFile"/>
             <appender-ref ref="ConsoleRouter"/>
         </logger>
