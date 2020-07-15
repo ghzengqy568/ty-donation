@@ -11,18 +11,20 @@ import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateDetail;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
-import com.baidu.mapp.bcd.dto.DonateDetailReq;
-import com.baidu.mapp.bcd.dto.DonateFlowResp;
-import com.baidu.mapp.bcd.dto.DonateReq;
-import com.baidu.mapp.bcd.dto.DonationFlowBriefResp;
+import com.baidu.mapp.bcd.dto.*;
 import com.baidu.mapp.bcd.service.*;
 import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Schema(description = "捐赠接口", name = "DonateController")
 @RestController
@@ -39,7 +41,7 @@ public class DonateController {
     DonorService donorService;
 
     @Autowired
-    AllocationService allocationService;
+    ActivityPlanService activityPlanService;
 
     @Autowired
     CertService certService;
@@ -56,16 +58,44 @@ public class DonateController {
     @Autowired
     DonatoryService donatoryService;
 
+    @Autowired
+    AllocationService allocationService;
+
+    @Autowired
+    PlanAllocationRelService planAllocationRelService;
+
+    @Autowired
+    ActivityService activityService;
+
+    @Autowired
+    ActivityPlanConfigService activityPlanConfigService;
+
+    @Autowired
+    AdminService adminService;
+
     public static final String PARTICIPATION_DONATE = "捐赠";
 
     public static final String PARTICIPATION_RECEIVE = "受捐";
 
+    public static final String ANONYMITY_PREFIX = "雷锋";
+
     @PostMapping("submit")
     public R<String> submit(@RequestBody DonateReq donateReq) {
-        Long donorId = donateReq.getDonorId();
-        if (donorId == null || donorId <=0 ) {
-            return R.error(100101, "捐赠人Id不能为空");
+        Long loginId = donateReq.getLoginId();
+        Long donorId;
+        // todo 判断操作人是否为管理员
+        Admin admin = adminService.selectByPrimaryKey(loginId);
+        Boolean isAdmin = admin == null ? false : true;
+        if (isAdmin) {
+            donorId = donateReq.getDonorId();
+            if (donorId == null || donorId <=0 ) {
+                return R.error(100101, "捐赠人Id不能为空");
+            }
+        } else {
+            // 非管理员操作, 则捐赠人为操作人本身
+            donorId = loginId;
         }
+
         if (CollectionUtils.isEmpty(donateReq.getDetails())) {
             return R.error(100101, "捐赠明细不能为空");
         }
@@ -74,14 +104,18 @@ public class DonateController {
             return R.error(100102, "捐赠人不存在");
         }
 
-        // 装载UUID
         Date donateTime = new Date();
+        String anonymity = Strings.EMPTY;
+        if (donateReq.getIsAnonymous() == 1) {
+            anonymity = ANONYMITY_PREFIX + RandomStringUtils.randomNumeric(10);
+        }
         // 流水签名 donorId, donorTime
         String sign = SignUtils.sign(donorId, DateTimeUtils.toDateTimeString(donateTime, "yyyyMMddHHmmss"));
         DonateFlow flow = DonateFlow.newBuilder()
                 .donorId(donorId)
                 .donateTime(donateTime)
                 .sign(sign)
+//                .anonymity(anonymity)  todo
                 .createTime(new Date())
                 .lastModifyTime(new Date())
                 .build();
@@ -124,30 +158,61 @@ public class DonateController {
 
     @GetMapping("/allDonations")
     public R<Pagination<DonationFlowBriefResp>> getAllDonations(@RequestParam(defaultValue = "1") Integer pageNo,
-                                                                @RequestParam(defaultValue = "10") Integer pageSize) {
+                                                                @RequestParam(defaultValue = "10") Integer pageSize,
+                                                                @RequestParam(required = false) Long donorId) {
 
         int start = (pageNo - 1) * pageSize;
 
-        Pagination<DonationFlowBriefResp> pagination =
-                donateDetailService.pagination(DonateDetailExample.newBuilder().start(start).limit(pageSize).build(),
-                        donateDetail -> {
-                            Long donateFlowId = donateDetail.getFlowId();
-                            DonateFlow donateFlow = donateFlowService.selectByPrimaryKey(donateFlowId);
-                            Long donorId = donateFlow.getDonorId();
-                            Donor donor = donorService.selectByPrimaryKey(donorId);
-                            String donorName = donor.getDonorName();
-                            return DonationFlowBriefResp.builder()
-                                    .donorName(donorName)
-                                    .donateTime(donateFlow.getDonateTime())
-                                    .participation(PARTICIPATION_DONATE)
-                                    .type(donateDetail.getType())
-                                    .unit(donateDetail.getUnit())
-                                    .quantity(donateDetail.getQuantity())
-                                    .name(donateDetail.getName())
-                                    .build();
+        if (donorId != null) {
+            // 捐赠人登录, 展示其本人的所有捐赠记录
+            List<DonateFlow> donateFlows = donateFlowService.selectByExample(DonateFlowExample.newBuilder().build()
+                    .createCriteria()
+                    .andDonorIdEqualTo(donorId)
+                    .toExample());
+            if (CollectionUtils.isEmpty(donateFlows)) {
+                return R.ok();
+            }
+            List<Long> flowIds = donateFlows.stream().map(DonateFlow::getId).collect(Collectors.toList());
+            Pagination<DonationFlowBriefResp> pagination =
+                    donateDetailService.pagination(DonateDetailExample.newBuilder()
+                            .orderByClause("create_time desc")
+                            .start(start).limit(pageSize)
+                            .build().createCriteria().andFlowIdIn(flowIds).toExample(), toDisplayConvert());
+            return R.ok(pagination);
+        } else {
+            // 管理员登录, 展示系统内所有人的捐赠记录
+            Pagination<DonationFlowBriefResp> pagination =
+                    donateDetailService.pagination(DonateDetailExample.newBuilder()
+                            .orderByClause("create_time desc").start(start)
+                            .limit(pageSize)
+                            .build(), toDisplayConvert());
 
-                        });
-        return R.ok(pagination);
+            return R.ok(pagination);
+        }
+    }
+
+    private Function<DonateDetail, DonationFlowBriefResp> toDisplayConvert() {
+        return (DonateDetail donateDetail) -> {
+            Long donateFlowId = donateDetail.getFlowId();
+            DonateFlow donateFlow = donateFlowService.selectByPrimaryKey(donateFlowId);
+            Long donorId = donateFlow.getDonorId();
+            Donor donor = donorService.selectByPrimaryKey(donorId);
+            String donorName = donor.getDonorName();
+            // todo 如果匿名捐赠, 展示雷锋***, 否则, 展示捐赠人名称(需要掩码 -- todo)
+            String displayName = donateFlow.getIsAnonymous() == 1 ? donateFlow.getAnonymity() :
+                    donor.getDonorName();
+            return DonationFlowBriefResp.builder()
+                    .donorName(displayName)
+                    .donateTime(donateFlow.getDonateTime())
+                    .certCode(donateFlow.getCertCode())
+                    .participation(PARTICIPATION_DONATE)
+                    .type(donateDetail.getType())
+                    .unit(donateDetail.getUnit())
+                    .quantity(donateDetail.getQuantity())
+                    .name(donateDetail.getName())
+                    .build();
+
+        };
     }
 
     @GetMapping("/genericSearch")
@@ -320,26 +385,154 @@ public class DonateController {
 
     /**
      * 按精确匹配证书号, 查询捐款流程
-     * @param queryString
-     * @return
+     * @param certCode 证书号
+     * @return 返回整个从捐赠到受捐的追溯详情
      */
-    private List<DonateFlowResp> queryDonationsByDonorCertCode(String queryString) {
+    @GetMapping("queryByDonorCertCode")
+    public DonateChainResp queryDonationsByDonateCertCode(@RequestParam String certCode) {
 
+        List<DonateFlow> flows = donateFlowService.selectByExample(DonateFlowExample.newBuilder()
+                .build()
+                .createCriteria()
+                .andCertCodeEqualTo(certCode)
+                .toExample());
+        Assert.isTrue(!CollectionUtils.isEmpty(flows) && flows.size() == 1, "捐赠流水不存在");
 
+        DonateFlow donateFlow = flows.get(0);
+        Long donorId = donateFlow.getDonorId();
+        Donor donor = donorService.selectByPrimaryKey(donorId);
+        Assert.isTrue(donor != null, "捐赠人不存在");
 
+        // 捐赠流水记录
+        DonateChainResp donateChainResp = DonateChainResp.builder()
+                .donateFlowId(donateFlow.getId())
+                .donorId(donor.getId())
+                .donorName(donor.getDonorName())
+                .isAnonymous(donateFlow.getIsAnonymous())
+                .anonymity(donateFlow.getAnonymity())
+                .donateTime(donateFlow.getDonateTime())
+                .certCode(certCode)
+                .build();
 
-        List<DonateFlow> donateFlows = donateFlowService
-                .selectByExample(DonateFlowExample.newBuilder().build().createCriteria().andCertCodeEqualTo
-                        (queryString).toExample());
+        // 捐赠详情
+        List<DonateDetail> donateDetails = donateDetailService.selectByExample(DonateDetailExample.newBuilder()
+                .build()
+                .createCriteria()
+                .andFlowIdEqualTo(donateFlow.getId())
+                .toExample());
 
-        // todo
+        List<DonateDetailResp> donateDetailResps = new ArrayList<>(donateDetails.size());
+        donateDetails.forEach((DonateDetail dd) -> {
+            donateDetailResps.add(DonateDetailResp.builder()
+                    .type(dd.getType())
+                    .unit(dd.getUnit())
+                    .quantity(dd.getQuantity())
+                    .name(dd.getName())
+                    .build());
+        });
+        donateChainResp.setDonateDetailResp(donateDetailResps);
 
-        return null;
+        // 捐赠对应的活动摘要（包含受捐详情）
+        List<Long> donateDetailIds = donateDetails.stream().map(DonateDetail::getId).collect(Collectors.toList());
 
+        List<Allocation> allocations = allocationService.selectByExample(AllocationExample.newBuilder().build()
+                .createCriteria()
+                .andDonateDetailIdIn(donateDetailIds)
+                .toExample());
+        List<Long> allocationIds = allocations.stream().map(Allocation::getId).collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(allocationIds)) {
+            // 该笔捐赠还没有被分配使用
+            return donateChainResp;
+        }
+
+        // 通过分配记录倒推应用于哪些活动
+        List<PlanAllocationRel> planAllocationRels =
+                planAllocationRelService.selectByExample(PlanAllocationRelExample.newBuilder().build()
+                        .createCriteria()
+                        .andAllocationIdIn(allocationIds)
+                        .toExample());
+        if (CollectionUtils.isEmpty(planAllocationRels)) {
+            // 表示捐赠还未用于任何活动
+            donateChainResp.setActivityBriefResps(Lists.newArrayList());
+            return donateChainResp;
+        }
+
+        List<Long> actPlanIds =
+                planAllocationRels.stream().map(PlanAllocationRel::getActivityPlanId).collect(Collectors.toList());
+
+        List<ActivityPlan> activityPlans = activityPlanService.selectByPrimaryKeys(actPlanIds);
+        Set<Long> actIds = activityPlans.stream().map(ActivityPlan::getActivityId).collect(Collectors.toSet());
+        // todo actId -> List<actPlanId> map ???
+        Map<Long, List<Long>> actPlansMap =
+                activityPlanService.selectMapListByExample(ActivityPlanExample.newBuilder().build().createCriteria()
+                        .toExample(), ActivityPlan::getActivityId, ActivityPlan::getId);
+
+        List<Activity> activities = activityService.selectByPrimaryKeys(new ArrayList<>(actIds));
+
+        List<DCActivityBriefResp> activityBriefResps = new ArrayList<>();
+        donateChainResp.setActivityBriefResps(activityBriefResps);
+        for (Activity act : activities) {
+            DCActivityBriefResp dcActivityBriefResp = DCActivityBriefResp.builder()
+                    .activityId(act.getId())
+                    .theme(act.getTheme())
+                    .description(act.getDescription())
+                    .startTime(act.getStartTime())
+                    .endTime(act.getEndTime())
+                    .status(act.getStatus())
+                    .build();
+            activityBriefResps.add(dcActivityBriefResp);
+
+            // 根据状态查找受捐领取摘要
+            // todo 啥是 实施中，实施完成
+            // 根据 actId -> List<actPlanId> map ====> actPlanId + allocationId -> drawdetail
+
+            List<DrawRecordFlatDetail> drawRecordFlatDetails = new ArrayList<>();
+            List<DrawRecordDetail> drawRecordDetails =
+                    drawRecordDetailService.selectByExample(DrawRecordDetailExample.newBuilder().build()
+                            .createCriteria()
+                            .andActivityIdEqualTo(act.getId())
+                            .andActivityPlanIdIn(actPlansMap.get(act.getId()))
+                            .toExample());
+            if (CollectionUtils.isEmpty(drawRecordDetails)) {
+                continue;
+            }
+            for (DrawRecordDetail drawRecordDetail : drawRecordDetails) {
+                Long donatoryId = drawRecordDetail.getDonatoryId();
+
+                List<DrawRecordFlow> drawRecordFlows =
+                        drawRecordFlowService.selectByExample(DrawRecordFlowExample.newBuilder().build()
+                                .createCriteria()
+                                .andDonatoryIdEqualTo(donatoryId)
+                                .andActivityIdEqualTo(drawRecordDetail.getActivityId())
+                                .toExample());
+                // 每个人在每次活动中只有一条领取记录
+                DrawRecordFlow drawRecordFlow = drawRecordFlows.get(0);
+
+                DrawRecordFlatDetail drawRecordFlatDetail = DrawRecordFlatDetail.builder()
+                        .activityId(drawRecordDetail.getActivityId())
+                        .activityPlanId(drawRecordDetail.getActivityPlanId())
+                        .allocationId(drawRecordDetail.getAllocationId())
+                        .donatoryId(drawRecordDetail.getDonatoryId())
+                        .build();
+                Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
+                drawRecordFlatDetail.setDonatoryName(donatory.getDonatoryName());
+
+                ActivityPlan activityPlan =
+                        activityPlanService.selectByPrimaryKey(drawRecordDetail.getActivityPlanId());
+
+                drawRecordFlatDetail.setType(activityPlan.getType());
+                drawRecordFlatDetail.setUnit(activityPlan.getUnit());
+                drawRecordFlatDetail.setName(activityPlan.getName());
+                drawRecordFlatDetail.setQuantity(drawRecordDetail.getUsed());
+                drawRecordFlatDetail.setDrawTime(drawRecordFlow.getDrawTime());
+                drawRecordFlatDetail.setCertCode(drawRecordFlow.getCertCode());
+                drawRecordFlatDetails.add(drawRecordFlatDetail);
+            }
+            dcActivityBriefResp.setDrawRecordFlatDetails(drawRecordFlatDetails);
+        }
+
+        return donateChainResp;
     }
-
-
-
-
 
 }

@@ -51,12 +51,6 @@ public class DrawRecordFlatDetail {
     private Long allocationId;
 
     /**
-     * 用量
-     */
-    @Schema(description = "用量")
-    private Long used;
-
-    /**
      * 受赠人ID
      */
     @Schema(description = "受赠人ID")
