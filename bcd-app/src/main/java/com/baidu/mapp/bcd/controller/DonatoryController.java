@@ -5,29 +5,55 @@ package com.baidu.mapp.bcd.controller;
 
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.common.utils.digest.Digest;
+import com.baidu.mapp.bcd.domain.ActivityExample;
+import com.baidu.mapp.bcd.domain.Admin;
+import com.baidu.mapp.bcd.domain.Assign;
+import com.baidu.mapp.bcd.domain.AssignExample;
 import com.baidu.mapp.bcd.domain.Donatory;
 import com.baidu.mapp.bcd.domain.DonatoryExample;
+import com.baidu.mapp.bcd.domain.DrawRecordFlow;
+import com.baidu.mapp.bcd.domain.DrawRecordFlowExample;
+import com.baidu.mapp.bcd.domain.base.Pagination;
 import com.baidu.mapp.bcd.domain.base.R;
+import com.baidu.mapp.bcd.domain.dto.LoginUser;
+import com.baidu.mapp.bcd.domain.dto.UserThreadLocal;
 import com.baidu.mapp.bcd.domain.dto.UserType;
+import com.baidu.mapp.bcd.domain.meta.MetaAssign;
+import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
 import com.baidu.mapp.bcd.domain.meta.MetaDonatory;
+import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
+import com.baidu.mapp.bcd.dto.DonatoryActivityRes;
 import com.baidu.mapp.bcd.dto.DonatoryReq;
 import com.baidu.mapp.bcd.dto.LoginParam;
 import com.baidu.mapp.bcd.dto.LoginResponse;
+import com.baidu.mapp.bcd.service.ActivityService;
+import com.baidu.mapp.bcd.service.AssignService;
 import com.baidu.mapp.bcd.service.CertService;
 import com.baidu.mapp.bcd.service.DonatoryService;
+import com.baidu.mapp.bcd.service.DrawRecordFlowService;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +73,15 @@ public class DonatoryController {
 
     @Autowired
     Digest digest;
+
+    @Autowired
+    private ActivityService activityService;
+
+    @Autowired
+    private AssignService assignService;
+
+    @Autowired
+    private DrawRecordFlowService drawRecordFlowService;
 
     @PostMapping("add")
     public R<String> register(@RequestBody DonatoryReq donatoryReq) {
@@ -147,5 +182,63 @@ public class DonatoryController {
         donatory.setLastModifyTime(new Date());
         donatoryService.updateByPrimaryKeySelective(donatory);
         return R.ok(loginResponse);
+    }
+
+    @GetMapping("myActivities")
+    public R<List<DonatoryActivityRes>> getx(@RequestParam("drawStatus") Byte drawStatus) {
+        LoginUser loginUser = UserThreadLocal.getLoginUser();
+        if (loginUser == null) {
+            return R.error(100102, "你尚未登录");
+        }
+        UserType userType = loginUser.getUserType();
+        if (userType == null || !userType.isDonatory()) {
+            return R.error(100102, "你无权访问");
+        }
+
+        // 参与的活动
+        Long donatoryId = loginUser.getUserId();
+        List<Long> activityIdList = assignService.selectByExample(AssignExample.newBuilder()
+                        .distinct(true)
+                        .build()
+                        .createCriteria()
+                        .andDonatoryIdEqualTo(donatoryId)
+                        .toExample(),
+                Assign :: getActivityId,
+                MetaAssign.COLUMN_NAME_ACTIVITYID
+        );
+
+        if (CollectionUtils.isEmpty(activityIdList)) {
+            return R.ok(new ArrayList<>());
+        }
+
+        // 已领取的活动
+        Map<Long, DrawRecordFlow> activityDrawMap =
+                drawRecordFlowService.selectMapByExample(DrawRecordFlowExample.newBuilder().
+                                build()
+                                .createCriteria()
+                                .andActivityIdIn(activityIdList)
+                                .andDonatoryIdEqualTo(donatoryId)
+                                .toExample(),
+                        DrawRecordFlow :: getActivityId,
+                        MetaDrawRecordFlow.COLUMN_NAME_ID,
+                        MetaDrawRecordFlow.COLUMN_NAME_ACTIVITYID
+                );
+
+        Map<Long, DrawRecordFlow>  factivityDrawMap = activityDrawMap == null ? new HashMap<>() : activityDrawMap;
+
+        List<DonatoryActivityRes> donatoryActivityRes = activityService.selectByPrimaryKeys(activityIdList, item ->
+                DonatoryActivityRes.builder()
+                        .activityId(item.getId())
+                        .certCode(item.getCertCode())
+                        .description(item.getDescription())
+                        .startTime(item.getStartTime())
+                        .drawStatus(factivityDrawMap.containsKey(item.getId()) ? (byte) 1 : (byte) 0 )
+                        .endTime(item.getEndTime())
+                        .status(item.getStatus())
+                        .donatoryId(donatoryId)
+                        .theme(item.getTheme())
+                        .build()
+        );
+        return R.ok(donatoryActivityRes);
     }
 }

@@ -109,9 +109,10 @@ public class AssignController {
                         Donatory :: getDonatoryUserName,
                         MetaDonatory.COLUMN_NAME_DONATORYUSERNAME
                 );
-
-                return R.error(100102,
-                        "活动计划配置ID=" + configId + "的受捐人" + GsonUtils.toJsonString(donatoryUserNames) + " 等级不匹配");
+                if (!CollectionUtils.isEmpty(donatoryUserNames)) {
+                    return R.error(100102,
+                            "活动计划配置ID=" + configId + "的受捐人" + GsonUtils.toJsonString(donatoryUserNames) + " 等级不匹配");
+                }
             }
         }
 
@@ -131,6 +132,7 @@ public class AssignController {
                 List<Long> donatoryIds = config.getDonatoryIds();
                 for (Long donatoryId : donatoryIds) {
                     assignService.insertSelective(Assign.newBuilder()
+                            .activityId(activityId)
                             .activityPlanId(planId)
                             .configId(configId)
                             .donatoryId(donatoryId)
@@ -146,6 +148,6 @@ public class AssignController {
     }
 
 
-    
+
 
 }
