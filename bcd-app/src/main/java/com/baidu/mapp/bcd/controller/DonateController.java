@@ -170,7 +170,10 @@ public class DonateController {
                     .andDonorIdEqualTo(donorId)
                     .toExample());
             if (CollectionUtils.isEmpty(donateFlows)) {
-                return R.ok();
+                Pagination<DonationFlowBriefResp> pagination = new Pagination<>();
+                pagination.setTotal(0L);
+                pagination.setDataList(Lists.newArrayList());
+                return R.ok(pagination);
             }
             List<Long> flowIds = donateFlows.stream().map(DonateFlow::getId).collect(Collectors.toList());
             Pagination<DonationFlowBriefResp> pagination =
@@ -382,6 +385,63 @@ public class DonateController {
         }
         return donateFlowResps;
     }
+
+    /**
+     * 按精确匹配证书号, 查询受捐流程
+     * @param certCode 证书号
+     * @return 返回整个从受捐到捐赠的追溯详情
+     */
+    @GetMapping("queryByDonatoryCertCode")
+    public R<DonatoryChainResp> queryByDonatoryCertCode(@RequestParam String certCode) {
+        List<DrawRecordFlow> drawRecordFlows =
+                drawRecordFlowService.selectByExample(DrawRecordFlowExample.newBuilder().build()
+                        .createCriteria()
+                        .andCertCodeEqualTo(certCode)
+                        .toExample());
+        Assert.isTrue(drawRecordFlows != null && drawRecordFlows.size() == 1, "领取流水不存在");
+        DrawRecordFlow drawRecordFlow = drawRecordFlows.get(0);
+
+        Long drawRecordFlowId = drawRecordFlow.getId();
+        Long donatoryId = drawRecordFlow.getDonatoryId();
+        Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
+        Assert.isTrue(donatory != null, "受捐人不存在");
+
+        DonatoryChainResp donatoryChainResp = DonatoryChainResp.builder()
+                .drawRecordFlowId(drawRecordFlowId)
+                .donatoryId(donatoryId)
+                .donatoryName(donatory.getDonatoryName())
+                .drawTime(drawRecordFlow.getDrawTime())
+                .certCode(drawRecordFlow.getCertCode())
+                .build();
+
+        Activity activity = activityService.selectByPrimaryKey(drawRecordFlow.getActivityId());
+        Assert.isTrue(activity != null, "受捐活动不存在");
+
+        DCActivityBriefResp activityBriefResp = DCActivityBriefResp.builder()
+                .activityId(activity.getId())
+                .theme(activity.getTheme())
+                .description(activity.getDescription())
+                .startTime(activity.getStartTime())
+                .status(activity.getStatus())
+                .endTime(activity.getEndTime())
+                .build();
+        donatoryChainResp.setActivityBriefResp(activityBriefResp);
+
+        // 查询捐赠明细, 需用从allocation来看
+        List<DrawRecordDetail> drawRecordDetails =
+                drawRecordDetailService.selectByExample(DrawRecordDetailExample.newBuilder().build()
+                        .createCriteria()
+                        .andActivityIdEqualTo(activity.getId())
+                        .andDonatoryIdEqualTo(donatoryId)
+                        .toExample());
+        List<Long> allocationIds =
+                drawRecordDetails.stream().map(DrawRecordDetail::getAllocationId).collect(Collectors.toList());
+        List<Allocation> allocations = allocationService.selectByPrimaryKeys(allocationIds);
+        List<Long> donateDetailIds = allocations.stream().map(Allocation::getDonateDetailId).collect(Collectors.toList());
+
+        return R.ok(donatoryChainResp);
+    }
+
 
     /**
      * 按精确匹配证书号, 查询捐款流程

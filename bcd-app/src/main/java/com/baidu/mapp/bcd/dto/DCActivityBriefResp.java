@@ -36,7 +36,16 @@ public class DCActivityBriefResp {
 //    @Schema(description = "活动计划详情列表")
 //    List<ActivityPlanDetailResp> plans;
 
+    /**
+     * 从捐赠证书查询时使用
+     */
     @Schema(description = "受捐领取摘要")
     private List<DrawRecordFlatDetail> drawRecordFlatDetails;
+
+    /**
+     * 从受赠证书查询时使用
+     */
+    @Schema(description = "捐赠明细")
+    private List<DonateFlatDetail> donateFlatDetails;
 
 }
