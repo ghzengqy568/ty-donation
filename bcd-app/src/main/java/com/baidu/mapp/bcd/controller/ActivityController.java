@@ -70,7 +70,8 @@ public class ActivityController {
         Long activityId = activity.getId();
 
         // 存证
-        String actCertCode = certService.writeChain(9900000L, MetaActivity.TABLE_NAME, activityId, actSign);
+        String actCertCode = certService.writeChain(9900000L, MetaActivity.TABLE_NAME, activityId,
+                actSign, "xx");
         activity.setCertCode(actCertCode);
         activity.setLastModifyTime(new Date());
         activityService.updateByPrimaryKeySelective(activity);
@@ -99,7 +100,7 @@ public class ActivityController {
             Long planId = plan.getId();
 
             String actPlanCertCode = certService.writeChain(9900000L, MetaActivityPlan.TABLE_NAME, planId,
-                    actPlanSign);
+                    actPlanSign, "yy");
             plan.setCertCode(actPlanCertCode);
             plan.setLastModifyTime(new Date());
             activityPlanService.updateByPrimaryKeySelective(plan);

@@ -170,13 +170,14 @@ public class DonateController {
                 .donorId(donorId)
                 .donateTime(donateTime)
                 .sign(sign)
-//                .anonymity(anonymity)  todo
+                .anonymity(anonymity)
+                .isAnonymous(donateReq.getIsAnonymous())
                 .createTime(new Date())
                 .lastModifyTime(new Date())
                 .build();
         donateFlowService.insertSelective(flow);
         Long flowId = flow.getId();
-        String certCode = certService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, flowId, sign);
+        String certCode = certService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, flowId, sign, "xx");
         flow.setCertCode(certCode);
         flow.setLastModifyTime(new Date());
         donateFlowService.updateByPrimaryKeySelective(flow);
@@ -203,7 +204,8 @@ public class DonateController {
 
             donateDetailService.insertSelective(donateDetail);
             Long detailId = donateDetail.getId();
-            String detailCertCode = certService.writeChain(donorId, MetaDonateDetail.TABLE_NAME, detailId, sign);
+            String detailCertCode = certService.writeChain(donorId, MetaDonateDetail.TABLE_NAME, detailId,
+                    sign, "xx");
             donateDetail.setCertCode(detailCertCode);
             donateDetail.setLastModifyTime(new Date());
             donateDetailService.updateByPrimaryKeySelective(donateDetail);
@@ -575,11 +577,12 @@ public class DonateController {
         Donor donor = donorService.selectByPrimaryKey(donorId);
         Assert.isTrue(donor != null, "捐赠人不存在");
 
+        String displayName = donateFlow.getIsAnonymous() == 1 ? donateFlow.getAnonymity() : donor.getDonorName();
         // 捐赠流水记录
         DonateChainResp donateChainResp = DonateChainResp.builder()
                 .donateFlowId(donateFlow.getId())
                 .donorId(donor.getId())
-                .donorName(donor.getDonorName())
+                .donorName(displayName)
                 .isAnonymous(donateFlow.getIsAnonymous())
                 .anonymity(donateFlow.getAnonymity())
                 .donateTime(donateFlow.getDonateTime())
@@ -656,9 +659,6 @@ public class DonateController {
             activityBriefResps.add(dcActivityBriefResp);
 
             // 根据状态查找受捐领取摘要
-            // todo 啥是 实施中，实施完成
-            // 根据 actId -> List<actPlanId> map ====> actPlanId + allocationId -> drawdetail
-
             List<DrawRecordFlatDetail> drawRecordFlatDetails = new ArrayList<>();
             List<DrawRecordDetail> drawRecordDetails =
                     drawRecordDetailService.selectByExample(DrawRecordDetailExample.newBuilder().build()
