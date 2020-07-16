@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -187,7 +188,7 @@ public class DonatoryController {
 
     @GetMapping("myActivities")
     public R<List<DonatoryActivityRes>> myActivities(@RequestHeader("X-TOKEN") String xtoken,
-                                             @RequestParam("drawStatus") Byte drawStatus) {
+                                             @RequestParam(value = "drawStatus", required = false) Byte drawStatus) {
         LoginUser loginUser = UserThreadLocal.getLoginUser();
         if (loginUser == null) {
             return R.error(100102, "你尚未登录");
@@ -241,6 +242,11 @@ public class DonatoryController {
                         .theme(item.getTheme())
                         .build()
         );
+        if (drawStatus != null && !donatoryActivityRes.isEmpty()) {
+            donatoryActivityRes =
+                    donatoryActivityRes.stream().filter(item -> item.getStatus().equals(drawStatus))
+                            .collect(Collectors.toList());
+        }
         return R.ok(donatoryActivityRes);
     }
 }
