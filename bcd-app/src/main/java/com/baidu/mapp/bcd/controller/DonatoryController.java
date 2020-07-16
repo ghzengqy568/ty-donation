@@ -43,6 +43,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -185,7 +186,8 @@ public class DonatoryController {
     }
 
     @GetMapping("myActivities")
-    public R<List<DonatoryActivityRes>> getx(@RequestParam("drawStatus") Byte drawStatus) {
+    public R<List<DonatoryActivityRes>> myActivities(@RequestHeader("X-TOKEN") String xtoken,
+                                             @RequestParam("drawStatus") Byte drawStatus) {
         LoginUser loginUser = UserThreadLocal.getLoginUser();
         if (loginUser == null) {
             return R.error(100102, "你尚未登录");
