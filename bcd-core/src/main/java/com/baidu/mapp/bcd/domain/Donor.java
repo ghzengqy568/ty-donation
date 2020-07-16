@@ -1,115 +1,98 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "Donor", description = "捐赠人")
 public class Donor implements Serializable {
 
     /**
      * column-name:id
      * 捐赠人ID
      */
-    @Schema(description = "捐赠人ID")
     private Long id;
 
     /**
      * column-name:donor_user_name
      * 捐赠人用户ID
      */
-    @Schema(description = "捐赠人用户ID")
     private String donorUserName;
 
     /**
      * column-name:donor_pwd
      * 捐赠人密码
      */
-    @Schema(description = "捐赠人密码")
     private String donorPwd;
 
     /**
      * column-name:donor_name
      * 捐赠人名称
      */
-    @Schema(description = "捐赠人名称")
     private String donorName;
 
     /**
      * column-name:cert_code
      * 证书编码
      */
-    @Schema(description = "证书编码")
     private String certCode;
 
     /**
      * column-name:sign
      * 存证签名
      */
-    @Schema(description = "存证签名")
     private String sign;
 
     /**
      * column-name:idcard
      * 身份证号码，加密存储
      */
-    @Schema(description = "身份证号码，加密存储")
     private String idcard;
 
     /**
      * column-name:mobile
      * 手机号，加密存储
      */
-    @Schema(description = "手机号，加密存储")
     private String mobile;
 
     /**
      * column-name:province
      * 省份
      */
-    @Schema(description = "省份")
     private String province;
 
     /**
      * column-name:city
      * 城市
      */
-    @Schema(description = "城市")
     private String city;
 
     /**
      * column-name:address
      * 地址
      */
-    @Schema(description = "地址")
     private String address;
 
     /**
      * column-name:login_token
      * 登录token
      */
-    @Schema(description = "登录token")
     private String loginToken;
 
     /**
      * column-name:last_login_time
      * 最后一次登录时间
      */
-    @Schema(description = "最后一次登录时间")
     private Date lastLoginTime;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**

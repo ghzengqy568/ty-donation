@@ -16,7 +16,9 @@ package com.baidu.mapp.bcd.domain.meta;
        @Result(property = "certCode", column = "cert_code", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "sign", column = "sign", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
        @Result(property = "createTime", column = "create_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
-       @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
+       @Result(property = "lastModifyTime", column = "last_modify_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP),
+       @Result(property = "loginToken", column = "login_token", javaType = java.lang.String.class, jdbcType = JdbcType.VARCHAR),
+       @Result(property = "lastLoginTime", column = "last_login_time", javaType = java.util.Date.class, jdbcType = JdbcType.TIMESTAMP)
 })
 */
 public final class MetaDonatory {
@@ -222,6 +224,32 @@ public final class MetaDonatory {
     public static final String IS_KEY_LASTMODIFYTIME = "false";
 
     /**
+     * 登录token
+     */
+    public static final String LOGINTOKEN = "loginToken";
+
+    public static final String COLUMN_NAME_LOGINTOKEN = "`login_token`";
+
+    public static final String JAVA_TYPE_LOGINTOKEN = "java.lang.String";
+
+    public static final String JDBC_TYPE_LOGINTOKEN = "VARCHAR";
+
+    public static final String IS_KEY_LOGINTOKEN = "false";
+
+    /**
+     * 最后一次登录时间
+     */
+    public static final String LASTLOGINTIME = "lastLoginTime";
+
+    public static final String COLUMN_NAME_LASTLOGINTIME = "`last_login_time`";
+
+    public static final String JAVA_TYPE_LASTLOGINTIME = "java.util.Date";
+
+    public static final String JDBC_TYPE_LASTLOGINTIME = "TIMESTAMP";
+
+    public static final String IS_KEY_LASTLOGINTIME = "false";
+
+    /**
      * 根据数据库字段名返回JAVA对象字段名
      */
     public static String getFieldNameByColumn(String columnName) {
@@ -279,6 +307,12 @@ public final class MetaDonatory {
         }
         if (columnName.equals(COLUMN_NAME_LASTMODIFYTIME)) {
             return LASTMODIFYTIME;
+        }
+        if (columnName.equals(COLUMN_NAME_LOGINTOKEN)) {
+            return LOGINTOKEN;
+        }
+        if (columnName.equals(COLUMN_NAME_LASTLOGINTIME)) {
+            return LASTLOGINTIME;
         }
         return "";
     }
@@ -339,6 +373,12 @@ public final class MetaDonatory {
         if (fieldName.equals(LASTMODIFYTIME)) {
             return COLUMN_NAME_LASTMODIFYTIME;
         }
+        if (fieldName.equals(LOGINTOKEN)) {
+            return COLUMN_NAME_LOGINTOKEN;
+        }
+        if (fieldName.equals(LASTLOGINTIME)) {
+            return COLUMN_NAME_LASTLOGINTIME;
+        }
         return "";
     }
 
@@ -397,6 +437,12 @@ public final class MetaDonatory {
         }
         if (fieldName.equals(LASTMODIFYTIME)) {
             return COLUMN_NAME_LASTMODIFYTIME.replace("`", "");
+        }
+        if (fieldName.equals(LOGINTOKEN)) {
+            return COLUMN_NAME_LOGINTOKEN.replace("`", "");
+        }
+        if (fieldName.equals(LASTLOGINTIME)) {
+            return COLUMN_NAME_LASTLOGINTIME.replace("`", "");
         }
         return "";
     }

@@ -1,59 +1,50 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "Certificate", description = "链上证书记录")
 public class Certificate implements Serializable {
 
     /**
      * column-name:id
      * 存证ID
      */
-    @Schema(description = "存证ID")
     private Long id;
 
     /**
      * column-name:cert_code
      * 证书编码
      */
-    @Schema(description = "证书编码")
     private String certCode;
 
     /**
      * column-name:cert_time
      * 证书日期
      */
-    @Schema(description = "证书日期")
     private Date certTime;
 
     /**
      * column-name:source_table
      * 存证来源表名
      */
-    @Schema(description = "存证来源表名")
     private String sourceTable;
 
     /**
      * column-name:source_id
      * 原始记录ID
      */
-    @Schema(description = "原始记录ID")
     private Long sourceId;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**

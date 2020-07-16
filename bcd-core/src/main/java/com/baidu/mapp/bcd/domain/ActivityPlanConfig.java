@@ -1,66 +1,56 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "ActivityPlanConfig", description = "项目计划配置表")
 public class ActivityPlanConfig implements Serializable {
 
     /**
      * column-name:id
      * 计划配置ID
      */
-    @Schema(description = "计划配置ID")
     private Long id;
 
     /**
      * column-name:activity_id
      * 活动ID
      */
-    @Schema(description = "活动ID")
     private Long activityId;
 
     /**
      * column-name:activity_plan_id
      * 活动计划ID
      */
-    @Schema(description = "活动计划ID")
     private Long activityPlanId;
 
     /**
      * column-name:donatory_level
      * 受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入
      */
-    @Schema(description = "受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入")
     private Byte donatoryLevel;
 
     /**
      * column-name:quantity
      * 同等级受捐人受捐数量
      */
-    @Schema(description = "同等级受捐人受捐数量")
     private Long quantity;
 
     /**
      * column-name:amount
      * 份数
      */
-    @Schema(description = "份数")
     private Integer amount;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**

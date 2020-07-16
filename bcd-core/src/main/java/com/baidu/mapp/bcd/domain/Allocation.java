@@ -1,66 +1,56 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "Allocation", description = "拨款记录")
 public class Allocation implements Serializable {
 
     /**
      * column-name:id
      * 拨款记录ID
      */
-    @Schema(description = "拨款记录ID")
     private Long id;
 
     /**
      * column-name:donate_detail_id
      * 捐款明细ID
      */
-    @Schema(description = "捐款明细ID")
     private Long donateDetailId;
 
     /**
      * column-name:used
      * 用量
      */
-    @Schema(description = "用量")
     private Long used;
 
     /**
      * column-name:balance
      * 余额
      */
-    @Schema(description = "余额")
     private Long balance;
 
     /**
      * column-name:cert_code
      * 证书编码
      */
-    @Schema(description = "证书编码")
     private String certCode;
 
     /**
      * column-name:sign
      * 存证签名
      */
-    @Schema(description = "存证签名")
     private String sign;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**

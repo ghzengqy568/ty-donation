@@ -1,59 +1,50 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "PlanAllocationRel", description = "活动计划与拨款记录关系表")
 public class PlanAllocationRel implements Serializable {
 
     /**
      * column-name:id
      * 活动计划与拨款记录关系ID
      */
-    @Schema(description = "活动计划与拨款记录关系ID")
     private Long id;
 
     /**
      * column-name:activity_plan_id
      * 活动计划ID
      */
-    @Schema(description = "活动计划ID")
     private Long activityPlanId;
 
     /**
      * column-name:allocation_id
      * 拨款记录ID
      */
-    @Schema(description = "拨款记录ID")
     private Long allocationId;
 
     /**
      * column-name:balance
      * 分配后余额
      */
-    @Schema(description = "分配后余额")
     private Long balance;
 
     /**
      * column-name:used
      * 使用量
      */
-    @Schema(description = "使用量")
     private Long used;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**

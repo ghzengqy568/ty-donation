@@ -1,101 +1,86 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "ActivityPlan", description = "活动计划")
 public class ActivityPlan implements Serializable {
 
     /**
      * column-name:id
      * 计划ID
      */
-    @Schema(description = "计划ID")
     private Long id;
 
     /**
      * column-name:activity_id
      * 活动ID
      */
-    @Schema(description = "活动ID")
     private Long activityId;
 
     /**
      * column-name:description
      * 计划描述
      */
-    @Schema(description = "计划描述")
     private String description;
 
     /**
      * column-name:type
      * 捐赠类别, 1-钱，2-物
      */
-    @Schema(description = "捐赠类别, 1-钱，2-物")
     private Byte type;
 
     /**
      * column-name:unit
      * 单位
      */
-    @Schema(description = "单位")
     private String unit;
 
     /**
      * column-name:quantity
      * 数量
      */
-    @Schema(description = "数量")
     private Long quantity;
 
     /**
      * column-name:name
      * 物资名称
      */
-    @Schema(description = "物资名称")
     private String name;
 
     /**
      * column-name:amount
      * 总价
      */
-    @Schema(description = "总价")
     private Long amount;
 
     /**
      * column-name:need_purchase
      * 是否需要采购
      */
-    @Schema(description = "是否需要采购")
     private Byte needPurchase;
 
     /**
      * column-name:cert_code
      * 证书编码
      */
-    @Schema(description = "证书编码")
     private String certCode;
 
     /**
      * column-name:sign
      * 存证签名
      */
-    @Schema(description = "存证签名")
     private String sign;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**

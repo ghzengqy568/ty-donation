@@ -18,9 +18,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.AntPathMatcher;
 
+import com.baidu.mapp.bcd.domain.Admin;
+import com.baidu.mapp.bcd.domain.AdminExample;
+import com.baidu.mapp.bcd.domain.Donatory;
+import com.baidu.mapp.bcd.domain.DonatoryExample;
 import com.baidu.mapp.bcd.domain.Donor;
 import com.baidu.mapp.bcd.domain.DonorExample;
-import com.baidu.mapp.bcd.dto.UserThreadLocal;
+import com.baidu.mapp.bcd.domain.dto.LoginUser;
+import com.baidu.mapp.bcd.domain.dto.UserThreadLocal;
+import com.baidu.mapp.bcd.domain.dto.UserType;
+import com.baidu.mapp.bcd.service.AdminService;
+import com.baidu.mapp.bcd.service.DonatoryService;
 import com.baidu.mapp.bcd.service.DonorService;
 
 public class UserAuthFilter implements Filter {
@@ -30,14 +38,20 @@ public class UserAuthFilter implements Filter {
 
     private DonorService donorService;
 
+    private DonatoryService donatoryService;
+
+    private AdminService adminService;
+
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-    public UserAuthFilter(List<String> noAuths, DonorService donorService) {
+    public UserAuthFilter(List<String> noAuths, DonorService donorService, DonatoryService donatoryService, AdminService adminService) {
         if (noAuths == null) {
             noAuths = new ArrayList<>();
         }
         this.noAuths = noAuths;
         this.donorService = donorService;
+        this.donatoryService = donatoryService;
+        this.adminService = adminService;
     }
 
     public boolean noAuth(String uri) {
@@ -56,12 +70,46 @@ public class UserAuthFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String xtoken = httpServletRequest.getHeader(XTOKEN);
         if (StringUtils.isNotBlank(xtoken)) {
-            Donor donor = donorService.selectOneByExample(
-                    DonorExample.newBuilder().build().createCriteria().andLoginTokenEqualTo(xtoken).toExample());
-            UserThreadLocal.addDonor(donor);
+            if (UserType.isDonorToken(xtoken)) {
+                Donor donor = donorService.selectOneByExample(
+                        DonorExample.newBuilder().build().createCriteria().andLoginTokenEqualTo(xtoken).toExample());
+                if (donor != null) {
+                    UserThreadLocal.addLoginUser(LoginUser.builder()
+                            .userId(donor.getId())
+                            .name(donor.getDonorName())
+                            .userName(donor.getDonorUserName())
+                            .token(xtoken)
+                            .userType(UserType.DONOR)
+                            .build());
+                }
+            } else if (UserType.isDonatoryToken(xtoken)) {
+                Donatory donatory = donatoryService.selectOneByExample(
+                        DonatoryExample.newBuilder().build().createCriteria().andLoginTokenEqualTo(xtoken).toExample());
+                if (donatory != null) {
+                    UserThreadLocal.addLoginUser(LoginUser.builder()
+                            .userId(donatory.getId())
+                            .name(donatory.getDonatoryName())
+                            .userName(donatory.getDonatoryUserName())
+                            .token(xtoken)
+                            .userType(UserType.DONATORY)
+                            .build());
+                }
+            } else if (UserType.isAdminToken(xtoken)) {
+                Admin admin = adminService.selectOneByExample(
+                        AdminExample.newBuilder().build().createCriteria().andLoginTokenEqualTo(xtoken).toExample());
+                if (admin != null) {
+                    UserThreadLocal.addLoginUser(LoginUser.builder()
+                            .userId(admin.getId())
+                            .name(admin.getAdminName())
+                            .userName(admin.getAdminUserName())
+                            .token(xtoken)
+                            .userType(UserType.ADMIN)
+                            .build());
+                }
+            }
         }
         chain.doFilter(request, response);
-        UserThreadLocal.removeDonor();
+        UserThreadLocal.removeLoginUser();
     }
 
     @Override

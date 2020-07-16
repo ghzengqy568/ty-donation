@@ -1,66 +1,56 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "DrawRecordFlow", description = "领取记录流水")
 public class DrawRecordFlow implements Serializable {
 
     /**
      * column-name:id
      * 领取记录流水ID
      */
-    @Schema(description = "领取记录流水ID")
     private Long id;
 
     /**
      * column-name:donatory_id
      * 受赠人ID
      */
-    @Schema(description = "受赠人ID")
     private Long donatoryId;
 
     /**
      * column-name:activity_id
      * 活动ID
      */
-    @Schema(description = "活动ID")
     private Long activityId;
 
     /**
      * column-name:draw_time
      * 领取时间
      */
-    @Schema(description = "领取时间")
     private Date drawTime;
 
     /**
      * column-name:cert_code
      * 证书编码
      */
-    @Schema(description = "证书编码")
     private String certCode;
 
     /**
      * column-name:sign
      * 存证签名
      */
-    @Schema(description = "存证签名")
     private String sign;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**

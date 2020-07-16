@@ -1,80 +1,68 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "Activity", description = "活动")
 public class Activity implements Serializable {
 
     /**
      * column-name:id
      * 活动ID
      */
-    @Schema(description = "活动ID")
     private Long id;
 
     /**
      * column-name:theme
      * 活动主题
      */
-    @Schema(description = "活动主题")
     private String theme;
 
     /**
      * column-name:description
      * 活动描述
      */
-    @Schema(description = "活动描述")
     private String description;
 
     /**
      * column-name:start_time
      * 活动开始时间
      */
-    @Schema(description = "活动开始时间")
     private Date startTime;
 
     /**
      * column-name:end_time
      * 活动结束时间
      */
-    @Schema(description = "活动结束时间")
     private Date endTime;
 
     /**
      * column-name:cert_code
      * 证书编码
      */
-    @Schema(description = "证书编码")
     private String certCode;
 
     /**
      * column-name:sign
      * 存证签名
      */
-    @Schema(description = "存证签名")
     private String sign;
 
     /**
      * column-name:status
      * 活动状态， 0-待实施， 1-实施中， 2-实施完成
      */
-    @Schema(description = "活动状态， 0-待实施， 1-实施中， 2-实施完成")
     private Byte status;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**

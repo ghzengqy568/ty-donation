@@ -1,66 +1,56 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "Assign", description = "指派关系表")
 public class Assign implements Serializable {
 
     /**
      * column-name:id
      * 领取和捐赠明细关系ID
      */
-    @Schema(description = "领取和捐赠明细关系ID")
     private Long id;
 
     /**
      * column-name:activity_id
      * 活动ID
      */
-    @Schema(description = "活动ID")
     private Long activityId;
 
     /**
      * column-name:activity_plan_id
      * 活动计划ID
      */
-    @Schema(description = "活动计划ID")
     private Long activityPlanId;
 
     /**
      * column-name:donatory_id
      * 受赠人ID
      */
-    @Schema(description = "受赠人ID")
     private Long donatoryId;
 
     /**
      * column-name:config_id
      * 计划配置ID
      */
-    @Schema(description = "计划配置ID")
     private Long configId;
 
     /**
      * column-name:donatory_level
      * 受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入
      */
-    @Schema(description = "受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入")
     private Byte donatoryLevel;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**

@@ -1,87 +1,74 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "DonateDetail", description = "捐赠明细")
 public class DonateDetail implements Serializable {
 
     /**
      * column-name:id
      * 捐赠明细ID
      */
-    @Schema(description = "捐赠明细ID")
     private Long id;
 
     /**
      * column-name:flow_id
      * 捐赠流水ID
      */
-    @Schema(description = "捐赠流水ID")
     private Long flowId;
 
     /**
      * column-name:type
      * 捐赠类别, 1-钱，2-物
      */
-    @Schema(description = "捐赠类别, 1-钱，2-物")
     private Byte type;
 
     /**
      * column-name:unit
      * 单位
      */
-    @Schema(description = "单位")
     private String unit;
 
     /**
      * column-name:quantity
      * 数量
      */
-    @Schema(description = "数量")
     private Long quantity;
 
     /**
      * column-name:name
      * 物资名称
      */
-    @Schema(description = "物资名称")
     private String name;
 
     /**
      * column-name:cert_code
      * 证书编码
      */
-    @Schema(description = "证书编码")
     private String certCode;
 
     /**
      * column-name:sign
      * 存证签名
      */
-    @Schema(description = "存证签名")
     private String sign;
 
     /**
      * column-name:balance
      * 余额
      */
-    @Schema(description = "余额")
     private Long balance;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**

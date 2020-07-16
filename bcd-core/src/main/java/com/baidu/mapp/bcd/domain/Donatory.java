@@ -1,116 +1,111 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "Donatory", description = "受赠人")
 public class Donatory implements Serializable {
 
     /**
      * column-name:id
      * 受赠人ID
      */
-    @Schema(description = "受赠人ID")
     private Long id;
 
     /**
      * column-name:donatory_user_name
      * 受赠人用户ID
      */
-    @Schema(description = "受赠人用户ID")
     private String donatoryUserName;
 
     /**
      * column-name:donatory_pwd
      * 受赠人密码
      */
-    @Schema(description = "受赠人密码")
     private String donatoryPwd;
 
     /**
      * column-name:donatory_name
      * 受赠人名称
      */
-    @Schema(description = "受赠人名称")
     private String donatoryName;
 
     /**
      * column-name:idcard
      * 身份证号码，加密存储
      */
-    @Schema(description = "身份证号码，加密存储")
     private String idcard;
 
     /**
      * column-name:mobile
      * 手机号，加密存储
      */
-    @Schema(description = "手机号，加密存储")
     private String mobile;
 
     /**
      * column-name:donatory_card
      * 受赠人社保卡，加密存储
      */
-    @Schema(description = "受赠人社保卡，加密存储")
     private String donatoryCard;
 
     /**
      * column-name:province
      * 省份
      */
-    @Schema(description = "省份")
     private String province;
 
     /**
      * column-name:city
      * 城市
      */
-    @Schema(description = "城市")
     private String city;
 
     /**
      * column-name:address
      * 地址
      */
-    @Schema(description = "地址")
     private String address;
 
     /**
      * column-name:donatory_level
      * 受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入
      */
-    @Schema(description = "受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入")
     private Byte donatoryLevel;
 
     /**
      * column-name:cert_code
      * 证书编码
      */
-    @Schema(description = "证书编码")
     private String certCode;
 
     /**
      * column-name:sign
      * 存证签名
      */
-    @Schema(description = "存证签名")
     private String sign;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
+
+    /**
+     * column-name:login_token
+     * 登录token
+     */
+    private String loginToken;
+
+    /**
+     * column-name:last_login_time
+     * 最后一次登录时间
+     */
+    private Date lastLoginTime;
 
     /**
      * 受赠人
@@ -138,6 +133,8 @@ public class Donatory implements Serializable {
         this.sign = builder.sign;
         this.createTime = builder.createTime;
         this.lastModifyTime = builder.lastModifyTime;
+        this.loginToken = builder.loginToken;
+        this.lastLoginTime = builder.lastLoginTime;
     }
 
     public static XBuilder newBuilder() {
@@ -354,6 +351,34 @@ public class Donatory implements Serializable {
         this.lastModifyTime = lastModifyTime;
     }
 
+    /**
+     * 登录token
+     */
+    public String getLoginToken() {
+        return loginToken;
+    }
+
+    /**
+     * 登录token
+     */
+    public void setLoginToken(String loginToken) {
+        this.loginToken = loginToken == null ? null : loginToken.trim();
+    }
+
+    /**
+     * 最后一次登录时间
+     */
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    /**
+     * 最后一次登录时间
+     */
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
     public Donatory copyFrom(Donatory other) {
         this.id = other.id;
         this.donatoryUserName = other.donatoryUserName;
@@ -370,6 +395,8 @@ public class Donatory implements Serializable {
         this.sign = other.sign;
         this.createTime = other.createTime;
         this.lastModifyTime = other.lastModifyTime;
+        this.loginToken = other.loginToken;
+        this.lastLoginTime = other.lastLoginTime;
         return this;
     }
 
@@ -392,6 +419,8 @@ public class Donatory implements Serializable {
         to.setSign(from.sign);
         to.setCreateTime(from.createTime);
         to.setLastModifyTime(from.lastModifyTime);
+        to.setLoginToken(from.loginToken);
+        to.setLastLoginTime(from.lastLoginTime);
         return to;
     }
 
@@ -412,11 +441,13 @@ public class Donatory implements Serializable {
             certCode: '',
             sign: '',
             createTime: '',
-            lastModifyTime: ''
+            lastModifyTime: '',
+            loginToken: '',
+            lastLoginTime: ''
         }
         */
         
-        return "{\"id\": \"\",\"donatoryUserName\": \"\",\"donatoryPwd\": \"\",\"donatoryName\": \"\",\"idcard\": \"\",\"mobile\": \"\",\"donatoryCard\": \"\",\"province\": \"\",\"city\": \"\",\"address\": \"\",\"donatoryLevel\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
+        return "{\"id\": \"\",\"donatoryUserName\": \"\",\"donatoryPwd\": \"\",\"donatoryName\": \"\",\"idcard\": \"\",\"mobile\": \"\",\"donatoryCard\": \"\",\"province\": \"\",\"city\": \"\",\"address\": \"\",\"donatoryLevel\": \"\",\"certCode\": \"\",\"sign\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\",\"loginToken\": \"\",\"lastLoginTime\": \"\"}" ;
     }
 
     @Override
@@ -440,6 +471,8 @@ public class Donatory implements Serializable {
         sb.append(", sign=").append(sign);
         sb.append(", createTime=").append(createTime);
         sb.append(", lastModifyTime=").append(lastModifyTime);
+        sb.append(", loginToken=").append(loginToken);
+        sb.append(", lastLoginTime=").append(lastLoginTime);
         sb.append("]");
         return sb.toString();
     }
@@ -520,6 +553,16 @@ public class Donatory implements Serializable {
          * 更新时间
          */
         private Date lastModifyTime;
+
+        /**
+         * 登录token
+         */
+        private String loginToken;
+
+        /**
+         * 最后一次登录时间
+         */
+        private Date lastLoginTime;
 
         private XBuilder() {
             
@@ -642,6 +685,22 @@ public class Donatory implements Serializable {
          */
         public XBuilder lastModifyTime(Date lastModifyTime) {
             this.lastModifyTime = lastModifyTime;
+            return this;
+        }
+
+        /**
+         * 登录token
+         */
+        public XBuilder loginToken(String loginToken) {
+            this.loginToken = loginToken;
+            return this;
+        }
+
+        /**
+         * 最后一次登录时间
+         */
+        public XBuilder lastLoginTime(Date lastLoginTime) {
+            this.lastLoginTime = lastLoginTime;
             return this;
         }
 

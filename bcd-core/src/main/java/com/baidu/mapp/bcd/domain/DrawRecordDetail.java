@@ -1,51 +1,43 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 
-@Schema(name = "DrawRecordDetail", description = "领取分配记录")
 public class DrawRecordDetail implements Serializable {
 
     /**
      * column-name:id
      * 领取记录ID
      */
-    @Schema(description = "领取记录ID")
     private Long id;
 
     /**
      * column-name:activity_id
      * 活动ID
      */
-    @Schema(description = "活动ID")
     private Long activityId;
 
     /**
      * column-name:activity_plan_id
      * 活动计划ID
      */
-    @Schema(description = "活动计划ID")
     private Long activityPlanId;
 
     /**
      * column-name:allocation_id
      * 拨款记录ID
      */
-    @Schema(description = "拨款记录ID")
     private Long allocationId;
 
     /**
      * column-name:used
      * 用量
      */
-    @Schema(description = "用量")
     private Long used;
 
     /**
      * column-name:donatory_id
      * 受赠人ID
      */
-    @Schema(description = "受赠人ID")
     private Long donatoryId;
 
     /**

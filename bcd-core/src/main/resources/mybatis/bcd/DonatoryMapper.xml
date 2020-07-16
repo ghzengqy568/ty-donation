@@ -17,6 +17,8 @@
     <result column="sign" jdbcType="VARCHAR" property="sign" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_modify_time" jdbcType="TIMESTAMP" property="lastModifyTime" />
+    <result column="login_token" jdbcType="VARCHAR" property="loginToken" />
+    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -78,7 +80,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, donatory_user_name, donatory_pwd, donatory_name, idcard, mobile, donatory_card, 
-    province, city, address, donatory_level, cert_code, sign, create_time, last_modify_time
+    province, city, address, donatory_level, cert_code, sign, create_time, last_modify_time, 
+    login_token, last_login_time
   </sql>
   <select id="selectByExample" parameterType="com.baidu.mapp.bcd.domain.DonatoryExample" resultMap="BaseResultMap">
     select
@@ -132,12 +135,14 @@
       idcard, mobile, donatory_card, 
       province, city, address, 
       donatory_level, cert_code, sign, 
-      create_time, last_modify_time)
+      create_time, last_modify_time, login_token, 
+      last_login_time)
     values (#{donatoryUserName,jdbcType=VARCHAR}, #{donatoryPwd,jdbcType=VARCHAR}, #{donatoryName,jdbcType=VARCHAR}, 
       #{idcard,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{donatoryCard,jdbcType=VARCHAR}, 
       #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
       #{donatoryLevel,jdbcType=TINYINT}, #{certCode,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{loginToken,jdbcType=VARCHAR}, 
+      #{lastLoginTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.baidu.mapp.bcd.domain.Donatory">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -187,6 +192,12 @@
       <if test="lastModifyTime != null">
         last_modify_time,
       </if>
+      <if test="loginToken != null">
+        login_token,
+      </if>
+      <if test="lastLoginTime != null">
+        last_login_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="donatoryUserName != null">
@@ -230,6 +241,12 @@
       </if>
       <if test="lastModifyTime != null">
         #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginToken != null">
+        #{loginToken,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null">
+        #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -287,6 +304,12 @@
       <if test="record.lastModifyTime != null">
         last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.loginToken != null">
+        login_token = #{record.loginToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastLoginTime != null">
+        last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -308,7 +331,9 @@
       cert_code = #{record.certCode,jdbcType=VARCHAR},
       sign = #{record.sign,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP}
+      last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP},
+      login_token = #{record.loginToken,jdbcType=VARCHAR},
+      last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -358,6 +383,12 @@
       <if test="lastModifyTime != null">
         last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="loginToken != null">
+        login_token = #{loginToken,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null">
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -376,7 +407,9 @@
       cert_code = #{certCode,jdbcType=VARCHAR},
       sign = #{sign,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP}
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      login_token = #{loginToken,jdbcType=VARCHAR},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

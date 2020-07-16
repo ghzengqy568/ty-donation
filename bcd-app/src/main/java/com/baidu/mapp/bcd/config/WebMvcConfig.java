@@ -17,6 +17,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.baidu.mapp.bcd.filter.CrossDomainFilter;
+import com.baidu.mapp.bcd.service.AdminService;
+import com.baidu.mapp.bcd.service.DonatoryService;
 import com.baidu.mapp.bcd.service.DonorService;
 
 /**
@@ -35,6 +37,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private DonorService donorService;
+
+    @Autowired
+    private DonatoryService donatoryService;
+
+    @Autowired
+    private AdminService adminService;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -67,7 +75,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         }
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setName(USERAUTH_FILTER_NAME);
-        filterRegistrationBean.setFilter(new UserAuthFilter(noAuths, donorService));
+        filterRegistrationBean.setFilter(new UserAuthFilter(noAuths, donorService, donatoryService, adminService));
         filterRegistrationBean.setUrlPatterns(Arrays.asList("/*"));
         filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 101);
         return filterRegistrationBean;

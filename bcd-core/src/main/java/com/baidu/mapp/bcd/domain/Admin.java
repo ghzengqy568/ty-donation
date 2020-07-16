@@ -1,66 +1,56 @@
 package com.baidu.mapp.bcd.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
-@Schema(name = "Admin", description = "管理员")
 public class Admin implements Serializable {
 
     /**
      * column-name:id
      * 管理员ID
      */
-    @Schema(description = "管理员ID")
     private Long id;
 
     /**
      * column-name:admin_user_name
      * 管理员用户ID
      */
-    @Schema(description = "管理员用户ID")
     private String adminUserName;
 
     /**
      * column-name:admin_pwd
      * 管理员密码
      */
-    @Schema(description = "管理员密码")
     private String adminPwd;
 
     /**
      * column-name:admin_name
      * 管理员名称
      */
-    @Schema(description = "管理员名称")
     private String adminName;
 
     /**
      * column-name:login_token
      * 登录token
      */
-    @Schema(description = "登录token")
     private String loginToken;
 
     /**
      * column-name:last_login_time
      * 最后一次登录时间
      */
-    @Schema(description = "最后一次登录时间")
     private Date lastLoginTime;
 
     /**
      * column-name:create_time
      * 创建时间
      */
-    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
      * column-name:last_modify_time
      * 更新时间
      */
-    @Schema(description = "更新时间")
     private Date lastModifyTime;
 
     /**
