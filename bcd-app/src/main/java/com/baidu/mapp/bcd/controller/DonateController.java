@@ -5,14 +5,58 @@ package com.baidu.mapp.bcd.controller;
 
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
-import com.baidu.mapp.bcd.domain.*;
+import com.baidu.mapp.bcd.domain.Activity;
+import com.baidu.mapp.bcd.domain.ActivityPlan;
+import com.baidu.mapp.bcd.domain.ActivityPlanExample;
+import com.baidu.mapp.bcd.domain.Admin;
+import com.baidu.mapp.bcd.domain.Allocation;
+import com.baidu.mapp.bcd.domain.AllocationExample;
+import com.baidu.mapp.bcd.domain.Certificate;
+import com.baidu.mapp.bcd.domain.DonateDetail;
+import com.baidu.mapp.bcd.domain.DonateDetailExample;
+import com.baidu.mapp.bcd.domain.DonateFlow;
+import com.baidu.mapp.bcd.domain.DonateFlowExample;
+import com.baidu.mapp.bcd.domain.Donatory;
+import com.baidu.mapp.bcd.domain.DonatoryExample;
+import com.baidu.mapp.bcd.domain.Donor;
+import com.baidu.mapp.bcd.domain.DonorExample;
+import com.baidu.mapp.bcd.domain.DrawRecord;
+import com.baidu.mapp.bcd.domain.DrawRecordDetail;
+import com.baidu.mapp.bcd.domain.DrawRecordDetailExample;
+import com.baidu.mapp.bcd.domain.DrawRecordExample;
+import com.baidu.mapp.bcd.domain.DrawRecordFlow;
+import com.baidu.mapp.bcd.domain.DrawRecordFlowExample;
+import com.baidu.mapp.bcd.domain.PlanAllocationRel;
+import com.baidu.mapp.bcd.domain.PlanAllocationRelExample;
 import com.baidu.mapp.bcd.domain.base.Pagination;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateDetail;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
-import com.baidu.mapp.bcd.dto.*;
-import com.baidu.mapp.bcd.service.*;
+import com.baidu.mapp.bcd.dto.DCActivityBriefResp;
+import com.baidu.mapp.bcd.dto.DCDrawDetailResp;
+import com.baidu.mapp.bcd.dto.DonateChainResp;
+import com.baidu.mapp.bcd.dto.DonateDetailReq;
+import com.baidu.mapp.bcd.dto.DonateDetailResp;
+import com.baidu.mapp.bcd.dto.DonateFlatDetail;
+import com.baidu.mapp.bcd.dto.DonateReq;
+import com.baidu.mapp.bcd.dto.DonationFlowBriefResp;
+import com.baidu.mapp.bcd.dto.DonatoryChainResp;
+import com.baidu.mapp.bcd.dto.DrawRecordFlatDetail;
+import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
+import com.baidu.mapp.bcd.service.ActivityPlanService;
+import com.baidu.mapp.bcd.service.ActivityService;
+import com.baidu.mapp.bcd.service.AdminService;
+import com.baidu.mapp.bcd.service.AllocationService;
+import com.baidu.mapp.bcd.service.CertService;
+import com.baidu.mapp.bcd.service.DonateDetailService;
+import com.baidu.mapp.bcd.service.DonateFlowService;
+import com.baidu.mapp.bcd.service.DonatoryService;
+import com.baidu.mapp.bcd.service.DonorService;
+import com.baidu.mapp.bcd.service.DrawRecordDetailService;
+import com.baidu.mapp.bcd.service.DrawRecordFlowService;
+import com.baidu.mapp.bcd.service.DrawRecordService;
+import com.baidu.mapp.bcd.service.PlanAllocationRelService;
 import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -20,9 +64,19 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -406,12 +460,29 @@ public class DonateController {
         Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
         Assert.isTrue(donatory != null, "受捐人不存在");
 
+        List<DrawRecord> drawRecords = drawRecordService.selectByExample(DrawRecordExample.newBuilder().build()
+                .createCriteria()
+                .andDrawRecordFlowIdEqualTo(drawRecordFlowId)
+                .toExample());
+        List<DCDrawDetailResp> dcDrawDetailResps = Lists.newArrayList();
+        if (!CollectionUtils.isEmpty(drawRecords)) {
+            for (DrawRecord dr : drawRecords) {
+                dcDrawDetailResps.add(DCDrawDetailResp.builder()
+                        .type(dr.getType())
+                        .unit(dr.getUnit())
+                        .quantity(dr.getQuantity())
+                        .name(dr.getName())
+                        .build());
+            }
+        }
+
         DonatoryChainResp donatoryChainResp = DonatoryChainResp.builder()
                 .drawRecordFlowId(drawRecordFlowId)
                 .donatoryId(donatoryId)
                 .donatoryName(donatory.getDonatoryName())
                 .drawTime(drawRecordFlow.getDrawTime())
                 .certCode(drawRecordFlow.getCertCode())
+                .drawDetailResps(dcDrawDetailResps)
                 .build();
 
         Activity activity = activityService.selectByPrimaryKey(drawRecordFlow.getActivityId());
@@ -439,6 +510,31 @@ public class DonateController {
         List<Allocation> allocations = allocationService.selectByPrimaryKeys(allocationIds);
         List<Long> donateDetailIds = allocations.stream().map(Allocation::getDonateDetailId).collect(Collectors.toList());
 
+        List<DonateDetail> donateDetails = donateDetailService.selectByExample(DonateDetailExample.newBuilder().build()
+                .createCriteria()
+                .andIdIn(donateDetailIds)
+                .toExample());
+        List<DonateFlatDetail> donateFlatDetails = Lists.newArrayList();
+        activityBriefResp.setDonateFlatDetails(donateFlatDetails);
+        if (!CollectionUtils.isEmpty(donateDetails)) {
+            for (DonateDetail donateDetail : donateDetails) {
+                DonateFlow donateFlow = donateFlowService.selectByPrimaryKey(donateDetail.getFlowId());
+                Donor donor = donorService.selectByPrimaryKey(donateFlow.getDonorId());
+                String donorName = donateFlow.getIsAnonymous() == 1 ? donateFlow.getAnonymity() : donor.getDonorName();
+                DonateFlatDetail donateFlatDetail = DonateFlatDetail.builder()
+                        .donateFlowId(donateDetail.getFlowId())
+                        .donateDetailId(donateDetail.getId())
+                        .donorName(donorName)
+                        .donateTime(donateFlow.getDonateTime())
+                        .certCode(donateFlow.getCertCode())
+                        .type(donateDetail.getType())
+                        .unit(donateDetail.getUnit())
+                        .quantity(donateDetail.getQuantity())
+                        .name(donateDetail.getName())
+                        .build();
+                donateFlatDetails.add(donateFlatDetail);
+            }
+        }
         return R.ok(donatoryChainResp);
     }
 

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 整个从受捐到捐赠的追溯详情
@@ -43,6 +44,12 @@ public class DonatoryChainResp {
      */
     @Schema(description = "证书ID")
     private String certCode;
+
+    /**
+     * 领取详情
+     */
+    @Schema(description = "领取详情")
+    private List<DCDrawDetailResp> drawDetailResps;
 
     /**
      * 追溯活动详情
