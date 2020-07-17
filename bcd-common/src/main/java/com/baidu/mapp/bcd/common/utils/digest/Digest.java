@@ -66,11 +66,17 @@ public class Digest {
     }
 
     public String encryptDes(String source) throws Exception {
+        if (source == null) {
+            return null;
+        }
         byte[] encrypt = desEncrypter.encrypt(source.getBytes());
         return new String(encrypt);
     }
 
     public String decryptDes(String source) throws Exception {
+        if (source == null) {
+            return null;
+        }
         byte[] encrypt = desEncrypter.decrypt(source.getBytes());
         return new String(encrypt);
     }

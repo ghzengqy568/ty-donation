@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.baidu.mapp.bcd.common.gson.GsonUtils;
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.domain.*;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
 import com.baidu.mapp.bcd.dto.DrawReq;
+import com.google.gson.JsonObject;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -135,9 +137,12 @@ public class DrawController {
                 .build();
         drawRecordFlowService.insertSelective(drawRecordFlow);
 
-        String flowCertCode = certService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME, drawRecordFlow.getId
-                        (),
-                sign);
+        JsonObject chainContent = new JsonObject();
+        chainContent.addProperty("activityId", activityId);
+        chainContent.addProperty("donatoryId", donatoryId);
+
+        String flowCertCode = certService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME,
+                drawRecordFlow.getId(), sign, GsonUtils.toJsonString(chainContent));
         drawRecordFlow.setCertCode(flowCertCode);
         drawRecordFlow.setLastModifyTime(new Date());
         drawRecordFlowService.updateByPrimaryKeySelective(drawRecordFlow);
@@ -234,8 +239,14 @@ public class DrawController {
                     .lastModifyTime(new Date())
                     .build();
             drawRecordService.insertSelective(drawRecord);
+            chainContent = new JsonObject();
+            chainContent.addProperty("drawRecordFlowId", drawFlowId);
+            chainContent.addProperty("activityId", activityId);
+            chainContent.addProperty("donatoryId", donatoryId);
+            chainContent.addProperty("quantity", personalQuantity);
 
-            String drCert = certService.writeChain(donatoryId, MetaDrawRecord.TABLE_NAME, drawRecord.getId(), sign);
+            String drCert = certService.writeChain(donatoryId, MetaDrawRecord.TABLE_NAME, drawRecord.getId(), sign,
+                    GsonUtils.toJsonString(chainContent));
             drawRecord.setCertCode(drCert);
             drawRecord.setLastModifyTime(new Date());
             drawRecordService.updateByPrimaryKeySelective(drawRecord);

@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baidu.mapp.bcd.common.gson.GsonUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.common.utils.digest.Digest;
+import com.baidu.mapp.bcd.domain.Donatory;
+import com.baidu.mapp.bcd.domain.DonatoryExample;
 import com.baidu.mapp.bcd.domain.Donor;
 import com.baidu.mapp.bcd.domain.DonorExample;
 import com.baidu.mapp.bcd.domain.base.R;
@@ -91,6 +93,24 @@ public class DonorController {
         try{
             idcard = digest.encryptDes(idcard);
             mobile = digest.encryptDes(mobile);
+            if (StringUtils.isNotBlank(idcard)) {
+                Donor donor =
+                        donorService.selectOneByExample(DonorExample.newBuilder().build().createCriteria()
+                                .andIdcardEqualTo(idcard)
+                                .toExample());
+                if (donor != null) {
+                    return R.ok("身份证号已存在");
+                }
+            }
+            if (StringUtils.isNotBlank(mobile)) {
+                Donor donor =
+                        donorService.selectOneByExample(DonorExample.newBuilder().build().createCriteria()
+                                .andMobileEqualTo(mobile)
+                                .toExample());
+                if (donor != null) {
+                    return R.ok("手机号已存在");
+                }
+            }
         }catch(Exception ex){
             LOGGER.error("digest error", ex);
         }

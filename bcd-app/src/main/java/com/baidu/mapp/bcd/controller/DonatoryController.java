@@ -119,12 +119,44 @@ public class DonatoryController {
         String sign = SignUtils.sign(userName,name);
         String pwd = DigestUtils.md5DigestAsHex(password.getBytes());
 
+        String idcard = donatoryReq.getIdcard();
+        String mobile = donatoryReq.getMobile();
+        try{
+            idcard = digest.encryptDes(idcard);
+            mobile = digest.encryptDes(mobile);
+            if (StringUtils.isNotBlank(idcard)) {
+                Donatory donatory =
+                        donatoryService.selectOneByExample(DonatoryExample.newBuilder().build().createCriteria()
+                                .andIdcardEqualTo(idcard)
+                                .toExample());
+                if (donatory != null) {
+                    return R.ok("身份证号已存在");
+                }
+            }
+            if (StringUtils.isNotBlank(mobile)) {
+                Donatory donatory =
+                        donatoryService.selectOneByExample(DonatoryExample.newBuilder().build().createCriteria()
+                                .andMobileEqualTo(mobile)
+                                .toExample());
+                if (donatory != null) {
+                    return R.ok("手机号已存在");
+                }
+            }
+        }catch(Exception ex){
+            LOGGER.error("digest error", ex);
+        }
         Donatory donatory = Donatory.newBuilder()
                 .donatoryUserName(userName)
                 .donatoryName(name)
                 .createTime(new Date())
                 .lastModifyTime(new Date())
                 .donatoryLevel(donatoryLevel)
+                .idcard(idcard)
+                .mobile(mobile)
+                .donatoryCard(donatoryReq.getDonatoryCard())
+                .province(donatoryReq.getProvince())
+                .city(donatoryReq.getCity())
+                .address(donatoryReq.getAddress())
                 .certCode("")
                 .donatoryPwd(pwd)
                 .sign(password)

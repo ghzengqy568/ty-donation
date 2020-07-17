@@ -3,6 +3,7 @@
  */
 package com.baidu.mapp.bcd.controller;
 
+import com.baidu.mapp.bcd.common.gson.GsonUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.dao.base.BaseSQL;
 import com.baidu.mapp.bcd.dao.base.SQLParam;
@@ -11,6 +12,8 @@ import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaAllocation;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateDetail;
 import com.baidu.mapp.bcd.service.*;
+import com.google.gson.JsonObject;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,8 +171,12 @@ public class AllocationController {
                 allocationService.insertSelective(allocation);
                 Long allocationId = allocation.getId();
                 // 存证
-
-                String certCode = certService.writeChain(9900000L, MetaAllocation.TABLE_NAME, allocationId, sign);
+                JsonObject chainContent = new JsonObject();
+                chainContent.addProperty("balance", b1);
+                chainContent.addProperty("used", used);
+                chainContent.addProperty("detailId", detailId);
+                String certCode = certService.writeChain(9900000L, MetaAllocation.TABLE_NAME, allocationId, sign,
+                        GsonUtils.toJsonString(chainContent));
                 allocation.setCertCode(certCode);
                 allocation.setLastModifyTime(new Date());
                 allocationService.updateByPrimaryKeySelective(allocation);
