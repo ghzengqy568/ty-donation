@@ -96,6 +96,25 @@ public class DonatoryController {
         return R.ok(customizedPairs);
     }
 
+    @GetMapping("query")
+    public R<List<CustomizedPair>> getAllDonarNamesByLevel(Byte level) {
+        List<CustomizedPair> customizedPairs = new ArrayList<>();
+        List<Donatory> donors = donatoryService.selectByExample(DonatoryExample.newBuilder().build()
+                .createCriteria()
+                .andDonatoryLevelEqualTo(level)
+                .toExample());
+        if (CollectionUtils.isEmpty(donors)) {
+            return R.ok(customizedPairs);
+        }
+        donors.forEach((Donatory d) -> {
+            customizedPairs.add(CustomizedPair.builder()
+                    .label(d.getDonatoryName())
+                    .value(d.getId())
+                    .build());
+        });
+        return R.ok(customizedPairs);
+    }
+
     @PostMapping("add")
     public R<String> register(@RequestBody DonatoryReq donatoryReq) {
 
