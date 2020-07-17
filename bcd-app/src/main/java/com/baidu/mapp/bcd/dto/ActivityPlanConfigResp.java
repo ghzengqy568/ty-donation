@@ -11,6 +11,8 @@ import lombok.Data;
 @Schema(description = "活动计划配置")
 @Builder
 public class ActivityPlanConfigResp {
+    @Schema(description = "配置ID")
+    private Long configId;
 
     @Schema(description = "受赠人等级，1-绝对贫困人口(年人均纯收入低于627元), 2-相对贫困人口(年人均纯收入628—865元), 3-低收入人口(年人均纯收入866—1205元), 4-一般收入")
     private Byte donatoryLevel;

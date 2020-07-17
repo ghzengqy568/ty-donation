@@ -240,6 +240,7 @@ public class ActivityController {
                                     AssignExample.newBuilder().build().createCriteria().andConfigIdEqualTo(item.getId())
                                             .toExample());
                             ActivityPlanConfigResp conf = ActivityPlanConfigResp.builder()
+                                    .configId(item.getId())
                                     .amount(item.getAmount())
                                     .donatoryLevel(item.getDonatoryLevel())
                                     .quantity(item.getQuantity())
