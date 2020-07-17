@@ -11,12 +11,16 @@ import java.util.stream.Collectors;
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.domain.*;
+import com.baidu.mapp.bcd.domain.dto.LoginUser;
+import com.baidu.mapp.bcd.domain.dto.UserThreadLocal;
+import com.baidu.mapp.bcd.domain.dto.UserType;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
 import com.baidu.mapp.bcd.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,9 +69,20 @@ public class DrawController {
     PlanAllocationRelService planAllocationRelService;
 
     @PostMapping("draw")
-    public R<String> draw(@RequestBody DrawReq drawReq) {
+    public R<String> draw(@RequestHeader("X-TOKEN") String xtoken, @RequestBody DrawReq drawReq) {
+
+        LoginUser loginUser = UserThreadLocal.getLoginUser();
+        if (loginUser == null) {
+            return R.error(100102, "你尚未登录");
+        }
+        UserType userType = loginUser.getUserType();
+        if (userType == null || !userType.isDonatory()) {
+            return R.error(100102, "你无权访问");
+        }
+
+        // 参与的活动
+        Long donatoryId = loginUser.getUserId();
         Long activityId = drawReq.getActivityId();
-        Long donatoryId = drawReq.getDonatoryId();
 
         if (activityId == null || activityId <= 0) {
             return R.error(100101, "活动ID不能为空");
