@@ -11,6 +11,7 @@ import com.baidu.mapp.bcd.domain.Assign;
 import com.baidu.mapp.bcd.domain.AssignExample;
 import com.baidu.mapp.bcd.domain.Donatory;
 import com.baidu.mapp.bcd.domain.DonatoryExample;
+import com.baidu.mapp.bcd.domain.Donor;
 import com.baidu.mapp.bcd.domain.DrawRecordFlow;
 import com.baidu.mapp.bcd.domain.DrawRecordFlowExample;
 import com.baidu.mapp.bcd.domain.base.Pagination;
@@ -22,6 +23,7 @@ import com.baidu.mapp.bcd.domain.meta.MetaAssign;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
 import com.baidu.mapp.bcd.domain.meta.MetaDonatory;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
+import com.baidu.mapp.bcd.dto.CustomizedPair;
 import com.baidu.mapp.bcd.dto.DonatoryActivityRes;
 import com.baidu.mapp.bcd.dto.DonatoryReq;
 import com.baidu.mapp.bcd.dto.LoginParam;
@@ -84,6 +86,22 @@ public class DonatoryController {
 
     @Autowired
     private DrawRecordFlowService drawRecordFlowService;
+
+    @GetMapping("all")
+    public R<List<CustomizedPair>> getAllDonarNames() {
+        List<CustomizedPair> customizedPairs = new ArrayList<>();
+        List<Donatory> donors = donatoryService.selectAll();
+        if (CollectionUtils.isEmpty(donors)) {
+            return R.ok(customizedPairs);
+        }
+        donors.forEach((Donatory d) -> {
+            customizedPairs.add(CustomizedPair.builder()
+                    .label(d.getDonatoryName())
+                    .value(d.getId())
+                    .build());
+        });
+        return R.ok(customizedPairs);
+    }
 
     @PostMapping("add")
     public R<String> register(@RequestBody DonatoryReq donatoryReq) {
