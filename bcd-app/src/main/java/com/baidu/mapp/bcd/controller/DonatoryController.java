@@ -244,7 +244,7 @@ public class DonatoryController {
         );
         if (drawStatus != null && !donatoryActivityRes.isEmpty()) {
             donatoryActivityRes =
-                    donatoryActivityRes.stream().filter(item -> item.getStatus().equals(drawStatus))
+                    donatoryActivityRes.stream().filter(item -> item.getDrawStatus().equals(drawStatus))
                             .collect(Collectors.toList());
         }
         return R.ok(donatoryActivityRes);
