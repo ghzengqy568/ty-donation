@@ -12,7 +12,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bcd-open</artifactId>
+    <artifactId>bcd-supervision</artifactId>
+    <description>监管系统</description>
 
     <dependencies>
         <dependency>

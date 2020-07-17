@@ -12,7 +12,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bcd-donor</artifactId>
+    <artifactId>bcd-recipients</artifactId>
+    <description>领取系统</description>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,7 +62,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.baidu.mapp.bcd.DonorApplication</mainClass>
+                    <mainClass>com.baidu.mapp.bcd.DonatoryApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

@@ -14,10 +14,10 @@
     <modules>
         <module>bcd-core</module>
         <module>bcd-common</module>
-        <module>bcd-open</module>
-        <module>bcd-donor</module>
-        <module>bcd-donatory</module>
-        <module>bcd-manage</module>
+        <module>bcd-donate</module>
+        <module>bcd-allocation</module>
+        <module>bcd-supervision</module>
+        <module>bcd-recipients</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
