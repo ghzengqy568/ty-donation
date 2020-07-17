@@ -14,7 +14,10 @@
     <modules>
         <module>bcd-core</module>
         <module>bcd-common</module>
-        <module>bcd-app</module>
+        <module>bcd-open</module>
+        <module>bcd-donor</module>
+        <module>bcd-donatory</module>
+        <module>bcd-manage</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -273,6 +276,28 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring.boot.version}</version>
+                    <configuration>
+                        <mainClass>com.johnnian.App</mainClass>
+                        <layout>ZIP</layout>
+                        <includes>
+                            <include>
+                                <groupId>com.baidu.mapp.bcd</groupId>
+                                <artifactId>bcd-core</artifactId>
+                            </include>
+                            <include>
+                                <groupId>com.baidu.mapp.bcd</groupId>
+                                <artifactId>bcd-common</artifactId>
+                            </include>
+                        </includes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+
                 </plugin>
             </plugins>
         </pluginManagement>

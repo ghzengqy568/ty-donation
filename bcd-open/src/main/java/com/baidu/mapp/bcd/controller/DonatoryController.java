@@ -3,38 +3,15 @@
  */
 package com.baidu.mapp.bcd.controller;
 
-import com.baidu.mapp.bcd.common.utils.SignUtils;
-import com.baidu.mapp.bcd.common.utils.digest.Digest;
-import com.baidu.mapp.bcd.domain.ActivityExample;
-import com.baidu.mapp.bcd.domain.Admin;
-import com.baidu.mapp.bcd.domain.Assign;
-import com.baidu.mapp.bcd.domain.AssignExample;
-import com.baidu.mapp.bcd.domain.Donatory;
-import com.baidu.mapp.bcd.domain.DonatoryExample;
-import com.baidu.mapp.bcd.domain.Donor;
-import com.baidu.mapp.bcd.domain.DrawRecordFlow;
-import com.baidu.mapp.bcd.domain.DrawRecordFlowExample;
-import com.baidu.mapp.bcd.domain.base.Pagination;
-import com.baidu.mapp.bcd.domain.base.R;
-import com.baidu.mapp.bcd.domain.dto.LoginUser;
-import com.baidu.mapp.bcd.domain.dto.UserThreadLocal;
-import com.baidu.mapp.bcd.domain.dto.UserType;
-import com.baidu.mapp.bcd.domain.meta.MetaAssign;
-import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
-import com.baidu.mapp.bcd.domain.meta.MetaDonatory;
-import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
-import com.baidu.mapp.bcd.dto.CustomizedPair;
-import com.baidu.mapp.bcd.dto.DonatoryActivityRes;
-import com.baidu.mapp.bcd.dto.DonatoryReq;
-import com.baidu.mapp.bcd.dto.LoginParam;
-import com.baidu.mapp.bcd.dto.LoginResponse;
-import com.baidu.mapp.bcd.service.ActivityService;
-import com.baidu.mapp.bcd.service.AssignService;
-import com.baidu.mapp.bcd.service.CertService;
-import com.baidu.mapp.bcd.service.DonatoryService;
-import com.baidu.mapp.bcd.service.DrawRecordFlowService;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -50,17 +27,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import com.baidu.mapp.bcd.common.utils.SignUtils;
+import com.baidu.mapp.bcd.common.utils.digest.Digest;
+import com.baidu.mapp.bcd.domain.Assign;
+import com.baidu.mapp.bcd.domain.AssignExample;
+import com.baidu.mapp.bcd.domain.Donatory;
+import com.baidu.mapp.bcd.domain.DonatoryExample;
+import com.baidu.mapp.bcd.domain.DrawRecordFlow;
+import com.baidu.mapp.bcd.domain.DrawRecordFlowExample;
+import com.baidu.mapp.bcd.domain.base.R;
+import com.baidu.mapp.bcd.domain.dto.LoginUser;
+import com.baidu.mapp.bcd.domain.dto.UserThreadLocal;
+import com.baidu.mapp.bcd.domain.dto.UserType;
+import com.baidu.mapp.bcd.domain.meta.MetaAssign;
+import com.baidu.mapp.bcd.domain.meta.MetaDonatory;
+import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
+import com.baidu.mapp.bcd.dto.CustomizedPair;
+import com.baidu.mapp.bcd.dto.DonatoryActivityRes;
+import com.baidu.mapp.bcd.dto.DonatoryReq;
+import com.baidu.mapp.bcd.dto.LoginParam;
+import com.baidu.mapp.bcd.dto.LoginResponse;
+import com.baidu.mapp.bcd.service.ActivityService;
+import com.baidu.mapp.bcd.service.AssignService;
+import com.baidu.mapp.bcd.service.CertService;
+import com.baidu.mapp.bcd.service.DonatoryService;
+import com.baidu.mapp.bcd.service.DrawRecordFlowService;
 
-import javax.servlet.http.HttpServletRequest;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "受捐人接口", name = "DonatoryController")
 @RestController
@@ -134,12 +127,12 @@ public class DonatoryController {
         if (donatoryInDb != null) {
             return R.error(100102, "用户名已被占用");
         }
-        String sign = SignUtils.sign(userName,name);
+        String sign = SignUtils.sign(userName, name);
         String pwd = DigestUtils.md5DigestAsHex(password.getBytes());
 
         String idcard = donatoryReq.getIdcard();
         String mobile = donatoryReq.getMobile();
-        try{
+        try {
             idcard = digest.encryptDes(idcard);
             mobile = digest.encryptDes(mobile);
             if (StringUtils.isNotBlank(idcard)) {
@@ -160,7 +153,7 @@ public class DonatoryController {
                     return R.ok("手机号已存在");
                 }
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             LOGGER.error("digest error", ex);
         }
         Donatory donatory = Donatory.newBuilder()
@@ -205,11 +198,12 @@ public class DonatoryController {
         Donatory donatory = null;
         if (!StringUtils.isBlank(username)) {
             donatory = donatoryService.selectOneByExample(
-                    DonatoryExample.newBuilder().build().createCriteria().andDonatoryUserNameEqualTo(username).toExample());
+                    DonatoryExample.newBuilder().build().createCriteria().andDonatoryUserNameEqualTo(username)
+                            .toExample());
         } else if (!StringUtils.isBlank(mobile)) {
-            try{
+            try {
                 mobile = digest.encryptDes(mobile);
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 LOGGER.error("digest error", ex);
             }
             donatory = donatoryService.selectOneByExample(
@@ -238,7 +232,8 @@ public class DonatoryController {
 
     @GetMapping("myActivities")
     public R<List<DonatoryActivityRes>> myActivities(@RequestHeader("X-TOKEN") String xtoken,
-                                             @RequestParam(value = "drawStatus", required = false) Byte drawStatus) {
+                                                     @RequestParam(value = "drawStatus", required = false)
+                                                             Byte drawStatus) {
         LoginUser loginUser = UserThreadLocal.getLoginUser();
         if (loginUser == null) {
             return R.error(100102, "你尚未登录");
@@ -274,18 +269,20 @@ public class DonatoryController {
                                 .toExample(),
                         DrawRecordFlow :: getActivityId,
                         MetaDrawRecordFlow.COLUMN_NAME_ID,
-                        MetaDrawRecordFlow.COLUMN_NAME_ACTIVITYID
+                        MetaDrawRecordFlow.COLUMN_NAME_ACTIVITYID,
+                        MetaDrawRecordFlow.COLUMN_NAME_CERTCODE
                 );
 
-        Map<Long, DrawRecordFlow>  factivityDrawMap = activityDrawMap == null ? new HashMap<>() : activityDrawMap;
+        Map<Long, DrawRecordFlow> factivityDrawMap = activityDrawMap == null ? new HashMap<>() : activityDrawMap;
 
         List<DonatoryActivityRes> donatoryActivityRes = activityService.selectByPrimaryKeys(activityIdList, item ->
                 DonatoryActivityRes.builder()
                         .activityId(item.getId())
-                        .certCode(item.getCertCode())
+                        .certCode(factivityDrawMap.get(item.getId()) != null ?
+                                factivityDrawMap.get(item.getId()).getCertCode() : "")
                         .description(item.getDescription())
                         .startTime(item.getStartTime())
-                        .drawStatus(factivityDrawMap.containsKey(item.getId()) ? (byte) 1 : (byte) 0 )
+                        .drawStatus(factivityDrawMap.containsKey(item.getId()) ? (byte) 1 : (byte) 0)
                         .endTime(item.getEndTime())
                         .status(item.getStatus())
                         .donatoryId(donatoryId)
