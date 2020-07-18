@@ -4,11 +4,13 @@
 package com.baidu.mapp.bcd.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.baidu.mapp.bcd.common.gson.GsonUtils;
+import com.baidu.mapp.bcd.common.utils.ChainConstants;
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.domain.*;
@@ -17,6 +19,7 @@ import com.baidu.mapp.bcd.domain.dto.UserThreadLocal;
 import com.baidu.mapp.bcd.domain.dto.UserType;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
 import com.baidu.mapp.bcd.service.*;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -124,14 +127,14 @@ public class DrawController {
             return R.error(100102, "受捐人已领取过了");
         }
 
-        Date drawTime = new Date();
-        String sign = SignUtils.sign(donatoryId, activityId, DateTimeUtils.toDateTimeString(drawTime,
-                "yyyyMMddHHmmss"));
+//        Date drawTime = new Date();
+//        String sign = SignUtils.sign(donatoryId, activityId, DateTimeUtils.toDateTimeString(drawTime,
+//                "yyyyMMddHHmmss"));
         DrawRecordFlow drawRecordFlow = DrawRecordFlow.newBuilder()
                 .drawTime(new Date())
                 .activityId(activityId)
                 .donatoryId(donatoryId)
-                .sign(sign)
+//                .sign(sign)
                 .createTime(new Date())
                 .lastModifyTime(new Date())
                 .build();
@@ -141,11 +144,11 @@ public class DrawController {
         chainContent.addProperty("activityId", activityId);
         chainContent.addProperty("donatoryId", donatoryId);
 
-        String flowCertCode = certService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME,
-                drawRecordFlow.getId(), sign, GsonUtils.toJsonString(chainContent));
-        drawRecordFlow.setCertCode(flowCertCode);
-        drawRecordFlow.setLastModifyTime(new Date());
-        drawRecordFlowService.updateByPrimaryKeySelective(drawRecordFlow);
+//        String flowCertCode = certService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME,
+//                drawRecordFlow.getId(), sign, GsonUtils.toJsonString(chainContent));
+//        drawRecordFlow.setCertCode(flowCertCode);
+//        drawRecordFlow.setLastModifyTime(new Date());
+//        drawRecordFlowService.updateByPrimaryKeySelective(drawRecordFlow);
 
         Long drawFlowId = drawRecordFlow.getId();
 
@@ -160,6 +163,7 @@ public class DrawController {
                         ActivityPlan::getId
                 );
 
+        List<Map<String, Object>> drawDetailMapList = Lists.newArrayList();
         for (Assign assign : assigns) {
             Long configId = assign.getConfigId();
             ActivityPlanConfig activityPlanConfig = configMap.get(configId);
@@ -239,18 +243,44 @@ public class DrawController {
                     .lastModifyTime(new Date())
                     .build();
             drawRecordService.insertSelective(drawRecord);
-            chainContent = new JsonObject();
-            chainContent.addProperty("drawRecordFlowId", drawFlowId);
-            chainContent.addProperty("activityId", activityId);
-            chainContent.addProperty("donatoryId", donatoryId);
-            chainContent.addProperty("quantity", personalQuantity);
 
-            String drCert = certService.writeChain(donatoryId, MetaDrawRecord.TABLE_NAME, drawRecord.getId(), sign,
-                    GsonUtils.toJsonString(chainContent));
-            drawRecord.setCertCode(drCert);
-            drawRecord.setLastModifyTime(new Date());
-            drawRecordService.updateByPrimaryKeySelective(drawRecord);
+            // WRITE_CHAIN 领取流水+详情一起作为关键信息一次性上链
+            Map<String, Object> drawDetailMap = new HashMap<>();
+            drawDetailMap.put(ChainConstants.DRAW_DETAIL_NAME, name);
+            drawDetailMap.put(ChainConstants.DRAW_DETAIL_QUANTITY, personalQuantity);
+            drawDetailMap.put(ChainConstants.DRAW_DETAIL_UNIT, unit);
+            drawDetailMapList.add(drawDetailMap);
+
+//            chainContent = new JsonObject();
+//            chainContent.addProperty("drawRecordFlowId", drawFlowId);
+//            chainContent.addProperty("activityId", activityId);
+//            chainContent.addProperty("donatoryId", donatoryId);
+//            chainContent.addProperty("quantity", personalQuantity);
+//
+//            String drCert = certService.writeChain(donatoryId, MetaDrawRecord.TABLE_NAME, drawRecord.getId(), sign,
+//                    GsonUtils.toJsonString(chainContent));
+//            drawRecord.setCertCode(drCert);
+//            drawRecord.setLastModifyTime(new Date());
+//            drawRecordService.updateByPrimaryKeySelective(drawRecord);
         }
+
+        // WRITE_CHAIN 领取流水+详情一起作为关键信息一次性上链
+        Map<String, Object> drawFlowMap = new HashMap<>();
+        drawFlowMap.put(ChainConstants.DRAw_FLOW_DONATORY_NAME, donatory.getDonatoryName());
+        drawFlowMap.put(ChainConstants.DRAW_FLOW_DONATORY_ID_CARD, donatory.getIdcard());
+        drawFlowMap.put(ChainConstants.DRAW_FLOW_DRAW_TIME, drawRecordFlow.getDrawTime());
+        drawFlowMap.put(ChainConstants.DRAW_DETAIL, drawDetailMapList);
+        String writeChainStr = GsonUtils.toJsonString(drawFlowMap);
+
+        String sign = SignUtils.sign(donatory.getDonatoryName(), donatory.getIdcard(),
+                DateTimeUtils.toDateTimeString(drawRecordFlow.getDrawTime(), "yyyyMMddHHmmss"),
+                drawDetailMapList);
+        String flowCertCode = certService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME,
+                drawRecordFlow.getId(), sign, writeChainStr);
+        drawRecordFlow.setSign(sign);
+        drawRecordFlow.setCertCode(flowCertCode);
+        drawRecordFlow.setLastModifyTime(new Date());
+        drawRecordFlowService.updateByPrimaryKeySelective(drawRecordFlow);
 
         return R.ok(flowCertCode);
     }
