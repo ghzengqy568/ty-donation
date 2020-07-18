@@ -532,13 +532,12 @@ public class DonateController {
      */
     @GetMapping("queryByDonatoryCertCode")
     public R<DonatoryChainResp> queryByDonatoryCertCode(@RequestParam String certCode) {
-        List<DrawRecordFlow> drawRecordFlows =
-                drawRecordFlowService.selectByExample(DrawRecordFlowExample.newBuilder().build()
+        DrawRecordFlow drawRecordFlow =
+                drawRecordFlowService.selectOneByExample(DrawRecordFlowExample.newBuilder().build()
                         .createCriteria()
                         .andCertCodeEqualTo(certCode)
                         .toExample());
-        Assert.isTrue(drawRecordFlows != null && drawRecordFlows.size() == 1, "领取流水不存在");
-        DrawRecordFlow drawRecordFlow = drawRecordFlows.get(0);
+        Assert.isTrue(drawRecordFlow != null, "领取流水不存在");
 
         Long drawRecordFlowId = drawRecordFlow.getId();
         Long donatoryId = drawRecordFlow.getDonatoryId();
@@ -595,14 +594,17 @@ public class DonateController {
         List<Allocation> allocations = allocationService.selectByPrimaryKeys(allocationIds);
         List<Long> donateDetailIds = allocations.stream().map(Allocation::getDonateDetailId).collect(Collectors.toList());
 
-        List<DonateDetail> donateDetails = donateDetailService.selectByExample(DonateDetailExample.newBuilder().build()
-                .createCriteria()
-                .andIdIn(donateDetailIds)
-                .toExample());
+        Map<Long, List<DonateDetail>> donateDetailsMap =
+                donateDetailService.selectMapListByExample(DonateDetailExample.newBuilder().build()
+                        .createCriteria()
+                        .andIdIn(donateDetailIds)
+                        .toExample(), DonateDetail::getId, item -> item);
         List<DonateFlatDetail> donateFlatDetails = Lists.newArrayList();
         activityBriefResp.setDonateFlatDetails(donateFlatDetails);
-        if (!CollectionUtils.isEmpty(donateDetails)) {
-            for (DonateDetail donateDetail : donateDetails) {
+        if (!CollectionUtils.isEmpty(allocations)) {
+            for (Allocation allocation : allocations) {
+                Long donateDetailId = allocation.getDonateDetailId();
+                DonateDetail donateDetail = donateDetailsMap.get(donateDetailId).get(0);
                 DonateFlow donateFlow = donateFlowService.selectByPrimaryKey(donateDetail.getFlowId());
                 Donor donor = donorService.selectByPrimaryKey(donateFlow.getDonorId());
                 String donorName = donateFlow.getIsAnonymous() == 1 ? donateFlow.getAnonymity() : donor.getDonorName();
@@ -614,7 +616,7 @@ public class DonateController {
                         .certCode(donateFlow.getCertCode())
                         .type(donateDetail.getType())
                         .unit(donateDetail.getUnit())
-                        .quantity(donateDetail.getQuantity())
+                        .quantity(allocation.getUsed())
                         .name(donateDetail.getName())
                         .build();
                 donateFlatDetails.add(donateFlatDetail);
