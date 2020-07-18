@@ -3,37 +3,62 @@
  */
 package com.baidu.mapp.bcd.controller;
 
+import com.baidu.mapp.bcd.common.gson.GsonUtils;
+import com.baidu.mapp.bcd.common.utils.ChainConstants;
+import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
+import com.baidu.mapp.bcd.common.utils.SignUtils;
+import com.baidu.mapp.bcd.domain.Activity;
+import com.baidu.mapp.bcd.domain.ActivityPlan;
+import com.baidu.mapp.bcd.domain.ActivityPlanConfig;
+import com.baidu.mapp.bcd.domain.ActivityPlanExample;
+import com.baidu.mapp.bcd.domain.Assign;
+import com.baidu.mapp.bcd.domain.AssignExample;
+import com.baidu.mapp.bcd.domain.Donatory;
+import com.baidu.mapp.bcd.domain.DrawRecord;
+import com.baidu.mapp.bcd.domain.DrawRecordDetail;
+import com.baidu.mapp.bcd.domain.DrawRecordExample;
+import com.baidu.mapp.bcd.domain.DrawRecordFlow;
+import com.baidu.mapp.bcd.domain.PlanAllocationRel;
+import com.baidu.mapp.bcd.domain.PlanAllocationRelExample;
+import com.baidu.mapp.bcd.domain.base.R;
+import com.baidu.mapp.bcd.domain.dto.LoginUser;
+import com.baidu.mapp.bcd.domain.dto.UserThreadLocal;
+import com.baidu.mapp.bcd.domain.dto.UserType;
+import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
+import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
+import com.baidu.mapp.bcd.dto.DrawReq;
+import com.baidu.mapp.bcd.dto.Verification;
+import com.baidu.mapp.bcd.dto.VerificationDetail;
+import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
+import com.baidu.mapp.bcd.service.ActivityPlanService;
+import com.baidu.mapp.bcd.service.ActivityService;
+import com.baidu.mapp.bcd.service.AllocationService;
+import com.baidu.mapp.bcd.service.AssignService;
+import com.baidu.mapp.bcd.service.CertService;
+import com.baidu.mapp.bcd.service.DonatoryService;
+import com.baidu.mapp.bcd.service.DrawRecordDetailService;
+import com.baidu.mapp.bcd.service.DrawRecordFlowService;
+import com.baidu.mapp.bcd.service.DrawRecordService;
+import com.baidu.mapp.bcd.service.PlanAllocationRelService;
+import com.google.common.collect.Lists;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.baidu.mapp.bcd.common.gson.GsonUtils;
-import com.baidu.mapp.bcd.common.utils.ChainConstants;
-import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
-import com.baidu.mapp.bcd.common.utils.SignUtils;
-import com.baidu.mapp.bcd.domain.*;
-import com.baidu.mapp.bcd.domain.dto.LoginUser;
-import com.baidu.mapp.bcd.domain.dto.UserThreadLocal;
-import com.baidu.mapp.bcd.domain.dto.UserType;
-import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
-import com.baidu.mapp.bcd.service.*;
-import com.google.common.collect.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.baidu.mapp.bcd.domain.base.R;
-import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
-import com.baidu.mapp.bcd.dto.DrawReq;
-import com.google.gson.JsonObject;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "领取接口")
 @RestController
@@ -72,6 +97,37 @@ public class DrawController {
 
     @Autowired
     PlanAllocationRelService planAllocationRelService;
+
+    @GetMapping("verify")
+    public R<Verification> verify(@RequestParam String certCode) {
+
+        // todo READ_CHAIN 校验怎么做
+
+        String chainContent = certService.readChain(certCode);
+        JsonObject jsonObject = GsonUtils.toJsonObject(chainContent);
+
+        String donatoryName = jsonObject.getAsJsonObject(ChainConstants.DRAw_FLOW_DONATORY_NAME).getAsString();
+        String drawTime = jsonObject.getAsJsonObject(ChainConstants.DRAW_FLOW_DRAW_TIME).getAsString();
+        String idCard = jsonObject.getAsJsonObject(ChainConstants.DRAW_FLOW_DONATORY_ID_CARD).getAsString();
+
+        List<VerificationDetail> details = Lists.newArrayList();
+        JsonArray detailJsonArray = jsonObject.getAsJsonArray(ChainConstants.DRAW_DETAIL);
+        detailJsonArray.forEach(element -> {
+            details.add(VerificationDetail.builder()
+                .name(element.getAsJsonObject().getAsJsonObject(ChainConstants.DRAW_DETAIL_NAME).getAsString())
+                .quantity(element.getAsJsonObject().getAsJsonObject(ChainConstants.DRAW_DETAIL_QUANTITY).getAsLong())
+                .unit(element.getAsJsonObject().getAsJsonObject(ChainConstants.DRAW_DETAIL_UNIT).getAsString())
+                .build());
+        });
+
+        Verification verification = Verification.builder()
+                .donorOrDonatoryName(donatoryName)
+                .idCard(idCard)
+                .time(drawTime)
+                .drawVerificationDetailList(details)
+                .build();
+        return R.ok(verification);
+    }
 
     @PostMapping("draw")
     public R<String> draw(@RequestHeader("X-TOKEN") String xtoken, @RequestBody DrawReq drawReq) {
@@ -266,14 +322,15 @@ public class DrawController {
 
         // WRITE_CHAIN 领取流水+详情一起作为关键信息一次性上链
         Map<String, Object> drawFlowMap = new HashMap<>();
+        String drawTimeInString = DateTimeUtils.toDateTimeString(drawRecordFlow.getDrawTime(),
+                "yyyy-MM-dd HH:mm:ss");
         drawFlowMap.put(ChainConstants.DRAw_FLOW_DONATORY_NAME, donatory.getDonatoryName());
         drawFlowMap.put(ChainConstants.DRAW_FLOW_DONATORY_ID_CARD, donatory.getIdcard());
-        drawFlowMap.put(ChainConstants.DRAW_FLOW_DRAW_TIME, drawRecordFlow.getDrawTime());
+        drawFlowMap.put(ChainConstants.DRAW_FLOW_DRAW_TIME, drawTimeInString);
         drawFlowMap.put(ChainConstants.DRAW_DETAIL, drawDetailMapList);
         String writeChainStr = GsonUtils.toJsonString(drawFlowMap);
 
-        String sign = SignUtils.sign(donatory.getDonatoryName(), donatory.getIdcard(),
-                DateTimeUtils.toDateTimeString(drawRecordFlow.getDrawTime(), "yyyyMMddHHmmss"),
+        String sign = SignUtils.sign(donatory.getDonatoryName(), donatory.getIdcard(), drawTimeInString,
                 drawDetailMapList);
         String flowCertCode = certService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME,
                 drawRecordFlow.getId(), sign, writeChainStr);

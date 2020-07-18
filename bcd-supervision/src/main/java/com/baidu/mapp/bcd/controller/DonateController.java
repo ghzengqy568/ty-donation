@@ -46,6 +46,8 @@ import com.baidu.mapp.bcd.dto.DonateReq;
 import com.baidu.mapp.bcd.dto.DonationFlowBriefResp;
 import com.baidu.mapp.bcd.dto.DonatoryChainResp;
 import com.baidu.mapp.bcd.dto.DrawRecordFlatDetail;
+import com.baidu.mapp.bcd.dto.Verification;
+import com.baidu.mapp.bcd.dto.VerificationDetail;
 import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
 import com.baidu.mapp.bcd.service.ActivityPlanService;
 import com.baidu.mapp.bcd.service.ActivityService;
@@ -61,6 +63,8 @@ import com.baidu.mapp.bcd.service.DrawRecordFlowService;
 import com.baidu.mapp.bcd.service.DrawRecordService;
 import com.baidu.mapp.bcd.service.PlanAllocationRelService;
 import com.google.common.collect.Lists;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.util.Strings;
@@ -136,6 +140,39 @@ public class DonateController {
     public static final String PARTICIPATION_RECEIVE = "受捐";
 
     public static final String ANONYMITY_PREFIX = "雷锋";
+
+    @GetMapping("verify")
+    public R<Verification> verify(@RequestParam String certCode) {
+
+        // todo READ_CHAIN 校验怎么做
+
+
+        String chainContent = certService.readChain(certCode);
+        JsonObject jsonObject = GsonUtils.toJsonObject(chainContent);
+
+        String donorName = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONOR_NAME).getAsString();
+        String donateTime = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONATE_TIME).getAsString();
+        String idCard = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONOR_ID_CARD).getAsString();
+
+        List<VerificationDetail> details = Lists.newArrayList();
+        JsonArray detailJsonArray = jsonObject.getAsJsonArray(ChainConstants.DONATE_DETAIL);
+        detailJsonArray.forEach(element -> {
+            details.add(VerificationDetail.builder()
+                    .name(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_NAME).getAsString())
+                    .quantity(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_QUANTITY).getAsLong())
+                    .unit(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_UNIT).getAsString())
+                    .build());
+        });
+
+        Verification verification = Verification.builder()
+                .donorOrDonatoryName(donorName)
+                .idCard(idCard)
+                .time(donateTime)
+                .drawVerificationDetailList(details)
+                .build();
+        return R.ok(verification);
+    }
+
 
     @PostMapping("submit")
     public R<String> submit(@RequestBody DonateReq donateReq) {
@@ -217,14 +254,14 @@ public class DonateController {
 
         // WRITE_CHAIN 捐赠流水+详情一起作为关键信息一次性上链
         Map<String, Object> donateFlowMap = new HashMap<>();
+        String donateTimeInString = DateTimeUtils.toDateTimeString(flow.getDonateTime(), "yyyyMMddHHmmss");
         donateFlowMap.put(ChainConstants.DONATE_FLOW_DONOR_NAME, donor.getDonorName());
         donateFlowMap.put(ChainConstants.DONATE_FLOW_DONOR_ID_CARD, donor.getIdcard());
-        donateFlowMap.put(ChainConstants.DONATE_FLOW_DONATE_TIME, flow.getDonateTime());
+        donateFlowMap.put(ChainConstants.DONATE_FLOW_DONATE_TIME, donateTimeInString);
         donateFlowMap.put(ChainConstants.DONATE_DETAIL, donateDetailMapList);
         String writeChainStr = GsonUtils.toJsonString(donateFlowMap);
 
-        String sign = SignUtils.sign(donor.getDonorName(), donor.getIdcard(),
-                DateTimeUtils.toDateTimeString(flow.getDonateTime(), "yyyyMMddHHmmss"),
+        String sign = SignUtils.sign(donor.getDonorName(), donor.getIdcard(), donateTimeInString,
                 donateDetailMapList);
         String certCode = certService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, flowId, sign, writeChainStr);
         flow.setCertCode(certCode);
