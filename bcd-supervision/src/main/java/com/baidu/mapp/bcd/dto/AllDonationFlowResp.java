@@ -18,6 +18,18 @@ public class AllDonationFlowResp {
     @Schema(description = "捐赠人名称")
     private String donorName;
 
+    /**
+     * 捐赠人手机号
+     */
+    @Schema(description = "捐赠人手机号")
+    private String phone;
+
+    /**
+     * 捐赠人身份证号码
+     */
+    @Schema(description = "捐赠人身份证号码")
+    private String idCard;
+
 
     /**
      * 捐赠时间

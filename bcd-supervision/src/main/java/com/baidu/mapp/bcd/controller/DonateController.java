@@ -3,7 +3,10 @@
  */
 package com.baidu.mapp.bcd.controller;
 
+import com.baidu.mapp.bcd.common.gson.GsonUtils;
+import com.baidu.mapp.bcd.common.utils.ChainConstants;
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
+import com.baidu.mapp.bcd.common.utils.MaskUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.domain.Activity;
 import com.baidu.mapp.bcd.domain.ActivityPlan;
@@ -30,7 +33,6 @@ import com.baidu.mapp.bcd.domain.PlanAllocationRel;
 import com.baidu.mapp.bcd.domain.PlanAllocationRelExample;
 import com.baidu.mapp.bcd.domain.base.Pagination;
 import com.baidu.mapp.bcd.domain.base.R;
-import com.baidu.mapp.bcd.domain.meta.MetaDonateDetail;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
 import com.baidu.mapp.bcd.dto.AllDonationFlowResp;
@@ -74,6 +76,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -162,14 +165,11 @@ public class DonateController {
         Date donateTime = new Date();
         String anonymity = Strings.EMPTY;
         if (donateReq.getIsAnonymous() == 1) {
-            anonymity = ANONYMITY_PREFIX + RandomStringUtils.randomNumeric(10);
+            anonymity = ANONYMITY_PREFIX + RandomStringUtils.randomNumeric(4);
         }
-        // 流水签名 donorId, donorTime
-        String sign = SignUtils.sign(donorId, DateTimeUtils.toDateTimeString(donateTime, "yyyyMMddHHmmss"));
         DonateFlow flow = DonateFlow.newBuilder()
                 .donorId(donorId)
                 .donateTime(donateTime)
-                .sign(sign)
                 .anonymity(anonymity)
                 .isAnonymous(donateReq.getIsAnonymous())
                 .createTime(new Date())
@@ -177,10 +177,8 @@ public class DonateController {
                 .build();
         donateFlowService.insertSelective(flow);
         Long flowId = flow.getId();
-        String certCode = certService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, flowId, sign, "xx");
-        flow.setCertCode(certCode);
-        flow.setLastModifyTime(new Date());
-        donateFlowService.updateByPrimaryKeySelective(flow);
+
+        List<Map<String, Object>> donateDetailMapList = Lists.newArrayList();
         // details ...
         List<DonateDetailReq> details = donateReq.getDetails();
         for (DonateDetailReq detail : details) {
@@ -188,7 +186,12 @@ public class DonateController {
             Long quantity = detail.getQuantity();
             Byte type = detail.getType();
             String unit = detail.getUnit();
-            sign = SignUtils.sign(donorId, name, quantity, type, unit);
+
+            Map<String, Object> detailMap = new HashMap<>();
+            detailMap.put(ChainConstants.DONATE_DETAIL_NAME, name);
+            detailMap.put(ChainConstants.DONATE_DETAIL_QUANTITY, quantity);
+            detailMap.put(ChainConstants.DONATE_DETAIL_UNIT, unit);
+            donateDetailMapList.add(detailMap);
 
             DonateDetail donateDetail = DonateDetail.newBuilder()
                     .flowId(flowId)
@@ -197,19 +200,37 @@ public class DonateController {
                     .name(name)
                     .quantity(quantity)
                     .balance(quantity)
-                    .sign(sign)
                     .type(type)
                     .unit(unit)
                     .build();
 
             donateDetailService.insertSelective(donateDetail);
             Long detailId = donateDetail.getId();
-            String detailCertCode = certService.writeChain(donorId, MetaDonateDetail.TABLE_NAME, detailId,
-                    sign, "xx");
-            donateDetail.setCertCode(detailCertCode);
-            donateDetail.setLastModifyTime(new Date());
+            // WRITE_CHAIN 捐赠详情跟流水一起作为关键信息一次性上链, 不单独上链, 提高写入和查询验证效率
+            // 是不是部分不单独上链表中的cert_code一列可以删除了
+//            String detailCertCode = certService.writeChain(donorId, MetaDonateDetail.TABLE_NAME, detailId,
+//                    sign, "xx");
+//            donateDetail.setCertCode(detailCertCode);
+//            donateDetail.setLastModifyTime(new Date());
             donateDetailService.updateByPrimaryKeySelective(donateDetail);
         }
+
+        // WRITE_CHAIN 捐赠流水+详情一起作为关键信息一次性上链
+        Map<String, Object> donateFlowMap = new HashMap<>();
+        donateFlowMap.put(ChainConstants.DONATE_FLOW_DONOR_NAME, donor.getDonorName());
+        donateFlowMap.put(ChainConstants.DONATE_FLOW_DONOR_ID_CARD, donor.getIdcard());
+        donateFlowMap.put(ChainConstants.DONATE_FLOW_DONATE_TIME, flow.getDonateTime());
+        donateFlowMap.put(ChainConstants.DONATE_DETAIL, donateDetailMapList);
+        String writeChainStr = GsonUtils.toJsonString(donateFlowMap);
+
+        String sign = SignUtils.sign(donor.getDonorName(), donor.getIdcard(),
+                DateTimeUtils.toDateTimeString(flow.getDonateTime(), "yyyyMMddHHmmss"),
+                donateDetailMapList);
+        String certCode = certService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, flowId, sign, writeChainStr);
+        flow.setCertCode(certCode);
+        flow.setSign(sign);
+        flow.setLastModifyTime(new Date());
+        donateFlowService.updateByPrimaryKeySelective(flow);
         return R.ok(certCode);
     }
 
@@ -217,7 +238,6 @@ public class DonateController {
     public R<Pagination<AllDonationFlowResp>> getAllDonations(@RequestParam(defaultValue = "1") Integer pageNo,
                                                               @RequestParam(defaultValue = "10") Integer pageSize,
                                                               @RequestParam(required = false) Long donorId) {
-
         int start = (pageNo - 1) * pageSize;
 
         if (donorId != null) {
@@ -257,12 +277,12 @@ public class DonateController {
             DonateFlow donateFlow = donateFlowService.selectByPrimaryKey(donateFlowId);
             Long donorId = donateFlow.getDonorId();
             Donor donor = donorService.selectByPrimaryKey(donorId);
-            String donorName = donor.getDonorName();
-            // todo 如果匿名捐赠, 展示雷锋***, 否则, 展示捐赠人名称(需要掩码 -- todo)
             String displayName = donateFlow.getIsAnonymous() == 1 ? donateFlow.getAnonymity() :
                     donor.getDonorName();
             return AllDonationFlowResp.builder()
-                    .donorName(displayName)
+                    .donorName(MaskUtils.maskDonorName(displayName))
+                    .idCard(MaskUtils.maskIdCard(donor.getIdcard()))
+                    .phone(MaskUtils.maskCellPhone(donor.getMobile()))
                     .donateTime(donateFlow.getDonateTime())
                     .certCode(donateFlow.getCertCode())
                     .participation(PARTICIPATION_DONATE)
@@ -374,6 +394,7 @@ public class DonateController {
                 .build()
                 .createCriteria()
                 .andDonorIdIn(donorIds)
+                .andIsAnonymousEqualTo((byte) 0)
                 .toExample());
         if (!CollectionUtils.isEmpty(donateFlows)) {
             donateFlows.forEach(df -> {
