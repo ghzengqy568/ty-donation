@@ -10,7 +10,6 @@ import com.baidu.mapp.bcd.common.utils.MaskUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.domain.Activity;
 import com.baidu.mapp.bcd.domain.ActivityPlan;
-import com.baidu.mapp.bcd.domain.ActivityPlanExample;
 import com.baidu.mapp.bcd.domain.Admin;
 import com.baidu.mapp.bcd.domain.Allocation;
 import com.baidu.mapp.bcd.domain.AllocationExample;
@@ -634,14 +633,13 @@ public class DonateController {
     @GetMapping("queryByDonorCertCode")
     public DonateChainResp queryDonationsByDonateCertCode(@RequestParam String certCode) {
 
-        List<DonateFlow> flows = donateFlowService.selectByExample(DonateFlowExample.newBuilder()
+        DonateFlow donateFlow = donateFlowService.selectOneByExample(DonateFlowExample.newBuilder()
                 .build()
                 .createCriteria()
                 .andCertCodeEqualTo(certCode)
                 .toExample());
-        Assert.isTrue(!CollectionUtils.isEmpty(flows) && flows.size() == 1, "捐赠流水不存在");
+        Assert.isTrue(donateFlow != null, "捐赠流水不存在");
 
-        DonateFlow donateFlow = flows.get(0);
         Long donorId = donateFlow.getDonorId();
         Donor donor = donorService.selectByPrimaryKey(donorId);
         Assert.isTrue(donor != null, "捐赠人不存在");
@@ -707,10 +705,6 @@ public class DonateController {
 
         List<ActivityPlan> activityPlans = activityPlanService.selectByPrimaryKeys(actPlanIds);
         Set<Long> actIds = activityPlans.stream().map(ActivityPlan::getActivityId).collect(Collectors.toSet());
-        // todo actId -> List<actPlanId> map ???
-        Map<Long, List<Long>> actPlansMap =
-                activityPlanService.selectMapListByExample(ActivityPlanExample.newBuilder().build().createCriteria()
-                        .toExample(), ActivityPlan::getActivityId, ActivityPlan::getId);
 
         List<Activity> activities = activityService.selectByPrimaryKeys(new ArrayList<>(actIds));
 
@@ -729,46 +723,36 @@ public class DonateController {
 
             // 根据状态查找受捐领取摘要
             List<DrawRecordFlatDetail> drawRecordFlatDetails = new ArrayList<>();
-            List<DrawRecordDetail> drawRecordDetails =
-                    drawRecordDetailService.selectByExample(DrawRecordDetailExample.newBuilder().build()
+
+            List<DrawRecordFlow> drawRecordFlows =
+                    drawRecordFlowService.selectByExample(DrawRecordFlowExample.newBuilder().build()
                             .createCriteria()
                             .andActivityIdEqualTo(act.getId())
-                            .andActivityPlanIdIn(actPlansMap.get(act.getId()))
                             .toExample());
-            if (CollectionUtils.isEmpty(drawRecordDetails)) {
-                continue;
-            }
-            for (DrawRecordDetail drawRecordDetail : drawRecordDetails) {
-                Long donatoryId = drawRecordDetail.getDonatoryId();
+            if (!CollectionUtils.isEmpty(drawRecordFlows)) {
+                for (DrawRecordFlow drawRecordFlow : drawRecordFlows) {
+                    Long drawRecordFlowId = drawRecordFlow.getId();
+                    Long donatoryId = drawRecordFlow.getDonatoryId();
 
-                List<DrawRecordFlow> drawRecordFlows =
-                        drawRecordFlowService.selectByExample(DrawRecordFlowExample.newBuilder().build()
-                                .createCriteria()
-                                .andDonatoryIdEqualTo(donatoryId)
-                                .andActivityIdEqualTo(drawRecordDetail.getActivityId())
-                                .toExample());
-                // 每个人在每次活动中只有一条领取记录
-                DrawRecordFlow drawRecordFlow = drawRecordFlows.get(0);
+                    DrawRecord drawRecord = drawRecordService.selectOneByExample(DrawRecordExample.newBuilder().build()
+                            .createCriteria()
+                            .andDrawRecordFlowIdEqualTo(drawRecordFlowId)
+                            .toExample());
+                    Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
 
-                DrawRecordFlatDetail drawRecordFlatDetail = DrawRecordFlatDetail.builder()
-                        .activityId(drawRecordDetail.getActivityId())
-                        .activityPlanId(drawRecordDetail.getActivityPlanId())
-                        .allocationId(drawRecordDetail.getAllocationId())
-                        .donatoryId(drawRecordDetail.getDonatoryId())
-                        .build();
-                Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
-                drawRecordFlatDetail.setDonatoryName(donatory.getDonatoryName());
-
-                ActivityPlan activityPlan =
-                        activityPlanService.selectByPrimaryKey(drawRecordDetail.getActivityPlanId());
-
-                drawRecordFlatDetail.setType(activityPlan.getType());
-                drawRecordFlatDetail.setUnit(activityPlan.getUnit());
-                drawRecordFlatDetail.setName(activityPlan.getName());
-                drawRecordFlatDetail.setQuantity(drawRecordDetail.getUsed());
-                drawRecordFlatDetail.setDrawTime(drawRecordFlow.getDrawTime());
-                drawRecordFlatDetail.setCertCode(drawRecordFlow.getCertCode());
-                drawRecordFlatDetails.add(drawRecordFlatDetail);
+                    DrawRecordFlatDetail flatDetail = DrawRecordFlatDetail.builder()
+                            .donatoryId(donatoryId)
+                            .drawFlowId(drawRecordFlowId)
+                            .drawTime(drawRecordFlow.getDrawTime())
+                            .donatoryName(donatory.getDonatoryName())
+                            .certCode(drawRecordFlow.getCertCode())
+                            .unit(drawRecord.getUnit())
+                            .type(drawRecord.getType())
+                            .name(drawRecord.getName())
+                            .quantity(drawRecord.getQuantity())
+                            .build();
+                    drawRecordFlatDetails.add(flatDetail);
+                }
             }
             dcActivityBriefResp.setDrawRecordFlatDetails(drawRecordFlatDetails);
         }
