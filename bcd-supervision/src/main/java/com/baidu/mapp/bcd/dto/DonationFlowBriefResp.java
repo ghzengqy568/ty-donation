@@ -18,6 +18,17 @@ public class DonationFlowBriefResp {
     @Schema(description = "捐赠/受捐人名称")
     private String donorName;
 
+    /**
+     * 捐赠/受捐人手机号
+     */
+    @Schema(description = "捐赠/受捐人手机号")
+    private String phone;
+
+    /**
+     * 捐赠/受捐人身份证号
+     */
+    @Schema(description = "捐赠/受捐人身份证号")
+    private String idCard;
 
     /**
      * 捐赠/受捐时间

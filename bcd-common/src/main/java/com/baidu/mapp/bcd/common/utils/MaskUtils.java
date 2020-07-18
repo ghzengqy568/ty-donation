@@ -30,6 +30,9 @@ public class MaskUtils {
      * 身份证号脱敏
      */
     public static String maskIdCard(String idCard) {
+        if (StringUtils.isEmpty(idCard)) {
+            return StringUtils.EMPTY;
+        }
         return maskFromStart(idCard, idCard.length() - 4);
     }
 
@@ -37,6 +40,9 @@ public class MaskUtils {
      * 手机号脱敏
      */
     public static String maskCellPhone(String phone) {
+        if (StringUtils.isEmpty(phone)) {
+            return StringUtils.EMPTY;
+        }
         return maskFromTo(phone, 3, 6);
     }
 
