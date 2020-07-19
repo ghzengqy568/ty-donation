@@ -30,7 +30,7 @@ public class ActivityResp {
     @Schema(description = "活动描述")
     private String description;
 
-    @Schema(description = "活动状态， 0-待实施， 1-实施中， 2-实施完成")
+    @Schema(description = "活动状态， 0-待拨款， 1-已拨款，2-已指派，3-领取中， 4-已结束")
     private Byte status;
 
     /**

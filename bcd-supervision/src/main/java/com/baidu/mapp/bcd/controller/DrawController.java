@@ -156,6 +156,10 @@ public class DrawController {
         if (activity == null) {
             return R.error(100102, "活动不存在");
         }
+        if (activity.getStatus()== null || activity.getStatus() < 2) {
+            // 活动状态， 0-待拨款， 1-已拨款，2-已指派，3-领取中，4-已结束
+            return R.error(100102, "活动尚未拨款或指派，不能领取");
+        }
         Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
         if (donatory == null) {
             return R.error(100102, "受捐人不存在");
@@ -338,6 +342,13 @@ public class DrawController {
         drawRecordFlow.setCertCode(flowCertCode);
         drawRecordFlow.setLastModifyTime(new Date());
         drawRecordFlowService.updateByPrimaryKeySelective(drawRecordFlow);
+
+        if (activity.getStatus()!=null && activity.getStatus() == 2) {
+            // 活动状态， 0-待拨款， 1-已拨款，2-已指派，3-领取中， 4-已结束
+            activity.setStatus((byte)3);
+            activity.setLastModifyTime(new Date());
+            activityService.updateByPrimaryKeySelective(activity);
+        }
 
         return R.ok(flowCertCode);
     }

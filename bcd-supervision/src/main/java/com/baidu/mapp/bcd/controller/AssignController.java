@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,7 +45,7 @@ public class AssignController {
     AssignService assignService;
 
     @PostMapping("assign")
-    public R assign(@RequestBody AssignReq assignReq) {
+    public R assign(@RequestHeader("X-TOKEN") String xtoken, @RequestBody AssignReq assignReq) {
 
         Long activityId = assignReq.getActivityId();
         if (activityId == null || activityId <= 0) {
@@ -144,6 +145,12 @@ public class AssignController {
                 }
             }
         }
+
+        // 活动状态， 0-待拨款， 1-已拨款，2-已指派，3-领取中， 4-已结束
+        activity.setStatus((byte)2);
+        activity.setLastModifyTime(new Date());
+        activityService.updateByPrimaryKeySelective(activity);
+
         return R.ok();
     }
 

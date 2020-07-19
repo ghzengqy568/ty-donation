@@ -27,8 +27,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baidu.mapp.bcd.common.gson.GsonUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.common.utils.digest.Digest;
+import com.baidu.mapp.bcd.domain.ActivityPlanConfig;
+import com.baidu.mapp.bcd.domain.ActivityPlanConfigExample;
 import com.baidu.mapp.bcd.domain.Assign;
 import com.baidu.mapp.bcd.domain.AssignExample;
 import com.baidu.mapp.bcd.domain.Donatory;
@@ -47,11 +50,13 @@ import com.baidu.mapp.bcd.dto.DonatoryActivityRes;
 import com.baidu.mapp.bcd.dto.DonatoryReq;
 import com.baidu.mapp.bcd.dto.LoginParam;
 import com.baidu.mapp.bcd.dto.LoginResponse;
+import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
 import com.baidu.mapp.bcd.service.ActivityService;
 import com.baidu.mapp.bcd.service.AssignService;
 import com.baidu.mapp.bcd.service.CertService;
 import com.baidu.mapp.bcd.service.DonatoryService;
 import com.baidu.mapp.bcd.service.DrawRecordFlowService;
+import com.google.gson.JsonObject;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -79,6 +84,8 @@ public class DonatoryController {
 
     @Autowired
     private DrawRecordFlowService drawRecordFlowService;
+
+    private ActivityPlanConfigService activityPlanConfigService;
 
     @GetMapping("all")
     public R<List<CustomizedPair>> getAllDonarNames() {
@@ -195,8 +202,11 @@ public class DonatoryController {
         donatoryService.insertSelective(donatory);
 
         Long donatoryId = donatory.getId();
-
-        String certCode = certService.writeChain(donatoryId, MetaDonatory.TABLE_NAME, donatoryId, sign);
+        JsonObject chainContent = new JsonObject();
+        chainContent.addProperty("userName", userName);
+        chainContent.addProperty("name", name);
+        String certCode = certService.writeChain(donatoryId, MetaDonatory.TABLE_NAME, donatoryId, sign,
+                GsonUtils.toJsonString(chainContent));
         donatory.setCertCode(certCode);
         donatory.setLastModifyTime(new Date());
         donatoryService.updateByPrimaryKeySelective(donatory);
@@ -264,6 +274,13 @@ public class DonatoryController {
 
         // 参与的活动
         Long donatoryId = loginUser.getUserId();
+
+        Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
+        if (donatory == null) {
+            // 后期可以受捐人干预操作
+            return R.error(100102, "服务错误，受捐人不存在");
+        }
+
         List<Long> activityIdList = assignService.selectByExample(AssignExample.newBuilder()
                         .distinct(true)
                         .build()
@@ -294,6 +311,17 @@ public class DonatoryController {
 
         Map<Long, DrawRecordFlow> factivityDrawMap = activityDrawMap == null ? new HashMap<>() : activityDrawMap;
 
+        // 可以领取的钱数, 后期做物的时候需要区分类型
+        Map<Long, List<Long>> activityMoney =
+                activityPlanConfigService.selectMapListByExample(ActivityPlanConfigExample.newBuilder().build()
+                                .createCriteria()
+                                .andActivityIdIn(activityIdList)
+                                .andDonatoryLevelEqualTo(donatory.getDonatoryLevel())
+                                .toExample(),
+                        ActivityPlanConfig :: getActivityId,
+                        ActivityPlanConfig :: getQuantity
+                );
+
         List<DonatoryActivityRes> donatoryActivityRes = activityService.selectByPrimaryKeys(activityIdList, item ->
                 DonatoryActivityRes.builder()
                         .activityId(item.getId())
@@ -302,6 +330,12 @@ public class DonatoryController {
                         .description(item.getDescription())
                         .startTime(item.getStartTime())
                         .drawStatus(factivityDrawMap.containsKey(item.getId()) ? (byte) 1 : (byte) 0)
+                        .recipientAmount(
+                                activityMoney.containsKey(item.getId()) && CollectionUtils
+                                        .isEmpty(activityMoney.get(item.getId())) ?
+                                        activityMoney.get(item.getId()).stream().reduce(0L, (a, b) -> a + b)
+                                        : 0L
+                        )
                         .endTime(item.getEndTime())
                         .status(item.getStatus())
                         .donatoryId(donatoryId)

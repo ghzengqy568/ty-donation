@@ -49,7 +49,7 @@ public class Activity implements Serializable {
 
     /**
      * column-name:status
-     * 活动状态， 0-待实施， 1-实施中， 2-实施完成
+     * 活动状态， 0-待拨款， 1-已拨款，2-已指派，3-领取中， 4-已结束
      */
     private Byte status;
 
@@ -69,7 +69,7 @@ public class Activity implements Serializable {
      * 活动
      */
     public Activity() {
-        
+
     }
 
     /**
@@ -191,14 +191,14 @@ public class Activity implements Serializable {
     }
 
     /**
-     * 活动状态， 0-待实施， 1-实施中， 2-实施完成
+     * 活动状态， 0-待拨款， 1-已拨款，2-已指派，3-领取中， 4-已结束
      */
     public Byte getStatus() {
         return status;
     }
 
     /**
-     * 活动状态， 0-待实施， 1-实施中， 2-实施完成
+     * 活动状态， 0-待拨款， 1-已拨款，2-已指派，3-领取中， 4-已结束
      */
     public void setStatus(Byte status) {
         this.status = status;
@@ -278,7 +278,7 @@ public class Activity implements Serializable {
             lastModifyTime: ''
         }
         */
-        
+
         return "{\"id\": \"\",\"theme\": \"\",\"description\": \"\",\"startTime\": \"\",\"endTime\": \"\",\"certCode\": \"\",\"sign\": \"\",\"status\": \"\",\"createTime\": \"\",\"lastModifyTime\": \"\"}" ;
     }
 
@@ -355,7 +355,7 @@ public class Activity implements Serializable {
         private Date lastModifyTime;
 
         private XBuilder() {
-            
+
         }
 
         /**

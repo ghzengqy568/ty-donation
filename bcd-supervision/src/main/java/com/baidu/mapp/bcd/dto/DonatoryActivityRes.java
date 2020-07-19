@@ -42,6 +42,9 @@ public class DonatoryActivityRes {
     @Schema(description = "受捐人Id")
     private Long donatoryId;
 
+    @Schema(description = "领取金额")
+    private Long recipientAmount;
+
     @Schema(description = "领取状态， 0-未领取， 1-已领取")
     private Byte drawStatus;
 }

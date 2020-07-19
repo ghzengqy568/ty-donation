@@ -9,6 +9,8 @@ import com.baidu.mapp.bcd.dao.base.BaseSQL;
 import com.baidu.mapp.bcd.dao.base.SQLParam;
 import com.baidu.mapp.bcd.domain.*;
 import com.baidu.mapp.bcd.domain.base.R;
+import com.baidu.mapp.bcd.domain.dto.LoginUser;
+import com.baidu.mapp.bcd.domain.dto.UserThreadLocal;
 import com.baidu.mapp.bcd.domain.meta.MetaAllocation;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateDetail;
 import com.baidu.mapp.bcd.service.*;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,7 +55,13 @@ public class AllocationController {
 
     @Operation(method = "POST", description = "拨款")
     @PostMapping("execute/{activityId}")
-    public R allocation(@Schema(description = "活动ID") @PathVariable("activityId") Long activityId) {
+    public R allocation(@RequestHeader("X-TOKEN") String xtoken, @Schema(description = "活动ID") @PathVariable("activityId") Long activityId) {
+
+        LoginUser loginUser = UserThreadLocal.getLoginUser();
+        Long adminUserId = null;
+        if (loginUser != null) {
+            adminUserId = loginUser.getUserId();
+        }
 
         Activity activity = activityService.selectByPrimaryKey(activityId);
 
@@ -61,7 +70,7 @@ public class AllocationController {
         }
 
         if (activity.getStatus() != 0) {
-            return R.error(100102, activity.getStatus().intValue() == 1 ? "活动实施中，请勿重复提交" : "活动已实施结束");
+            return R.error(100102, "活动已拨款");
         }
 
         // 计划款项是否能满足，可以先预分配
@@ -86,14 +95,8 @@ public class AllocationController {
                 + ">0 and type=1");
         Long totalBanlance = donateDetailService.selectOneLong(sql, SQLParam.newInstance());
         if (totalBanlance < totalNeedCash) {
-            return R.error(100103, "资金池余额不足，不能实施");
+            return R.error(100103, "资金池余额不足，无法拨款");
         }
-
-        // 准备实施
-        // 状态修改为实施中
-        activity.setLastModifyTime(new Date());
-        activity.setStatus((byte) 1);
-        activityService.updateByPrimaryKeySelective(activity);
 
         // 等待分配
         List<DonateDetail> payload = new ArrayList<>();
@@ -175,7 +178,7 @@ public class AllocationController {
                 chainContent.addProperty("balance", b1);
                 chainContent.addProperty("used", used);
                 chainContent.addProperty("detailId", detailId);
-                String certCode = certService.writeChain(9900000L, MetaAllocation.TABLE_NAME, allocationId, sign,
+                String certCode = certService.writeChain(adminUserId, MetaAllocation.TABLE_NAME, allocationId, sign,
                         GsonUtils.toJsonString(chainContent));
                 allocation.setCertCode(certCode);
                 allocation.setLastModifyTime(new Date());
@@ -196,7 +199,8 @@ public class AllocationController {
                 donateDetailService.updateByPrimaryKeySelective(donateDetail);
             }
         }
-        activity.setStatus((byte)2);
+        // 活动状态， 0-待拨款， 1-已拨款，2-已指派，3-领取中， 4-已结束
+        activity.setStatus((byte)1);
         activity.setLastModifyTime(new Date());
         activityService.updateByPrimaryKeySelective(activity);
         return R.ok();
