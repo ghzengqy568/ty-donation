@@ -5,4 +5,7 @@ import com.baidu.mapp.bcd.domain.DonateDetailExample;
 import com.baidu.mapp.bcd.service.base.GenericService;
 
 public interface DonateDetailService extends GenericService<DonateDetail, Long, DonateDetailExample> {
+
+    Long sumMoneyBalanceByExample(DonateDetailExample example);
+
 }

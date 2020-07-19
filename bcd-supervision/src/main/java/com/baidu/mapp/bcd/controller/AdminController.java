@@ -13,16 +13,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baidu.mapp.bcd.domain.Admin;
 import com.baidu.mapp.bcd.domain.AdminExample;
+import com.baidu.mapp.bcd.domain.DonateDetail;
+import com.baidu.mapp.bcd.domain.DonateDetailExample;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.dto.UserType;
 import com.baidu.mapp.bcd.dto.LoginParam;
 import com.baidu.mapp.bcd.dto.LoginResponse;
 import com.baidu.mapp.bcd.service.AdminService;
+import com.baidu.mapp.bcd.service.DonateDetailService;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -33,6 +37,9 @@ public class AdminController {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    DonateDetailService donateDetailService;
 
     @PostMapping("adminLogin")
     public R<LoginResponse> adminLogin(@RequestBody LoginParam loginParam, HttpServletRequest request) {
@@ -72,4 +79,22 @@ public class AdminController {
         return R.ok(loginResponse);
 
     }
+
+    // 库存可用金额
+    @PostMapping("donate/balance")
+    @Schema(description = "库存剩余金额")
+    public R<Long> balance(@RequestHeader("X-TOKEN") String xtoken) {
+        Long balance = donateDetailService.sumMoneyBalanceByExample(DonateDetailExample.newBuilder()
+                .build()
+                .createCriteria()
+                .andBalanceGreaterThan(0L)
+                //                捐赠类别, 1-钱，2-物
+                .andTypeEqualTo((byte) 1)
+                .toExample()
+        );
+
+        return R.ok(balance);
+    }
+
+
 }

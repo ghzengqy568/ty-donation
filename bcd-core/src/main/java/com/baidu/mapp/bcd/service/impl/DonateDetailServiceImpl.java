@@ -33,4 +33,9 @@ public class DonateDetailServiceImpl extends GenericServiceImpl<DonateDetail, Lo
     public DonateDetailExample newIdInExample(List<Long> ids) {
         return DonateDetailExample.newBuilder().build().createCriteria().andIdIn(ids).toExample();
     }
+
+    @Override
+    public Long sumMoneyBalanceByExample(DonateDetailExample example) {
+        return donateDetailMapper.sumMoneyBalanceByExample(example);
+    }
 }

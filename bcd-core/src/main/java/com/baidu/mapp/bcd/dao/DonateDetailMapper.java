@@ -7,4 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface DonateDetailMapper extends BaseMapper<DonateDetail, Long, DonateDetailExample> {
+
+    Long sumMoneyBalanceByExample(DonateDetailExample example);
+
 }
