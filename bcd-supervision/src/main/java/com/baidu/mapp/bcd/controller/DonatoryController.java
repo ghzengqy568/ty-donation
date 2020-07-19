@@ -85,6 +85,7 @@ public class DonatoryController {
     @Autowired
     private DrawRecordFlowService drawRecordFlowService;
 
+    @Autowired
     private ActivityPlanConfigService activityPlanConfigService;
 
     @GetMapping("all")
