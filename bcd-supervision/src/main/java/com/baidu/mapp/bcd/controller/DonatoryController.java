@@ -331,6 +331,8 @@ public class DonatoryController {
                         .description(item.getDescription())
                         .startTime(item.getStartTime())
                         .drawStatus(factivityDrawMap.containsKey(item.getId()) ? (byte) 1 : (byte) 0)
+                        .drawDate(factivityDrawMap.get(item.getId()) != null ?
+                                factivityDrawMap.get(item.getId()).getDrawTime() : null)
                         .recipientAmount(
                                 activityMoney.containsKey(item.getId()) && CollectionUtils
                                         .isEmpty(activityMoney.get(item.getId())) ?

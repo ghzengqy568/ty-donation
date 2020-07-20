@@ -47,4 +47,7 @@ public class DonatoryActivityRes {
 
     @Schema(description = "领取状态， 0-未领取， 1-已领取")
     private Byte drawStatus;
+
+    @Schema(description = "领取时间")
+    private Date drawDate;
 }
