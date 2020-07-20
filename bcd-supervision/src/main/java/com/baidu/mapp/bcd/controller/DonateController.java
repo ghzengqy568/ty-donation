@@ -41,6 +41,7 @@ import com.baidu.mapp.bcd.dto.DonateChainResp;
 import com.baidu.mapp.bcd.dto.DonateDetailReq;
 import com.baidu.mapp.bcd.dto.DonateDetailResp;
 import com.baidu.mapp.bcd.dto.DonateFlatDetail;
+import com.baidu.mapp.bcd.dto.DonateFlowResp;
 import com.baidu.mapp.bcd.dto.DonateReq;
 import com.baidu.mapp.bcd.dto.DonationFlowBriefResp;
 import com.baidu.mapp.bcd.dto.DonatoryChainResp;
@@ -78,6 +79,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -409,10 +411,12 @@ public class DonateController {
             flowBriefResps.addAll(queryDonationsByDonar(query));
             // 模糊匹配受捐人
             flowBriefResps.addAll(queryDrawRecordsByDonatory(query));
-            return R.ok(flowBriefResps);
+            List<DonationFlowBriefResp> sortedResult = flowBriefResps.stream()
+                    .sorted(Comparator.comparing(DonationFlowBriefResp::getDonateTime).reversed())
+                    .collect(Collectors.toList());
+            return R.ok(sortedResult);
         }
     }
-
 
     /**
      * 按模糊匹配捐赠人名称, 查询捐赠记录
