@@ -619,7 +619,7 @@ public class DonateController {
                         .certCode(donateFlow.getCertCode())
                         .type(donateDetail.getType())
                         .unit(donateDetail.getUnit())
-                        .quantity(allocation.getUsed())
+                        .quantity(donateDetail.getQuantity())
                         .name(donateDetail.getName())
                         .build();
                 donateFlatDetails.add(donateFlatDetail);
