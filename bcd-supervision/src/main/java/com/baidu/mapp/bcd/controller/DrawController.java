@@ -7,6 +7,7 @@ import com.baidu.mapp.bcd.common.gson.GsonUtils;
 import com.baidu.mapp.bcd.common.utils.ChainConstants;
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
+import com.baidu.mapp.bcd.common.utils.digest.Digest;
 import com.baidu.mapp.bcd.domain.Activity;
 import com.baidu.mapp.bcd.domain.ActivityPlan;
 import com.baidu.mapp.bcd.domain.ActivityPlanConfig;
@@ -44,7 +45,10 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,6 +67,7 @@ import java.util.stream.Collectors;
 @Schema(description = "领取接口")
 @RestController
 @RequestMapping("/draw")
+@Slf4j
 public class DrawController {
 
     @Autowired
@@ -98,35 +103,124 @@ public class DrawController {
     @Autowired
     PlanAllocationRelService planAllocationRelService;
 
+    @Autowired
+    Digest digest;
+
     @GetMapping("verify")
     public R<Verification> verify(@RequestParam String certCode) {
+        try {
+            // READ_CHAIN 链下和链上领取详情
+            String chainContent = certService.readChain(certCode);
+            String fromTable = StringUtils.EMPTY;
+            String fromId = StringUtils.EMPTY;
+            String drawContent = StringUtils.EMPTY;
+            if (StringUtils.isNotBlank(chainContent)) {
+                String[] split = chainContent.split("\t");
+                String source = split[1];
+                String[] srcArray = source.split(":");
+                fromTable = srcArray[0];
+                fromId = srcArray[1];
+                String content = split[2];
 
-        // todo READ_CHAIN 校验怎么做
+                String[] split1 = content.split(":");
+                try {
+                    drawContent = digest.decryptDes(split1[1]);
+                } catch (Exception e) {
+                    log.error("Fail to read from chain.", e);
+                    return R.error(2001001, "获取链上数据失败, 请稍后重试!");
+                }
+            }
 
-        String chainContent = certService.readChain(certCode);
-        JsonObject jsonObject = GsonUtils.toJsonObject(chainContent);
+            if (!StringUtils.isEmpty(drawContent)) {
+                JsonObject jsonObject = GsonUtils.toJsonObject(drawContent);
 
-        String donatoryName = jsonObject.getAsJsonObject(ChainConstants.DRAw_FLOW_DONATORY_NAME).getAsString();
-        String drawTime = jsonObject.getAsJsonObject(ChainConstants.DRAW_FLOW_DRAW_TIME).getAsString();
-        String idCard = jsonObject.getAsJsonObject(ChainConstants.DRAW_FLOW_DONATORY_ID_CARD).getAsString();
+                String donatoryName = jsonObject.get(ChainConstants.DRAw_FLOW_DONATORY_NAME).getAsString();
+                String drawTime = jsonObject.get(ChainConstants.DRAW_FLOW_DRAW_TIME).getAsString();
+                String idCard = jsonObject.get(ChainConstants.DRAW_FLOW_DONATORY_ID_CARD).getAsString();
 
-        List<VerificationDetail> details = Lists.newArrayList();
-        JsonArray detailJsonArray = jsonObject.getAsJsonArray(ChainConstants.DRAW_DETAIL);
-        detailJsonArray.forEach(element -> {
-            details.add(VerificationDetail.builder()
-                .name(element.getAsJsonObject().getAsJsonObject(ChainConstants.DRAW_DETAIL_NAME).getAsString())
-                .quantity(element.getAsJsonObject().getAsJsonObject(ChainConstants.DRAW_DETAIL_QUANTITY).getAsLong())
-                .unit(element.getAsJsonObject().getAsJsonObject(ChainConstants.DRAW_DETAIL_UNIT).getAsString())
-                .build());
-        });
+                List<VerificationDetail> details = Lists.newArrayList();
+                JsonArray detailJsonArray = jsonObject.getAsJsonArray(ChainConstants.DRAW_DETAIL);
+                detailJsonArray.forEach(element -> {
+                    details.add(VerificationDetail.builder()
+                            .name(element.getAsJsonObject().get(ChainConstants.DRAW_DETAIL_NAME)
+                                    .getAsString())
+                            .quantity(element.getAsJsonObject().get(ChainConstants.DRAW_DETAIL_QUANTITY)
+                                    .getAsLong())
+                            .unit(element.getAsJsonObject().get(ChainConstants.DRAW_DETAIL_UNIT)
+                                    .getAsString())
+                            .build());
+                });
 
-        Verification verification = Verification.builder()
-                .donorOrDonatoryName(donatoryName)
-                .idCard(idCard)
-                .time(drawTime)
-                .drawVerificationDetailList(details)
-                .build();
-        return R.ok(verification);
+                if (!fromTable.equals(MetaDrawRecordFlow.TABLE_NAME)) {
+                    return R.ok(Verification.builder()
+                            .pass(false)
+                            .build());
+                }
+
+                DrawRecordFlow drawRecordFlow = drawRecordFlowService.selectByPrimaryKey(Long.valueOf(fromId));
+                Assert.isTrue(drawRecordFlow != null, "draw flow does not exist!");
+                Long donatoryId = drawRecordFlow.getDonatoryId();
+                Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
+                Assert.isTrue(donatory != null, "donatory does not exist!");
+                String drawTimeInStr = DateTimeUtils.toDateTimeString(drawRecordFlow.getDrawTime(), "yyyy-MM-dd HH:mm:ss");
+                if (!donatory.getDonatoryName().equals(donatoryName)
+                        || !idCard.equals(donatory.getIdcard())
+                        || !drawTimeInStr.equals(drawTime)) {
+                    return R.ok(Verification.builder()
+                            .pass(false)
+                            .build());
+                }
+
+                List<Map<String, Object>> drawDetailMapList = Lists.newArrayList();
+                List<DrawRecord> drawRecords = drawRecordService.selectByExample(DrawRecordExample.newBuilder().build()
+                        .createCriteria()
+                        .andDrawRecordFlowIdEqualTo(drawRecordFlow.getId())
+                        .toExample());
+                if (!CollectionUtils.isEmpty(drawRecords)) {
+                    for (DrawRecord record : drawRecords) {
+                        Map<String, Object> drawDetailMap = new HashMap<>();
+                        drawDetailMap.put(ChainConstants.DRAW_DETAIL_NAME, record.getName());
+                        drawDetailMap.put(ChainConstants.DRAW_DETAIL_QUANTITY, record.getQuantity());
+                        drawDetailMap.put(ChainConstants.DRAW_DETAIL_UNIT, record.getUnit());
+                        drawDetailMapList.add(drawDetailMap);
+                    }
+                }
+
+                if (!CollectionUtils.isEmpty(details)) {
+                    for (VerificationDetail detail : details) {
+                        boolean matched = false;
+                        for (Map<String, Object> map : drawDetailMapList) {
+                            if (detail.getName().equals(map.get(ChainConstants.DRAW_DETAIL_NAME))
+                                    && detail.getQuantity().equals(map.get(ChainConstants.DRAW_DETAIL_QUANTITY))
+                                    && detail.getUnit().equals(map.get(ChainConstants.DRAW_DETAIL_UNIT))) {
+                                matched = true;
+                                break;
+                            }
+                        }
+                        if (!matched) {
+                            return R.ok(Verification.builder()
+                                    .pass(false)
+                                    .build());
+                        }
+                    }
+                }
+
+                Verification verification = Verification.builder()
+                        .pass(true)
+                        .donorOrDonatoryName(donatoryName)
+                        .idCard(idCard)
+                        .time(drawTime)
+                        .drawVerificationDetailList(details)
+                        .build();
+                return R.ok(verification);
+            }
+            return R.error(2001002, "链上数据读取为空");
+        } catch (Exception e) {
+            log.error("Fail to read chain data.", e);
+            return R.ok(Verification.builder()
+                    .pass(false)
+                    .build());
+        }
     }
 
     @PostMapping("draw")

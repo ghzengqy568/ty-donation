@@ -8,6 +8,7 @@ import com.baidu.mapp.bcd.common.utils.ChainConstants;
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
 import com.baidu.mapp.bcd.common.utils.MaskUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
+import com.baidu.mapp.bcd.common.utils.digest.Digest;
 import com.baidu.mapp.bcd.domain.Activity;
 import com.baidu.mapp.bcd.domain.ActivityPlan;
 import com.baidu.mapp.bcd.domain.Admin;
@@ -41,7 +42,6 @@ import com.baidu.mapp.bcd.dto.DonateChainResp;
 import com.baidu.mapp.bcd.dto.DonateDetailReq;
 import com.baidu.mapp.bcd.dto.DonateDetailResp;
 import com.baidu.mapp.bcd.dto.DonateFlatDetail;
-import com.baidu.mapp.bcd.dto.DonateFlowResp;
 import com.baidu.mapp.bcd.dto.DonateReq;
 import com.baidu.mapp.bcd.dto.DonationFlowBriefResp;
 import com.baidu.mapp.bcd.dto.DonatoryChainResp;
@@ -66,7 +66,9 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -92,6 +94,7 @@ import java.util.stream.Collectors;
 @Schema(description = "捐赠接口", name = "DonateController")
 @RestController
 @RequestMapping("/donate")
+@Slf4j
 public class DonateController {
 
     @Autowired
@@ -142,44 +145,136 @@ public class DonateController {
 
     public static final String ANONYMITY_PREFIX = "雷锋";
 
+    @Autowired
+    Digest digest;
+
     @GetMapping("verify")
     public R<Verification> verify(@RequestParam String certCode) {
+        // READ_CHAIN 校验链上和链下捐赠详情
+        try {
+            String chainContent = certService.readChain(certCode);
+            String fromTable = StringUtils.EMPTY;
+            String fromId = StringUtils.EMPTY;
+            String donateContent = StringUtils.EMPTY;
+            if (StringUtils.isNotBlank(chainContent)) {
+                String[] split = chainContent.split("\t");
+                String source = split[1];
+                String[] srcArray = source.split(":");
+                fromTable = srcArray[0];
+                fromId = srcArray[1];
+                String content = split[2];
 
-        // todo READ_CHAIN 校验怎么做
+                String[] split1 = content.split(":");
+                try {
+                    donateContent = digest.decryptDes(split1[1]);
+                } catch (Exception e) {
+                    log.error("Fail to read from chain.", e);
+                    return R.error(2001001, "获取链上数据失败, 请稍后重试!");
+                }
+            }
 
+            if (StringUtils.isNotEmpty(donateContent)) {
+                JsonObject jsonObject = GsonUtils.toJsonObject(donateContent);
 
-        String chainContent = certService.readChain(certCode);
-        JsonObject jsonObject = GsonUtils.toJsonObject(chainContent);
+                String donorName = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONOR_NAME).getAsString();
+                String donateTime = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONATE_TIME).getAsString();
+                String idCard = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONOR_ID_CARD).getAsString();
 
-        String donorName = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONOR_NAME).getAsString();
-        String donateTime = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONATE_TIME).getAsString();
-        String idCard = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONOR_ID_CARD).getAsString();
+                List<VerificationDetail> details = Lists.newArrayList();
+                JsonArray detailJsonArray = jsonObject.getAsJsonArray(ChainConstants.DONATE_DETAIL);
+                detailJsonArray.forEach(element -> {
+                    details.add(VerificationDetail.builder()
+                            .name(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_NAME)
+                                    .getAsString())
+                            .quantity(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_QUANTITY)
+                                    .getAsLong())
+                            .unit(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_UNIT)
+                                    .getAsString())
+                            .build());
+                });
 
-        List<VerificationDetail> details = Lists.newArrayList();
-        JsonArray detailJsonArray = jsonObject.getAsJsonArray(ChainConstants.DONATE_DETAIL);
-        detailJsonArray.forEach(element -> {
-            details.add(VerificationDetail.builder()
-                    .name(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_NAME).getAsString())
-                    .quantity(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_QUANTITY).getAsLong())
-                    .unit(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_UNIT).getAsString())
+                // 校验过程
+                if (fromTable != MetaDonateFlow.TABLE_NAME) {
+                    return R.ok(Verification.builder()
+                            .pass(false)
+                            .build());
+                }
+
+                DonateFlow donateFlowInDB = donateFlowService.selectByPrimaryKey(Long.valueOf(fromId));
+                Long donorIDInDB = donateFlowInDB.getDonorId();
+                Donor donorInDB = donorService.selectByPrimaryKey(donorIDInDB);
+                String donateTimeInString =
+                        DateTimeUtils.toDateTimeString(donateFlowInDB.getDonateTime(), "yyyy-MM-dd HH:mm:ss");
+                if (!donorName.equals(donorInDB.getDonorName()) || !idCard.equals(donorInDB.getIdcard())
+                        || !donateTimeInString.equals(donateTime)) {
+                    return R.ok(Verification.builder()
+                            .pass(false)
+                            .build());
+                }
+
+                List<Map<String, Object>> donateDetailMapList = Lists.newArrayList();
+                List<DonateDetail> donateDetails =
+                        donateDetailService.selectByExample(DonateDetailExample.newBuilder().build()
+                                .createCriteria()
+                                .andFlowIdEqualTo(Long.valueOf(fromId))
+                                .toExample());
+                if (!CollectionUtils.isEmpty(donateDetails)) {
+                    donateDetails.forEach((item) -> {
+                        Map<String, Object> detailMap = new HashMap<>();
+                        detailMap.put(ChainConstants.DONATE_DETAIL_NAME, item.getName());
+                        detailMap.put(ChainConstants.DONATE_DETAIL_QUANTITY, item.getQuantity());
+                        detailMap.put(ChainConstants.DONATE_DETAIL_UNIT, item.getUnit());
+                        donateDetailMapList.add(detailMap);
+                    });
+                }
+
+                if (details.size() != donateDetailMapList.size()) {
+                    return R.ok(Verification.builder()
+                            .pass(false)
+                            .build());
+                }
+
+                for (VerificationDetail detail : details) {
+                    boolean matched = false;
+                    for (Map<String, Object> map : donateDetailMapList) {
+                        if (detail.getName().equals(map.get(ChainConstants.DONATE_DETAIL_NAME))
+                                && detail.getQuantity().equals(map.get(ChainConstants.DONATE_DETAIL_QUANTITY))
+                                && detail.getUnit().equals(map.get(ChainConstants.DONATE_DETAIL_UNIT))) {
+                            matched = true;
+                            break;
+                        }
+                    }
+                    if (!matched) {
+                        return R.ok(Verification.builder()
+                                .pass(false)
+                                .build());
+                    }
+                }
+
+                // 构造校验结果
+                Verification verification = Verification.builder()
+                        .pass(true)
+                        .donorOrDonatoryName(donorName)
+                        .idCard(idCard)
+                        .time(donateTime)
+                        .drawVerificationDetailList(details)
+                        .build();
+                return R.ok(verification);
+            }
+            return R.error(2001002, "链上数据读取为空");
+        } catch (Exception e) {
+            log.error("Fail to verify donate information.", e);
+            return R.ok(Verification.builder()
+                    .pass(false)
                     .build());
-        });
-
-        Verification verification = Verification.builder()
-                .donorOrDonatoryName(donorName)
-                .idCard(idCard)
-                .time(donateTime)
-                .drawVerificationDetailList(details)
-                .build();
-        return R.ok(verification);
+        }
     }
-
 
     @PostMapping("submit")
     public R<String> submit(@RequestBody DonateReq donateReq) {
         Long loginId = donateReq.getLoginId();
         Long donorId;
-        // todo 判断操作人是否为管理员
+        // 判断操作人是否为管理员
         Admin admin = adminService.selectByPrimaryKey(loginId);
         Boolean isAdmin = admin == null ? false : true;
         if (isAdmin) {
@@ -255,7 +350,7 @@ public class DonateController {
 
         // WRITE_CHAIN 捐赠流水+详情一起作为关键信息一次性上链
         Map<String, Object> donateFlowMap = new HashMap<>();
-        String donateTimeInString = DateTimeUtils.toDateTimeString(flow.getDonateTime(), "yyyyMMddHHmmss");
+        String donateTimeInString = DateTimeUtils.toDateTimeString(flow.getDonateTime(), "yyyy-MM-dd HH:mm:ss");
         donateFlowMap.put(ChainConstants.DONATE_FLOW_DONOR_NAME, donor.getDonorName());
         donateFlowMap.put(ChainConstants.DONATE_FLOW_DONOR_ID_CARD, donor.getIdcard());
         donateFlowMap.put(ChainConstants.DONATE_FLOW_DONATE_TIME, donateTimeInString);
@@ -309,6 +404,16 @@ public class DonateController {
         }
     }
 
+    private String decryptInternal(String encrypted) {
+        if (StringUtils.isNotEmpty(encrypted)) {
+            try {
+                return digest.decryptDes(encrypted);
+            } catch (Exception e) {
+            }
+        }
+        return StringUtils.EMPTY;
+    }
+
     private Function<DonateDetail, AllDonationFlowResp> toDisplayConvert() {
         return (DonateDetail donateDetail) -> {
             Long donateFlowId = donateDetail.getFlowId();
@@ -317,10 +422,12 @@ public class DonateController {
             Donor donor = donorService.selectByPrimaryKey(donorId);
             String displayName = donateFlow.getIsAnonymous() == 1 ? donateFlow.getAnonymity() :
                     donor.getDonorName();
+            String idCard = decryptInternal(donor.getIdcard());
+            String mobile = decryptInternal(donor.getMobile());
             return AllDonationFlowResp.builder()
                     .donorName(MaskUtils.maskDonorName(displayName))
-                    .idCard(MaskUtils.maskIdCard(donor.getIdcard()))
-                    .phone(MaskUtils.maskCellPhone(donor.getMobile()))
+                    .idCard(MaskUtils.maskIdCard(idCard))
+                    .phone(MaskUtils.maskCellPhone(mobile))
                     .donateTime(donateFlow.getDonateTime())
                     .certCode(donateFlow.getCertCode())
                     .participation(PARTICIPATION_DONATE)
@@ -363,12 +470,14 @@ public class DonateController {
                                     .build();
                         });
                 String donorName = donateFlow.getIsAnonymous() == 1 ? donateFlow.getAnonymity() : donor.getDonorName();
+                String idCard = decryptInternal(donor.getIdcard());
+                String mobile = decryptInternal(donor.getMobile());
                 DonationFlowBriefResp donationFlowBriefResp = DonationFlowBriefResp.builder()
                         .certCode(donateFlow.getCertCode())
                         .donateTime(donateFlow.getDonateTime())
                         .donorName(MaskUtils.maskDonorName(donorName))
-                        .idCard(MaskUtils.maskIdCard(donor.getIdcard()))
-                        .phone(MaskUtils.maskCellPhone(donor.getMobile()))
+                        .idCard(MaskUtils.maskIdCard(idCard))
+                        .phone(MaskUtils.maskCellPhone(mobile))
                         .participation(PARTICIPATION_DONATE)
                         .donateDetailResps(donateDetails)
                         .build();
@@ -391,12 +500,14 @@ public class DonateController {
                             .name(item.getName())
                             .build();
                 });
+                String idCard = decryptInternal(donatory.getIdcard());
+                String mobile = decryptInternal(donatory.getMobile());
                 DonationFlowBriefResp donationFlowBriefResp = DonationFlowBriefResp.builder()
                         .certCode(drawRecordFlow.getCertCode())
                         .donateTime(drawRecordFlow.getDrawTime())
                         .donorName(MaskUtils.maskDonorName(donatory.getDonatoryName()))
-                        .phone(MaskUtils.maskCellPhone(donatory.getMobile()))
-                        .idCard(MaskUtils.maskIdCard(donatory.getIdcard()))
+                        .phone(MaskUtils.maskCellPhone(mobile))
+                        .idCard(MaskUtils.maskIdCard(idCard))
                         .participation(PARTICIPATION_RECEIVE)
                         .donateDetailResps(drawRecords)
                         .build();
@@ -460,12 +571,14 @@ public class DonateController {
                 }
                 String donorDisplayName = df.getIsAnonymous() == 1? df.getAnonymity()
                         : donorIdMap.get(df.getDonorId()).getDonorName();
+                String idCard = decryptInternal(donorIdMap.get(df.getDonorId()).getIdcard());
+                String mobile = decryptInternal(donorIdMap.get(df.getDonorId()).getMobile());
                 donateFlowResps.add(DonationFlowBriefResp.builder()
                         .certCode(df.getCertCode())
                         .donateTime(df.getDonateTime())
                         .donorName(MaskUtils.maskDonorName(donorDisplayName))
-                        .phone(MaskUtils.maskCellPhone(donorIdMap.get(df.getDonorId()).getMobile()))
-                        .idCard(MaskUtils.maskIdCard(donorIdMap.get(df.getDonorId()).getIdcard()))
+                        .phone(MaskUtils.maskCellPhone(mobile))
+                        .idCard(MaskUtils.maskIdCard(idCard))
                         .participation(PARTICIPATION_DONATE)
                         .donateDetailResps(donateDetailResps)
                         .build());
@@ -513,13 +626,15 @@ public class DonateController {
                                 .build());
                     });
                 }
+                String idCard = decryptInternal(donatoryIdMap.get(drawRecordFlow.getDonatoryId()).getIdcard());
+                String mobile = decryptInternal(donatoryIdMap.get(drawRecordFlow.getDonatoryId()).getMobile());
                 donateFlowResps.add(DonationFlowBriefResp.builder()
                         .certCode(drawRecordFlow.getCertCode())
                         .donateTime(drawRecordFlow.getDrawTime())
                         .donorName(MaskUtils.maskDonorName(donatoryIdMap.get(drawRecordFlow.getDonatoryId())
                                 .getDonatoryName()))
-                        .phone(MaskUtils.maskCellPhone(donatoryIdMap.get(drawRecordFlow.getDonatoryId()).getMobile()))
-                        .idCard(MaskUtils.maskIdCard(donatoryIdMap.get(drawRecordFlow.getDonatoryId()).getIdcard()))
+                        .phone(MaskUtils.maskCellPhone(mobile))
+                        .idCard(MaskUtils.maskIdCard(idCard))
                         .participation(PARTICIPATION_RECEIVE)
                         .donateDetailResps(drawRecordResps)
                         .build());
