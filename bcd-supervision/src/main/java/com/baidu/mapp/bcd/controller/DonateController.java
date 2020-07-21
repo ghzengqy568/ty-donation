@@ -43,6 +43,7 @@ import com.baidu.mapp.bcd.dto.DonateDetailReq;
 import com.baidu.mapp.bcd.dto.DonateDetailResp;
 import com.baidu.mapp.bcd.dto.DonateFlatDetail;
 import com.baidu.mapp.bcd.dto.DonateReq;
+import com.baidu.mapp.bcd.dto.DonateResp;
 import com.baidu.mapp.bcd.dto.DonationFlowBriefResp;
 import com.baidu.mapp.bcd.dto.DonatoryChainResp;
 import com.baidu.mapp.bcd.dto.DrawRecordFlatDetail;
@@ -271,7 +272,7 @@ public class DonateController {
     }
 
     @PostMapping("submit")
-    public R<String> submit(@RequestBody DonateReq donateReq) {
+    public R<DonateResp> submit(@RequestBody DonateReq donateReq) {
         Long loginId = donateReq.getLoginId();
         Long donorId;
         // 判断操作人是否为管理员
@@ -364,7 +365,14 @@ public class DonateController {
         flow.setSign(sign);
         flow.setLastModifyTime(new Date());
         donateFlowService.updateByPrimaryKeySelective(flow);
-        return R.ok(certCode);
+
+        DonateResp donateResp = DonateResp.builder()
+                .certCode(certCode)
+                .donorName(donor.getDonorName())
+                .quantity(details.get(0).getQuantity())
+                .donateTime(flow.getDonateTime())
+                .build();
+        return R.ok(donateResp);
     }
 
     @GetMapping("/allDonations")
