@@ -177,25 +177,25 @@ public class DonateController {
             if (StringUtils.isNotEmpty(donateContent)) {
                 JsonObject jsonObject = GsonUtils.toJsonObject(donateContent);
 
-                String donorName = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONOR_NAME).getAsString();
-                String donateTime = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONATE_TIME).getAsString();
-                String idCard = jsonObject.getAsJsonObject(ChainConstants.DONATE_FLOW_DONOR_ID_CARD).getAsString();
+                String donorName = jsonObject.get(ChainConstants.DONATE_FLOW_DONOR_NAME).getAsString();
+                String donateTime = jsonObject.get(ChainConstants.DONATE_FLOW_DONATE_TIME).getAsString();
+                String idCard = jsonObject.get(ChainConstants.DONATE_FLOW_DONOR_ID_CARD).getAsString();
 
                 List<VerificationDetail> details = Lists.newArrayList();
                 JsonArray detailJsonArray = jsonObject.getAsJsonArray(ChainConstants.DONATE_DETAIL);
                 detailJsonArray.forEach(element -> {
                     details.add(VerificationDetail.builder()
-                            .name(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_NAME)
+                            .name(element.getAsJsonObject().get(ChainConstants.DONATE_DETAIL_NAME)
                                     .getAsString())
-                            .quantity(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_QUANTITY)
+                            .quantity(element.getAsJsonObject().get(ChainConstants.DONATE_DETAIL_QUANTITY)
                                     .getAsLong())
-                            .unit(element.getAsJsonObject().getAsJsonObject(ChainConstants.DONATE_DETAIL_UNIT)
+                            .unit(element.getAsJsonObject().get(ChainConstants.DONATE_DETAIL_UNIT)
                                     .getAsString())
                             .build());
                 });
 
                 // 校验过程
-                if (fromTable != MetaDonateFlow.TABLE_NAME) {
+                if (!fromTable.equals(MetaDonateFlow.TABLE_NAME)) {
                     return R.ok(Verification.builder()
                             .pass(false)
                             .build());
@@ -204,10 +204,7 @@ public class DonateController {
                 DonateFlow donateFlowInDB = donateFlowService.selectByPrimaryKey(Long.valueOf(fromId));
                 Long donorIDInDB = donateFlowInDB.getDonorId();
                 Donor donorInDB = donorService.selectByPrimaryKey(donorIDInDB);
-                String donateTimeInString =
-                        DateTimeUtils.toDateTimeString(donateFlowInDB.getDonateTime(), "yyyy-MM-dd HH:mm:ss");
-                if (!donorName.equals(donorInDB.getDonorName()) || !idCard.equals(donorInDB.getIdcard())
-                        || !donateTimeInString.equals(donateTime)) {
+                if (!donorName.equals(donorInDB.getDonorName()) || !idCard.equals(donorInDB.getIdcard())) {
                     return R.ok(Verification.builder()
                             .pass(false)
                             .build());

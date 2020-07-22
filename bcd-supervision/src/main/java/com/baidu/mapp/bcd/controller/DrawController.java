@@ -162,10 +162,8 @@ public class DrawController {
                 Long donatoryId = drawRecordFlow.getDonatoryId();
                 Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
                 Assert.isTrue(donatory != null, "donatory does not exist!");
-                String drawTimeInStr = DateTimeUtils.toDateTimeString(drawRecordFlow.getDrawTime(), "yyyy-MM-dd HH:mm:ss");
                 if (!donatory.getDonatoryName().equals(donatoryName)
-                        || !idCard.equals(donatory.getIdcard())
-                        || !drawTimeInStr.equals(drawTime)) {
+                        || !idCard.equals(donatory.getIdcard())) {
                     return R.ok(Verification.builder()
                             .pass(false)
                             .build());
