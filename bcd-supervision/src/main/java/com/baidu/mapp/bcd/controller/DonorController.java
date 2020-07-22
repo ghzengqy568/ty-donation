@@ -99,7 +99,7 @@ public class DonorController {
                                 .andIdcardEqualTo(idcard)
                                 .toExample());
                 if (donor != null) {
-                    return R.ok("身份证号已存在");
+                    return R.error("身份证号已存在");
                 }
             }
             if (StringUtils.isNotBlank(mobile)) {
@@ -108,7 +108,7 @@ public class DonorController {
                                 .andMobileEqualTo(mobile)
                                 .toExample());
                 if (donor != null) {
-                    return R.ok("手机号已存在");
+                    return R.error("手机号已存在");
                 }
             }
         }catch(Exception ex){
