@@ -35,6 +35,7 @@ import com.baidu.mapp.bcd.domain.base.Pagination;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
+import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
 import com.baidu.mapp.bcd.dto.AllDonationFlowResp;
 import com.baidu.mapp.bcd.dto.DCActivityBriefResp;
 import com.baidu.mapp.bcd.dto.DCDrawDetailResp;
@@ -487,7 +488,7 @@ public class DonateController {
                         .donateDetailResps(donateDetails)
                         .build();
                 return R.ok(Lists.newArrayList(donationFlowBriefResp));
-            } else if (sourceTable.equalsIgnoreCase(MetaDrawRecord.TABLE_NAME)) {
+            } else if (sourceTable.equalsIgnoreCase(MetaDrawRecordFlow.TABLE_NAME)) {
                 // 受捐人通过领取记录证书查询
                 // sourceId 领取流水ID
                 DrawRecordFlow drawRecordFlow = drawRecordFlowService.selectByPrimaryKey(sourceId);
