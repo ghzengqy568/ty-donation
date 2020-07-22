@@ -254,7 +254,7 @@ public class DonateController {
                         .pass(true)
                         .donorOrDonatoryName(MaskUtils.maskDonorName(donorName))
                         .idCard(MaskUtils.maskIdCard(idCard))
-                        .time(donateTime)
+                        .time(donateFlowInDB.getDonateTime())
                         .drawVerificationDetailList(details)
                         .build();
                 return R.ok(verification);
