@@ -307,7 +307,8 @@ public class DonatoryController {
                         DrawRecordFlow :: getActivityId,
                         MetaDrawRecordFlow.COLUMN_NAME_ID,
                         MetaDrawRecordFlow.COLUMN_NAME_ACTIVITYID,
-                        MetaDrawRecordFlow.COLUMN_NAME_CERTCODE
+                        MetaDrawRecordFlow.COLUMN_NAME_CERTCODE,
+                        MetaDrawRecordFlow.COLUMN_NAME_DRAWTIME
                 );
 
         Map<Long, DrawRecordFlow> factivityDrawMap = activityDrawMap == null ? new HashMap<>() : activityDrawMap;
@@ -334,7 +335,7 @@ public class DonatoryController {
                         .drawDate(factivityDrawMap.get(item.getId()) != null ?
                                 factivityDrawMap.get(item.getId()).getDrawTime() : null)
                         .recipientAmount(
-                                activityMoney.containsKey(item.getId()) && CollectionUtils
+                                activityMoney.containsKey(item.getId()) && !CollectionUtils
                                         .isEmpty(activityMoney.get(item.getId())) ?
                                         activityMoney.get(item.getId()).stream().reduce(0L, (a, b) -> a + b)
                                         : 0L
