@@ -252,8 +252,8 @@ public class DonateController {
                 // 构造校验结果
                 Verification verification = Verification.builder()
                         .pass(true)
-                        .donorOrDonatoryName(donorName)
-                        .idCard(idCard)
+                        .donorOrDonatoryName(MaskUtils.maskDonorName(donorName))
+                        .idCard(MaskUtils.maskIdCard(idCard))
                         .time(donateTime)
                         .drawVerificationDetailList(details)
                         .build();

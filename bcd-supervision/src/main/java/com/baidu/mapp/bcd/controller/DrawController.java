@@ -6,6 +6,7 @@ package com.baidu.mapp.bcd.controller;
 import com.baidu.mapp.bcd.common.gson.GsonUtils;
 import com.baidu.mapp.bcd.common.utils.ChainConstants;
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
+import com.baidu.mapp.bcd.common.utils.MaskUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.common.utils.digest.Digest;
 import com.baidu.mapp.bcd.domain.Activity;
@@ -205,8 +206,8 @@ public class DrawController {
 
                 Verification verification = Verification.builder()
                         .pass(true)
-                        .donorOrDonatoryName(donatoryName)
-                        .idCard(idCard)
+                        .donorOrDonatoryName(MaskUtils.maskDonorName(donatoryName))
+                        .idCard(MaskUtils.maskIdCard(idCard))
                         .time(drawTime)
                         .drawVerificationDetailList(details)
                         .build();
