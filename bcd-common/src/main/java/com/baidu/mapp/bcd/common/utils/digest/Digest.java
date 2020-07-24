@@ -69,6 +69,7 @@ public class Digest {
         if (source == null) {
             return null;
         }
+//        return AESUtil.encrypt(source);
         byte[] encrypt = desEncrypter.encrypt(source.getBytes());
         return new String(encrypt);
     }
@@ -77,6 +78,7 @@ public class Digest {
         if (source == null) {
             return null;
         }
+//        return AESUtil.decrypt(source);
         byte[] encrypt = desEncrypter.decrypt(source.getBytes());
         return new String(encrypt);
     }
