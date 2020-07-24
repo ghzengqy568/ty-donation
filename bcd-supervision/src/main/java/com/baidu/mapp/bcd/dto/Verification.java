@@ -39,7 +39,7 @@ public class Verification {
      * 捐赠/领取时间
      */
     @Schema(description = "捐赠/领取时间")
-    private String time;
+    private Date time;
 
     /**
      * 链上记录详情

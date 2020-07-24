@@ -35,6 +35,7 @@ import com.baidu.mapp.bcd.domain.base.Pagination;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
+import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
 import com.baidu.mapp.bcd.dto.AllDonationFlowResp;
 import com.baidu.mapp.bcd.dto.DCActivityBriefResp;
 import com.baidu.mapp.bcd.dto.DCDrawDetailResp;
@@ -254,7 +255,7 @@ public class DonateController {
                         .pass(true)
                         .donorOrDonatoryName(MaskUtils.maskDonorName(donorName))
                         .idCard(MaskUtils.maskIdCard(idCard))
-                        .time(donateTime)
+                        .time(donateFlowInDB.getDonateTime())
                         .drawVerificationDetailList(details)
                         .build();
                 return R.ok(verification);
@@ -487,7 +488,7 @@ public class DonateController {
                         .donateDetailResps(donateDetails)
                         .build();
                 return R.ok(Lists.newArrayList(donationFlowBriefResp));
-            } else if (sourceTable.equalsIgnoreCase(MetaDrawRecord.TABLE_NAME)) {
+            } else if (sourceTable.equalsIgnoreCase(MetaDrawRecordFlow.TABLE_NAME)) {
                 // 受捐人通过领取记录证书查询
                 // sourceId 领取流水ID
                 DrawRecordFlow drawRecordFlow = drawRecordFlowService.selectByPrimaryKey(sourceId);
@@ -686,7 +687,7 @@ public class DonateController {
         DonatoryChainResp donatoryChainResp = DonatoryChainResp.builder()
                 .drawRecordFlowId(drawRecordFlowId)
                 .donatoryId(donatoryId)
-                .donatoryName(donatory.getDonatoryName())
+                .donatoryName(MaskUtils.maskDonorName(donatory.getDonatoryName()))
                 .drawTime(drawRecordFlow.getDrawTime())
                 .certCode(drawRecordFlow.getCertCode())
                 .drawDetailResps(dcDrawDetailResps)
@@ -734,7 +735,7 @@ public class DonateController {
                 DonateFlatDetail donateFlatDetail = DonateFlatDetail.builder()
                         .donateFlowId(donateDetail.getFlowId())
                         .donateDetailId(donateDetail.getId())
-                        .donorName(donorName)
+                        .donorName(MaskUtils.maskDonorName(donorName))
                         .donateTime(donateFlow.getDonateTime())
                         .certCode(donateFlow.getCertCode())
                         .type(donateDetail.getType())
@@ -773,7 +774,7 @@ public class DonateController {
         DonateChainResp donateChainResp = DonateChainResp.builder()
                 .donateFlowId(donateFlow.getId())
                 .donorId(donor.getId())
-                .donorName(displayName)
+                .donorName(MaskUtils.maskDonorName(displayName))
                 .isAnonymous(donateFlow.getIsAnonymous())
                 .anonymity(donateFlow.getAnonymity())
                 .donateTime(donateFlow.getDonateTime())
@@ -868,7 +869,7 @@ public class DonateController {
                             .donatoryId(donatoryId)
                             .drawFlowId(drawRecordFlowId)
                             .drawTime(drawRecordFlow.getDrawTime())
-                            .donatoryName(donatory.getDonatoryName())
+                            .donatoryName(MaskUtils.maskDonorName(donatory.getDonatoryName()))
                             .certCode(drawRecordFlow.getCertCode())
                             .unit(drawRecord.getUnit())
                             .type(drawRecord.getType())

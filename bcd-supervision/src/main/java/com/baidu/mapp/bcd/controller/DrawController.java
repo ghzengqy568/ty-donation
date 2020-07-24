@@ -208,7 +208,7 @@ public class DrawController {
                         .pass(true)
                         .donorOrDonatoryName(MaskUtils.maskDonorName(donatoryName))
                         .idCard(MaskUtils.maskIdCard(idCard))
-                        .time(drawTime)
+                        .time(drawRecordFlow.getDrawTime())
                         .drawVerificationDetailList(details)
                         .build();
                 return R.ok(verification);
