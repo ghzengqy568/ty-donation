@@ -33,4 +33,28 @@ public class ChainConstants {
 
     public static final String DRAW_FLOW_DRAW_TIME = "drawTime";
 
+    public static final Long ADMIN_ID = 9900000L;
+
+    public static final String ACTIVITY_ID = "activityId";
+
+    public static final String ACTIVITY_DESC = "activityDesc";
+
+    public static final String ACTIVITY_THEME = "activityTheme";
+
+    public static final String ACTIVITY_PLAN_DESC = "activityPlanDesc";
+
+    public static final String ACTIVITY_PLAN_TYPE = "type";
+
+    public static final String ACTIVITY_START_TIME = "startTime";
+
+    public static final String ACTIVITY_END_TIME = "endTime";
+
+    public static final String ACTIVITY_PLAN_NAME = "name";
+
+    public static final String ACTIVITY_PLAN_AMOUNT = "amount";
+
+    public static final String ACTIVITY_PLAN_QUANTITY = "quantity";
+
+    public static final String ACTIVITY_PLAN_UNIT = "unit";
+
 }

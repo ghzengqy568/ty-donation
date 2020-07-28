@@ -3,21 +3,50 @@
  */
 package com.baidu.mapp.bcd.controller;
 
+import com.baidu.mapp.bcd.common.gson.GsonUtils;
 import com.baidu.mapp.bcd.common.utils.ActivityStatus;
+import com.baidu.mapp.bcd.common.utils.ChainConstants;
 import com.baidu.mapp.bcd.common.utils.DateTimeUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
-import com.baidu.mapp.bcd.domain.*;
+import com.baidu.mapp.bcd.domain.Activity;
+import com.baidu.mapp.bcd.domain.ActivityExample;
+import com.baidu.mapp.bcd.domain.ActivityPlan;
+import com.baidu.mapp.bcd.domain.ActivityPlanConfig;
+import com.baidu.mapp.bcd.domain.ActivityPlanConfigExample;
+import com.baidu.mapp.bcd.domain.ActivityPlanExample;
+import com.baidu.mapp.bcd.domain.AssignExample;
 import com.baidu.mapp.bcd.domain.base.Pagination;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaActivity;
 import com.baidu.mapp.bcd.domain.meta.MetaActivityPlan;
-import com.baidu.mapp.bcd.dto.*;
-import com.baidu.mapp.bcd.service.*;
+import com.baidu.mapp.bcd.dto.ActivityDetailResp;
+import com.baidu.mapp.bcd.dto.ActivityPlanConfigReq;
+import com.baidu.mapp.bcd.dto.ActivityPlanConfigResp;
+import com.baidu.mapp.bcd.dto.ActivityPlanDetailResp;
+import com.baidu.mapp.bcd.dto.ActivityPlanReq;
+import com.baidu.mapp.bcd.dto.ActivityReq;
+import com.baidu.mapp.bcd.dto.ActivityResp;
+import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
+import com.baidu.mapp.bcd.service.ActivityPlanService;
+import com.baidu.mapp.bcd.service.ActivityService;
+import com.baidu.mapp.bcd.service.AssignService;
+import com.baidu.mapp.bcd.service.CertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/activity")
@@ -70,8 +99,14 @@ public class ActivityController {
         Long activityId = activity.getId();
 
         // 存证
-        String actCertCode = certService.writeChain(9900000L, MetaActivity.TABLE_NAME, activityId,
-                actSign, "xx");
+        Map<String, Object> actChainMap = new HashMap<>();
+        actChainMap.put(ChainConstants.ACTIVITY_DESC, desc);
+        actChainMap.put(ChainConstants.ACTIVITY_THEME, theme);
+        actChainMap.put(ChainConstants.ACTIVITY_START_TIME, startTimeInStr);
+        actChainMap.put(ChainConstants.ACTIVITY_END_TIME, endTimeInStr);
+        String actWriteChainStr = GsonUtils.toJsonString(actChainMap);
+        String actCertCode = certService.writeChain(ChainConstants.ADMIN_ID, MetaActivity.TABLE_NAME, activityId,
+                actSign, actWriteChainStr);
         activity.setCertCode(actCertCode);
         activity.setLastModifyTime(new Date());
         activityService.updateByPrimaryKeySelective(activity);
@@ -87,11 +122,11 @@ public class ActivityController {
             ActivityPlan plan = ActivityPlan.newBuilder()
                     .activityId(activityId)
                     .description(actPlanDesc)
-                    .type(req.getType())
-                    .unit(req.getUnit())
-                    .quantity(req.getQuantity())
-                    .name(req.getName())
-                    .amount(req.getAmount())
+                    .type(type)
+                    .unit(unit)
+                    .quantity(quantity)
+                    .name(name)
+                    .amount(amount)
                     .createTime(new Date())
                     .lastModifyTime(new Date())
                     .sign(actPlanSign)
@@ -99,8 +134,17 @@ public class ActivityController {
             activityPlanService.insertSelective(plan);
             Long planId = plan.getId();
 
-            String actPlanCertCode = certService.writeChain(9900000L, MetaActivityPlan.TABLE_NAME, planId,
-                    actPlanSign, "yy");
+            Map<String, Object> actPlanChainMap = new HashMap<>();
+            actPlanChainMap.put(ChainConstants.ACTIVITY_ID, activityId);
+            actPlanChainMap.put(ChainConstants.ACTIVITY_PLAN_DESC, actPlanDesc);
+            actPlanChainMap.put(ChainConstants.ACTIVITY_PLAN_TYPE, type);
+            actPlanChainMap.put(ChainConstants.ACTIVITY_PLAN_UNIT, unit);
+            actPlanChainMap.put(ChainConstants.ACTIVITY_PLAN_QUANTITY, quantity);
+            actPlanChainMap.put(ChainConstants.ACTIVITY_PLAN_NAME, name);
+            actPlanChainMap.put(ChainConstants.ACTIVITY_PLAN_AMOUNT, amount);
+            String writeChainStr = GsonUtils.toJsonString(actPlanChainMap);
+            String actPlanCertCode = certService.writeChain(ChainConstants.ADMIN_ID, MetaActivityPlan.TABLE_NAME, planId,
+                    actPlanSign, writeChainStr);
             plan.setCertCode(actPlanCertCode);
             plan.setLastModifyTime(new Date());
             activityPlanService.updateByPrimaryKeySelective(plan);
@@ -129,7 +173,6 @@ public class ActivityController {
         return R.ok(activity.getId());
     }
 
-    // todo 查询活动和计划的时候需不需要验证链上数据和本地数据
     @GetMapping("/query")
     public R<Pagination<ActivityResp>> getActivities(@RequestParam(defaultValue = "1") Integer pageNo,
                                                      @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -137,6 +180,7 @@ public class ActivityController {
 
         Set<Long> actIds = new HashSet<>();
         Pagination<ActivityResp> activityPagination = activityService.pagination(ActivityExample.newBuilder()
+                        .orderByClause("id desc")
                         .start(start)
                         .limit(pageSize)
                         .build(),
@@ -156,38 +200,6 @@ public class ActivityController {
         );
 
         return R.ok(activityPagination);
-//        if (activityPagination.getTotal() == 0 || actIds.isEmpty()) {
-//            return R.ok(activityPagination);
-//        }
-//
-//        Map<Long, List<ActivityPlanResp>> actPlanMap =
-//                activityPlanService.selectMapListByExample(ActivityPlanExample.newBuilder()
-//                                .build()
-//                                .createCriteria()
-//                                .andActivityIdIn(actIds)
-//                                .toExample(),
-//                        ActivityPlan :: getActivityId,
-//                        item -> {
-//                            ActivityPlanResp planResp = ActivityPlanResp.builder()
-//                                    .id(item.getId())
-//                                    .activityId(item.getActivityId())
-//                                    .type(item.getType())
-//                                    .unit(item.getUnit())
-//                                    .quantity(item.getQuantity())
-//                                    .name(item.getName())
-//                                    .amount(item.getAmount())
-//                                    .build();
-//
-//                            return planResp;
-//                        }
-//                );
-//
-//        activityPagination.each(activityResp -> {
-//            Long actId = activityResp.getId();
-//            List<ActivityPlanResp> activityPlanResps = actPlanMap.get(actId);
-//            activityResp.setActivityPlanRespList(activityPlanResps);
-//        });
-//        return R.ok(activityPagination);
     }
 
     @GetMapping("/detail/{actId}")

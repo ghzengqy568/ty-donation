@@ -283,6 +283,7 @@ public class DonatoryController {
         }
 
         List<Long> activityIdList = assignService.selectByExample(AssignExample.newBuilder()
+                        .orderByClause("id desc")
                         .distinct(true)
                         .build()
                         .createCriteria()

@@ -280,14 +280,10 @@ public class DrawController {
             return R.error(100102, "受捐人已领取过了");
         }
 
-//        Date drawTime = new Date();
-//        String sign = SignUtils.sign(donatoryId, activityId, DateTimeUtils.toDateTimeString(drawTime,
-//                "yyyyMMddHHmmss"));
         DrawRecordFlow drawRecordFlow = DrawRecordFlow.newBuilder()
                 .drawTime(new Date())
                 .activityId(activityId)
                 .donatoryId(donatoryId)
-//                .sign(sign)
                 .createTime(new Date())
                 .lastModifyTime(new Date())
                 .build();
@@ -296,12 +292,6 @@ public class DrawController {
         JsonObject chainContent = new JsonObject();
         chainContent.addProperty("activityId", activityId);
         chainContent.addProperty("donatoryId", donatoryId);
-
-//        String flowCertCode = certService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME,
-//                drawRecordFlow.getId(), sign, GsonUtils.toJsonString(chainContent));
-//        drawRecordFlow.setCertCode(flowCertCode);
-//        drawRecordFlow.setLastModifyTime(new Date());
-//        drawRecordFlowService.updateByPrimaryKeySelective(drawRecordFlow);
 
         Long drawFlowId = drawRecordFlow.getId();
 
@@ -403,18 +393,6 @@ public class DrawController {
             drawDetailMap.put(ChainConstants.DRAW_DETAIL_QUANTITY, personalQuantity);
             drawDetailMap.put(ChainConstants.DRAW_DETAIL_UNIT, unit);
             drawDetailMapList.add(drawDetailMap);
-
-//            chainContent = new JsonObject();
-//            chainContent.addProperty("drawRecordFlowId", drawFlowId);
-//            chainContent.addProperty("activityId", activityId);
-//            chainContent.addProperty("donatoryId", donatoryId);
-//            chainContent.addProperty("quantity", personalQuantity);
-//
-//            String drCert = certService.writeChain(donatoryId, MetaDrawRecord.TABLE_NAME, drawRecord.getId(), sign,
-//                    GsonUtils.toJsonString(chainContent));
-//            drawRecord.setCertCode(drCert);
-//            drawRecord.setLastModifyTime(new Date());
-//            drawRecordService.updateByPrimaryKeySelective(drawRecord);
         }
 
         // WRITE_CHAIN 领取流水+详情一起作为关键信息一次性上链
