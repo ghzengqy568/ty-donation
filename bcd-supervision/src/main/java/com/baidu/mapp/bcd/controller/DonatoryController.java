@@ -155,11 +155,13 @@ public class DonatoryController {
             return R.error(100102, "用户名已被占用");
         }
         String sign = SignUtils.sign(userName, name);
+        // 密码加密存储
         String pwd = DigestUtils.md5DigestAsHex(password.getBytes());
 
         String idcard = donatoryReq.getIdcard();
         String mobile = donatoryReq.getMobile();
         try {
+            // 身份证/手机号等敏感信息加密存储
             idcard = digest.encryptDes(idcard);
             mobile = digest.encryptDes(mobile);
             if (StringUtils.isNotBlank(idcard)) {

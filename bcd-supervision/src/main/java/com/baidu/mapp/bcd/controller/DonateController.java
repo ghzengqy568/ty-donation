@@ -156,16 +156,56 @@ public class DonateController {
 
     /**
      * 根据存证地址查询链上捐赠数据详情, 校验并返回校验结果
+     * 校验过程：
+     * - 验证证书是否有效
+     * - 校验签名
+     * - 校验数据类型及ID
+     * - 校验捐赠详情（包含：捐赠人/身份证号/捐赠时间/详情）
      */
     @GetMapping("verify")
-    public R<Verification> verify(@RequestParam String certCode) {
+    public R<Verification> verify(@RequestParam String address) {
+        // 查询链下证书地址相关记录
+        Certificate certificate = certificateService.selectOneByExample(CertificateExample.newBuilder()
+                .build()
+                .createCriteria()
+                .andCertCodeEqualTo(address)
+                .toExample()
+        );
+        // 证书地址无效，不需继续查询查链，防止用户恶意攻击
+        if (certificate == null) {
+            return R.error(100102, "证书地址无效");
+        }
+
+        // 查询链下捐赠流水和详情, 为计算签名和与链上数据校验做准备
+        Long flowId = certificate.getSourceId();
+        DonateFlow donateFlowInDB = donateFlowService.selectByPrimaryKey(flowId);
+        Long donorIDInDB = donateFlowInDB.getDonorId();
+        Donor donorInDB = donorService.selectByPrimaryKey(donorIDInDB);
+
+        List<Map<String, Object>> donateDetailMapList = Lists.newArrayList();
+        List<DonateDetail> donateDetails =
+                donateDetailService.selectByExample(DonateDetailExample.newBuilder().build()
+                        .createCriteria()
+                        .andFlowIdEqualTo(flowId)
+                        .toExample());
+        if (!CollectionUtils.isEmpty(donateDetails)) {
+            donateDetails.forEach((item) -> {
+                Map<String, Object> detailMap = new HashMap<>();
+                detailMap.put(ChainConstants.DONATE_DETAIL_NAME, item.getName());
+                detailMap.put(ChainConstants.DONATE_DETAIL_QUANTITY, item.getQuantity());
+                detailMap.put(ChainConstants.DONATE_DETAIL_UNIT, item.getUnit());
+                donateDetailMapList.add(detailMap);
+            });
+        }
+
         // READ_CHAIN 查询链上捐赠数据，校验链上和链下捐赠详情
         try {
             // 根据捐赠存证地址查询链上数据详情
-            String chainContent = chainService.readChain(certCode);
+            String chainContent = chainService.readChain(address);
             String domain = StringUtils.EMPTY;
             String domainId = StringUtils.EMPTY;
             String donateContent = StringUtils.EMPTY;
+            String signInChain = StringUtils.EMPTY;
             if (StringUtils.isNotBlank(chainContent)) {
                 String[] split = chainContent.split("\t");
                 // 解析数据标识
@@ -178,11 +218,26 @@ public class DonateController {
                 // 解析数据内容
                 String[] contentEnrypted = content.split(":");
                 try {
+                    signInChain = contentEnrypted[0];
+                    // 链上真实数据解密
                     donateContent = digest.decryptDes(contentEnrypted[1]);
                 } catch (Exception e) {
                     log.error("Fail to read from chain.", e);
                     return R.error(2001001, "获取链上数据失败, 请稍后重试!");
                 }
+            }
+
+            String donateTimeInString = DateTimeUtils.toDateTimeString(donateFlowInDB.getDonateTime(), "yyyy-MM-dd "
+                    + "HH:mm:ss");
+
+            // 计算签名
+            String sign = signDonation(donorInDB.getDonorName(), donorInDB.getIdcard(), donateTimeInString,
+                    donateDetailMapList);
+            // 校验签名
+            if (!StringUtils.equals(sign, signInChain)) {
+                return R.ok(Verification.builder()
+                        .pass(false)
+                        .build());
             }
 
             // 解析链上捐赠数据详情
@@ -205,17 +260,14 @@ public class DonateController {
                             .build());
                 });
 
-                // 校验1：校验数据类型
-                if (!domain.equals(MetaDonateFlow.TABLE_NAME)) {
+                // 校验1：校验数据类型及ID
+                if (!domain.equals(MetaDonateFlow.TABLE_NAME) || !domainId.equals(flowId.toString())) {
                     return R.ok(Verification.builder()
                             .pass(false)
                             .build());
                 }
 
-                DonateFlow donateFlowInDB = donateFlowService.selectByPrimaryKey(Long.valueOf(domainId));
-                Long donorIDInDB = donateFlowInDB.getDonorId();
-                Donor donorInDB = donorService.selectByPrimaryKey(donorIDInDB);
-                // 校验2：校验捐赠人和身份证信息
+               // 校验2：校验捐赠人和身份证信息
                 if (!donorName.equals(donorInDB.getDonorName()) || !idCard.equals(donorInDB.getIdcard())) {
                     return R.ok(Verification.builder()
                             .pass(false)
@@ -223,22 +275,6 @@ public class DonateController {
                 }
 
                 // 校验3：校验捐赠详情
-                List<Map<String, Object>> donateDetailMapList = Lists.newArrayList();
-                List<DonateDetail> donateDetails =
-                        donateDetailService.selectByExample(DonateDetailExample.newBuilder().build()
-                                .createCriteria()
-                                .andFlowIdEqualTo(Long.valueOf(domainId))
-                                .toExample());
-                if (!CollectionUtils.isEmpty(donateDetails)) {
-                    donateDetails.forEach((item) -> {
-                        Map<String, Object> detailMap = new HashMap<>();
-                        detailMap.put(ChainConstants.DONATE_DETAIL_NAME, item.getName());
-                        detailMap.put(ChainConstants.DONATE_DETAIL_QUANTITY, item.getQuantity());
-                        detailMap.put(ChainConstants.DONATE_DETAIL_UNIT, item.getUnit());
-                        donateDetailMapList.add(detailMap);
-                    });
-                }
-
                 if (details.size() != donateDetailMapList.size()) {
                     return R.ok(Verification.builder()
                             .pass(false)
@@ -309,7 +345,8 @@ public class DonateController {
             return R.error(100102, "捐赠人不存在");
         }
 
-        Date donateTime = new Date();
+        // 精确到秒，避免MYSQL存储损失时间精度，导致签名校验失败
+        Date donateTime = new Date(System.currentTimeMillis() / 1000 * 1000);
         String anonymity = Strings.EMPTY;
         if (donateReq.getIsAnonymous() == 1) {
             anonymity = ANONYMITY_PREFIX + RandomStringUtils.randomNumeric(4);
@@ -424,6 +461,9 @@ public class DonateController {
         }
     }
 
+    /**
+     * 敏感信息(如手机号、身份证号等)解密
+     */
     private String decryptInternal(String encrypted) {
         if (StringUtils.isNotEmpty(encrypted)) {
             try {
@@ -907,6 +947,14 @@ public class DonateController {
         }
 
         return donateChainResp;
+    }
+
+    /**
+     * 捐赠数据签名
+     */
+    private String signDonation(String donorName, String donorIdCard, String donateTime,
+                                List<Map<String, Object>> detailMap) {
+        return SignUtils.sign(donorName, donorIdCard, donateTime, detailMap);
     }
 
 }

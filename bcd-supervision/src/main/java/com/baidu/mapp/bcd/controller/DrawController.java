@@ -15,6 +15,8 @@ import com.baidu.mapp.bcd.domain.ActivityPlanConfig;
 import com.baidu.mapp.bcd.domain.ActivityPlanExample;
 import com.baidu.mapp.bcd.domain.Assign;
 import com.baidu.mapp.bcd.domain.AssignExample;
+import com.baidu.mapp.bcd.domain.Certificate;
+import com.baidu.mapp.bcd.domain.CertificateExample;
 import com.baidu.mapp.bcd.domain.Donatory;
 import com.baidu.mapp.bcd.domain.DrawRecord;
 import com.baidu.mapp.bcd.domain.DrawRecordDetail;
@@ -36,6 +38,7 @@ import com.baidu.mapp.bcd.service.ActivityPlanService;
 import com.baidu.mapp.bcd.service.ActivityService;
 import com.baidu.mapp.bcd.service.AllocationService;
 import com.baidu.mapp.bcd.service.AssignService;
+import com.baidu.mapp.bcd.service.CertificateService;
 import com.baidu.mapp.bcd.service.ChainService;
 import com.baidu.mapp.bcd.service.DonatoryService;
 import com.baidu.mapp.bcd.service.DrawRecordDetailService;
@@ -107,17 +110,61 @@ public class DrawController {
     @Autowired
     Digest digest;
 
+    @Autowired
+    CertificateService certificateService;
+
     /**
      * 根据存证地址查询链上受捐/领取数据详情, 校验并返回校验结果
+     * 校验过程：
+     * - 验证证书是否有效
+     * - 校验签名
+     * - 校验数据类型及ID
+     * - 校验受捐/领取详情（包含：受捐人/身份证号/受捐时间/详情）
      */
     @GetMapping("verify")
     public R<Verification> verify(@RequestParam String address) {
+        // 查询链下证书地址相关记录
+        Certificate certificate = certificateService.selectOneByExample(CertificateExample.newBuilder()
+                .build()
+                .createCriteria()
+                .andCertCodeEqualTo(address)
+                .toExample()
+        );
+        // 证书地址无效，不需继续查询查链，防止用户恶意攻击
+        if (certificate == null) {
+            return R.error(100102, "证书地址无效");
+        }
+
+        // 查询链下领取流水和详情, 为计算签名和与链上数据校验做准备
+        Long flowId = certificate.getSourceId();
+        DrawRecordFlow drawRecordFlow = drawRecordFlowService.selectByPrimaryKey(flowId);
+        Assert.isTrue(drawRecordFlow != null, "领取流水不存在!");
+        Long donatoryId = drawRecordFlow.getDonatoryId();
+        Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
+        Assert.isTrue(donatory != null, "受捐人不存在!");
+        List<Map<String, Object>> drawDetailMapList = Lists.newArrayList();
+        // 查询领取详情
+        List<DrawRecord> drawRecords = drawRecordService.selectByExample(DrawRecordExample.newBuilder().build()
+                .createCriteria()
+                .andDrawRecordFlowIdEqualTo(drawRecordFlow.getId())
+                .toExample());
+        if (!CollectionUtils.isEmpty(drawRecords)) {
+            for (DrawRecord record : drawRecords) {
+                Map<String, Object> drawDetailMap = new HashMap<>();
+                drawDetailMap.put(ChainConstants.DRAW_DETAIL_NAME, record.getName());
+                drawDetailMap.put(ChainConstants.DRAW_DETAIL_QUANTITY, record.getQuantity());
+                drawDetailMap.put(ChainConstants.DRAW_DETAIL_UNIT, record.getUnit());
+                drawDetailMapList.add(drawDetailMap);
+            }
+        }
+
+        // READ_CHAIN 查询链上领取数据, 校验链下和链上领取详情
         try {
-            // READ_CHAIN 查询链上领取数据, 校验链下和链上领取详情
             String chainContent = chainService.readChain(address);
             String domain = StringUtils.EMPTY;
             String domainId = StringUtils.EMPTY;
             String drawContent = StringUtils.EMPTY;
+            String signInChain = StringUtils.EMPTY;
             if (StringUtils.isNotBlank(chainContent)) {
                 String[] split = chainContent.split("\t");
                 String source = split[1];
@@ -130,12 +177,28 @@ public class DrawController {
                 // 解析链上数据内容
                 String[] contentEncrypted = content.split(":");
                 try {
+                    signInChain = contentEncrypted[0];
+                    // 链上真实数据解密
                     drawContent = digest.decryptDes(contentEncrypted[1]);
                 } catch (Exception e) {
                     log.error("Fail to read from chain.", e);
                     return R.error(2001001, "获取链上数据失败, 请稍后重试!");
                 }
             }
+
+            String drawTimeInString = DateTimeUtils.toDateTimeString(drawRecordFlow.getDrawTime(),
+                    "yyyy-MM-dd HH:mm:ss");
+
+            // 计算签名
+            String sign = signDraw(donatory.getDonatoryName(), donatory.getIdcard(), drawTimeInString,
+                    drawDetailMapList);
+            // 校验签名
+            if (!StringUtils.equals(sign, signInChain)) {
+                return R.ok(Verification.builder()
+                        .pass(false)
+                        .build());
+            }
+
             // 解析链上受捐领取数据详情
             if (!StringUtils.isEmpty(drawContent)) {
                 JsonObject jsonObject = GsonUtils.toJsonObject(drawContent);
@@ -156,17 +219,12 @@ public class DrawController {
                             .build());
                 });
                 // 校验1: 校验数据类型
-                if (!domain.equals(MetaDrawRecordFlow.TABLE_NAME)) {
+                if (!domain.equals(MetaDrawRecordFlow.TABLE_NAME) || !domainId.equals(flowId.toString())) {
                     return R.ok(Verification.builder()
                             .pass(false)
                             .build());
                 }
 
-                DrawRecordFlow drawRecordFlow = drawRecordFlowService.selectByPrimaryKey(Long.valueOf(domainId));
-                Assert.isTrue(drawRecordFlow != null, "draw flow does not exist!");
-                Long donatoryId = drawRecordFlow.getDonatoryId();
-                Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
-                Assert.isTrue(donatory != null, "donatory does not exist!");
                 // 校验2：校验受捐人和身份证信息
                 if (!donatory.getDonatoryName().equals(donatoryName)
                         || !idCard.equals(donatory.getIdcard())) {
@@ -175,20 +233,6 @@ public class DrawController {
                             .build());
                 }
 
-                List<Map<String, Object>> drawDetailMapList = Lists.newArrayList();
-                List<DrawRecord> drawRecords = drawRecordService.selectByExample(DrawRecordExample.newBuilder().build()
-                        .createCriteria()
-                        .andDrawRecordFlowIdEqualTo(drawRecordFlow.getId())
-                        .toExample());
-                if (!CollectionUtils.isEmpty(drawRecords)) {
-                    for (DrawRecord record : drawRecords) {
-                        Map<String, Object> drawDetailMap = new HashMap<>();
-                        drawDetailMap.put(ChainConstants.DRAW_DETAIL_NAME, record.getName());
-                        drawDetailMap.put(ChainConstants.DRAW_DETAIL_QUANTITY, record.getQuantity());
-                        drawDetailMap.put(ChainConstants.DRAW_DETAIL_UNIT, record.getUnit());
-                        drawDetailMapList.add(drawDetailMap);
-                    }
-                }
                 // 校验3：校验领取详情
                 if (!CollectionUtils.isEmpty(details)) {
                     for (VerificationDetail detail : details) {
@@ -209,6 +253,7 @@ public class DrawController {
                     }
                 }
 
+                // 返回校验结果
                 Verification verification = Verification.builder()
                         .pass(true)
                         .donorOrDonatoryName(MaskUtils.maskDonorName(donatoryName))
@@ -447,6 +492,14 @@ public class DrawController {
                         .andActivityPlanIdEqualTo(activityPlanId)
                         .toExample());
         return planAllocationRels;
+    }
+
+    /**
+     * 受捐/领取数据签名
+     */
+    private String signDraw(String donatoryName, String donatoryIdCard, String donateTime,
+                            List<Map<String, Object>> detailMap) {
+        return SignUtils.sign(donatoryName, donatoryIdCard, donateTime, detailMap);
     }
 
 }

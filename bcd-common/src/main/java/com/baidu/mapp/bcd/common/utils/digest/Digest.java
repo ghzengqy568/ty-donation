@@ -65,6 +65,9 @@ public class Digest {
         }
     }
 
+    /**
+     * DES加密
+     */
     public String encryptDes(String source) throws Exception {
         if (source == null) {
             return null;
@@ -74,6 +77,9 @@ public class Digest {
         return new String(encrypt);
     }
 
+    /**
+     * DES解密
+     */
     public String decryptDes(String source) throws Exception {
         if (source == null) {
             return null;
