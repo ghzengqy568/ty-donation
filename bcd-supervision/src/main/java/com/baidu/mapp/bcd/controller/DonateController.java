@@ -154,36 +154,42 @@ public class DonateController {
     @Autowired
     Digest digest;
 
+    /**
+     * 根据存证地址查询链上捐赠数据详情, 校验并返回校验结果
+     */
     @GetMapping("verify")
     public R<Verification> verify(@RequestParam String certCode) {
-        // READ_CHAIN 校验链上和链下捐赠详情
+        // READ_CHAIN 查询链上捐赠数据，校验链上和链下捐赠详情
         try {
+            // 根据捐赠存证地址查询链上数据详情
             String chainContent = chainService.readChain(certCode);
-            String fromTable = StringUtils.EMPTY;
-            String fromId = StringUtils.EMPTY;
+            String domain = StringUtils.EMPTY;
+            String domainId = StringUtils.EMPTY;
             String donateContent = StringUtils.EMPTY;
             if (StringUtils.isNotBlank(chainContent)) {
                 String[] split = chainContent.split("\t");
-                String source = split[1];
-                String[] srcArray = source.split(":");
-                fromTable = srcArray[0];
-                fromId = srcArray[1];
+                // 解析数据标识
+                String identityId = split[1];
+                String[] srcArray = identityId.split(":");
+                domain = srcArray[0];
+                domainId = srcArray[1];
                 String content = split[2];
 
-                String[] split1 = content.split(":");
+                // 解析数据内容
+                String[] contentEnrypted = content.split(":");
                 try {
-                    donateContent = digest.decryptDes(split1[1]);
+                    donateContent = digest.decryptDes(contentEnrypted[1]);
                 } catch (Exception e) {
                     log.error("Fail to read from chain.", e);
                     return R.error(2001001, "获取链上数据失败, 请稍后重试!");
                 }
             }
 
+            // 解析链上捐赠数据详情
             if (StringUtils.isNotEmpty(donateContent)) {
                 JsonObject jsonObject = GsonUtils.toJsonObject(donateContent);
 
                 String donorName = jsonObject.get(ChainConstants.DONATE_FLOW_DONOR_NAME).getAsString();
-                String donateTime = jsonObject.get(ChainConstants.DONATE_FLOW_DONATE_TIME).getAsString();
                 String idCard = jsonObject.get(ChainConstants.DONATE_FLOW_DONOR_ID_CARD).getAsString();
 
                 List<VerificationDetail> details = Lists.newArrayList();
@@ -199,27 +205,29 @@ public class DonateController {
                             .build());
                 });
 
-                // 校验过程
-                if (!fromTable.equals(MetaDonateFlow.TABLE_NAME)) {
+                // 校验1：校验数据类型
+                if (!domain.equals(MetaDonateFlow.TABLE_NAME)) {
                     return R.ok(Verification.builder()
                             .pass(false)
                             .build());
                 }
 
-                DonateFlow donateFlowInDB = donateFlowService.selectByPrimaryKey(Long.valueOf(fromId));
+                DonateFlow donateFlowInDB = donateFlowService.selectByPrimaryKey(Long.valueOf(domainId));
                 Long donorIDInDB = donateFlowInDB.getDonorId();
                 Donor donorInDB = donorService.selectByPrimaryKey(donorIDInDB);
+                // 校验2：校验捐赠人和身份证信息
                 if (!donorName.equals(donorInDB.getDonorName()) || !idCard.equals(donorInDB.getIdcard())) {
                     return R.ok(Verification.builder()
                             .pass(false)
                             .build());
                 }
 
+                // 校验3：校验捐赠详情
                 List<Map<String, Object>> donateDetailMapList = Lists.newArrayList();
                 List<DonateDetail> donateDetails =
                         donateDetailService.selectByExample(DonateDetailExample.newBuilder().build()
                                 .createCriteria()
-                                .andFlowIdEqualTo(Long.valueOf(fromId))
+                                .andFlowIdEqualTo(Long.valueOf(domainId))
                                 .toExample());
                 if (!CollectionUtils.isEmpty(donateDetails)) {
                     donateDetails.forEach((item) -> {
@@ -254,7 +262,7 @@ public class DonateController {
                     }
                 }
 
-                // 构造校验结果
+                // 构造并返回校验结果
                 Verification verification = Verification.builder()
                         .pass(true)
                         .donorOrDonatoryName(MaskUtils.maskDonorName(donorName))
@@ -273,6 +281,9 @@ public class DonateController {
         }
     }
 
+    /**
+     * 新增/提交一笔捐赠
+     */
     @PostMapping("submit")
     public R<DonateResp> submit(@RequestBody DonateReq donateReq) {
         Long loginId = donateReq.getLoginId();
@@ -341,13 +352,6 @@ public class DonateController {
                     .build();
 
             donateDetailService.insertSelective(donateDetail);
-            Long detailId = donateDetail.getId();
-            // WRITE_CHAIN 捐赠详情跟流水一起作为关键信息一次性上链, 不单独上链, 提高写入和查询验证效率
-            // 是不是部分不单独上链表中的cert_code一列可以删除了
-//            String detailCertCode = certService.writeChain(donorId, MetaDonateDetail.TABLE_NAME, detailId,
-//                    sign, "xx");
-//            donateDetail.setCertCode(detailCertCode);
-//            donateDetail.setLastModifyTime(new Date());
             donateDetailService.updateByPrimaryKeySelective(donateDetail);
         }
 
@@ -360,23 +364,29 @@ public class DonateController {
         donateFlowMap.put(ChainConstants.DONATE_DETAIL, donateDetailMapList);
         String writeChainStr = GsonUtils.toJsonString(donateFlowMap);
 
+        // 签名
         String sign = SignUtils.sign(donor.getDonorName(), donor.getIdcard(), donateTimeInString,
                 donateDetailMapList);
-        String certCode = chainService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, flowId, sign, writeChainStr);
-        flow.setCertCode(certCode);
+        // 数据上链
+        String address = chainService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, flowId, sign, writeChainStr);
+        flow.setCertCode(address);
         flow.setSign(sign);
         flow.setLastModifyTime(new Date());
         donateFlowService.updateByPrimaryKeySelective(flow);
 
         DonateResp donateResp = DonateResp.builder()
-                .certCode(certCode)
+                .certCode(address)
                 .donorName(donor.getDonorName())
                 .quantity(details.get(0).getQuantity())
                 .donateTime(flow.getDonateTime())
                 .build();
+        // 返回上链存证地址
         return R.ok(donateResp);
     }
 
+    /**
+     * 查询所有的捐赠记录，返回指定分页的结果
+     */
     @GetMapping("/allDonations")
     public R<Pagination<AllDonationFlowResp>> getAllDonations(@RequestParam(defaultValue = "1") Integer pageNo,
                                                               @RequestParam(defaultValue = "10") Integer pageSize,
@@ -450,6 +460,9 @@ public class DonateController {
         };
     }
 
+    /**
+     * 根据捐赠/受捐人名称/证书查询记录
+     */
     @GetMapping("/genericSearch")
     public R<List<DonationFlowBriefResp>> genericSearch(@RequestParam String query) {
         // 先精准匹配证书号
@@ -659,16 +672,17 @@ public class DonateController {
     }
 
     /**
-     * 按精确匹配证书号, 查询受捐流程
-     * @param certCode 证书号
+     * 按精确匹配存证地址, 查询受捐流程
+     * @param address 存证地址
      * @return 返回整个从受捐到捐赠的追溯详情
      */
     @GetMapping("queryByDonatoryCertCode")
-    public R<DonatoryChainResp> queryByDonatoryCertCode(@RequestParam String certCode) {
+    public R<DonatoryChainResp> queryByDonatoryCertCode(@RequestParam String address) {
+        // 查询受捐/领取流水
         DrawRecordFlow drawRecordFlow =
                 drawRecordFlowService.selectOneByExample(DrawRecordFlowExample.newBuilder().build()
                         .createCriteria()
-                        .andCertCodeEqualTo(certCode)
+                        .andCertCodeEqualTo(address)
                         .toExample());
         Assert.isTrue(drawRecordFlow != null, "领取流水不存在");
 
@@ -677,6 +691,7 @@ public class DonateController {
         Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
         Assert.isTrue(donatory != null, "受捐人不存在");
 
+        // 查询领取记录
         List<DrawRecord> drawRecords = drawRecordService.selectByExample(DrawRecordExample.newBuilder().build()
                 .createCriteria()
                 .andDrawRecordFlowIdEqualTo(drawRecordFlowId)
@@ -760,17 +775,17 @@ public class DonateController {
 
 
     /**
-     * 按精确匹配证书号, 查询捐款流程
-     * @param certCode 证书号
+     * 按精确匹配存证地址, 查询捐款流程
+     * @param address 存证地址
      * @return 返回整个从捐赠到受捐的追溯详情
      */
     @GetMapping("queryByDonorCertCode")
-    public DonateChainResp queryDonationsByDonateCertCode(@RequestParam String certCode) {
+    public DonateChainResp queryDonationsByDonateCertCode(@RequestParam String address) {
 
         DonateFlow donateFlow = donateFlowService.selectOneByExample(DonateFlowExample.newBuilder()
                 .build()
                 .createCriteria()
-                .andCertCodeEqualTo(certCode)
+                .andCertCodeEqualTo(address)
                 .toExample());
         Assert.isTrue(donateFlow != null, "捐赠流水不存在");
 
@@ -787,7 +802,7 @@ public class DonateController {
                 .isAnonymous(donateFlow.getIsAnonymous())
                 .anonymity(donateFlow.getAnonymity())
                 .donateTime(donateFlow.getDonateTime())
-                .certCode(certCode)
+                .certCode(address)
                 .build();
 
         // 捐赠详情

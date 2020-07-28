@@ -107,36 +107,40 @@ public class DrawController {
     @Autowired
     Digest digest;
 
+    /**
+     * 根据存证地址查询链上受捐/领取数据详情, 校验并返回校验结果
+     */
     @GetMapping("verify")
-    public R<Verification> verify(@RequestParam String certCode) {
+    public R<Verification> verify(@RequestParam String address) {
         try {
-            // READ_CHAIN 链下和链上领取详情
-            String chainContent = chainService.readChain(certCode);
-            String fromTable = StringUtils.EMPTY;
-            String fromId = StringUtils.EMPTY;
+            // READ_CHAIN 查询链上领取数据, 校验链下和链上领取详情
+            String chainContent = chainService.readChain(address);
+            String domain = StringUtils.EMPTY;
+            String domainId = StringUtils.EMPTY;
             String drawContent = StringUtils.EMPTY;
             if (StringUtils.isNotBlank(chainContent)) {
                 String[] split = chainContent.split("\t");
                 String source = split[1];
-                String[] srcArray = source.split(":");
-                fromTable = srcArray[0];
-                fromId = srcArray[1];
+                // 解析数据标识
+                String[] identityId = source.split(":");
+                domain = identityId[0];
+                domainId = identityId[1];
                 String content = split[2];
 
-                String[] split1 = content.split(":");
+                // 解析链上数据内容
+                String[] contentEncrypted = content.split(":");
                 try {
-                    drawContent = digest.decryptDes(split1[1]);
+                    drawContent = digest.decryptDes(contentEncrypted[1]);
                 } catch (Exception e) {
                     log.error("Fail to read from chain.", e);
                     return R.error(2001001, "获取链上数据失败, 请稍后重试!");
                 }
             }
-
+            // 解析链上受捐领取数据详情
             if (!StringUtils.isEmpty(drawContent)) {
                 JsonObject jsonObject = GsonUtils.toJsonObject(drawContent);
 
                 String donatoryName = jsonObject.get(ChainConstants.DRAw_FLOW_DONATORY_NAME).getAsString();
-                String drawTime = jsonObject.get(ChainConstants.DRAW_FLOW_DRAW_TIME).getAsString();
                 String idCard = jsonObject.get(ChainConstants.DRAW_FLOW_DONATORY_ID_CARD).getAsString();
 
                 List<VerificationDetail> details = Lists.newArrayList();
@@ -151,18 +155,19 @@ public class DrawController {
                                     .getAsString())
                             .build());
                 });
-
-                if (!fromTable.equals(MetaDrawRecordFlow.TABLE_NAME)) {
+                // 校验1: 校验数据类型
+                if (!domain.equals(MetaDrawRecordFlow.TABLE_NAME)) {
                     return R.ok(Verification.builder()
                             .pass(false)
                             .build());
                 }
 
-                DrawRecordFlow drawRecordFlow = drawRecordFlowService.selectByPrimaryKey(Long.valueOf(fromId));
+                DrawRecordFlow drawRecordFlow = drawRecordFlowService.selectByPrimaryKey(Long.valueOf(domainId));
                 Assert.isTrue(drawRecordFlow != null, "draw flow does not exist!");
                 Long donatoryId = drawRecordFlow.getDonatoryId();
                 Donatory donatory = donatoryService.selectByPrimaryKey(donatoryId);
                 Assert.isTrue(donatory != null, "donatory does not exist!");
+                // 校验2：校验受捐人和身份证信息
                 if (!donatory.getDonatoryName().equals(donatoryName)
                         || !idCard.equals(donatory.getIdcard())) {
                     return R.ok(Verification.builder()
@@ -184,7 +189,7 @@ public class DrawController {
                         drawDetailMapList.add(drawDetailMap);
                     }
                 }
-
+                // 校验3：校验领取详情
                 if (!CollectionUtils.isEmpty(details)) {
                     for (VerificationDetail detail : details) {
                         boolean matched = false;
@@ -222,9 +227,11 @@ public class DrawController {
         }
     }
 
+    /**
+     * 确认领取一笔善款
+     */
     @PostMapping("draw")
     public R<String> draw(@RequestHeader("X-TOKEN") String xtoken, @RequestBody DrawReq drawReq) {
-
         LoginUser loginUser = UserThreadLocal.getLoginUser();
         if (loginUser == null) {
             return R.error(100102, "你尚未登录");
@@ -407,10 +414,11 @@ public class DrawController {
 
         String sign = SignUtils.sign(donatory.getDonatoryName(), donatory.getIdcard(), drawTimeInString,
                 drawDetailMapList);
-        String flowCertCode = chainService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME,
+        // 领取详情数据上链
+        String address = chainService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME,
                 drawRecordFlow.getId(), sign, writeChainStr);
         drawRecordFlow.setSign(sign);
-        drawRecordFlow.setCertCode(flowCertCode);
+        drawRecordFlow.setCertCode(address);
         drawRecordFlow.setLastModifyTime(new Date());
         drawRecordFlowService.updateByPrimaryKeySelective(drawRecordFlow);
 
@@ -420,8 +428,8 @@ public class DrawController {
             activity.setLastModifyTime(new Date());
             activityService.updateByPrimaryKeySelective(activity);
         }
-
-        return R.ok(flowCertCode);
+        // 返回领取存证地址
+        return R.ok(address);
     }
 
     /**
