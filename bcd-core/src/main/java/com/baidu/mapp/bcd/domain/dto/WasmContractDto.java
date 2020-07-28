@@ -25,9 +25,9 @@ public class WasmContractDto {
 
     private Long userId;
 
-    private String hashId;
+    private String identityId;
 
-    private String fileName;
+    private String sign;
 
     private String subUri;
 

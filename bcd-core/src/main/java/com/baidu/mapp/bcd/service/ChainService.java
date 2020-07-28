@@ -3,34 +3,30 @@
  */
 package com.baidu.mapp.bcd.service;
 
-import com.baidu.mapp.bcd.domain.Certificate;
-
+/**
+ * 数据上链与链上数据查询接口
+ */
 public interface ChainService {
 
     /**
-     * @param userId,   流水+详情 -> 捐赠人ID，
+     * 数据上链
+     *
+     * @param userId,   流水+详情 -> 捐赠人ID
      *                  领取记录 -> 受捐人ID
      *                  活动，计划，拨款 —> 操作人ID
-     * @param tableName
-     * @param id
-     * @param sign
-     *
-     * @return
+     * @param domain 数据域
+     * @param id 数据标识
+     * @param sign 上链数据签名
+     * @param content 上链原始数据
+     * @return 链上存证地址
      */
-
-    String writeChain(Long userId, String tableName, Long id, String sign, String content);
-
-    /**
-     * 通过证书号查询本地DB中证书记录
-     * @param certCode 被查询的证书号
-     * @return 本地DB中存储的证书记录
-     */
-    Certificate queryCert(String certCode);
+    String writeChain(Long userId, String domain, Long id, String sign, String content);
 
     /**
-     * 通过证书号查询链上存储的内容
-     * @param certCode 被查询的链上证书号
-     * @return 返回对应的链上内容, 即sign
+     * 通过存证地址查询链上数据
+     * @param address 链上存证地址
+     * @return 返回对应的链上数据
      */
-    String readChain(String certCode);
+    String readChain(String address);
+
 }

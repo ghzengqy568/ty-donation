@@ -15,6 +15,7 @@ import com.baidu.mapp.bcd.domain.Admin;
 import com.baidu.mapp.bcd.domain.Allocation;
 import com.baidu.mapp.bcd.domain.AllocationExample;
 import com.baidu.mapp.bcd.domain.Certificate;
+import com.baidu.mapp.bcd.domain.CertificateExample;
 import com.baidu.mapp.bcd.domain.DonateDetail;
 import com.baidu.mapp.bcd.domain.DonateDetailExample;
 import com.baidu.mapp.bcd.domain.DonateFlow;
@@ -54,6 +55,7 @@ import com.baidu.mapp.bcd.service.ActivityPlanService;
 import com.baidu.mapp.bcd.service.ActivityService;
 import com.baidu.mapp.bcd.service.AdminService;
 import com.baidu.mapp.bcd.service.AllocationService;
+import com.baidu.mapp.bcd.service.CertificateService;
 import com.baidu.mapp.bcd.service.ChainService;
 import com.baidu.mapp.bcd.service.DonateDetailService;
 import com.baidu.mapp.bcd.service.DonateFlowService;
@@ -139,6 +141,9 @@ public class DonateController {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    CertificateService certificateService;
 
     public static final String PARTICIPATION_DONATE = "捐赠";
 
@@ -448,7 +453,12 @@ public class DonateController {
     @GetMapping("/genericSearch")
     public R<List<DonationFlowBriefResp>> genericSearch(@RequestParam String query) {
         // 先精准匹配证书号
-        Certificate certificate = chainService.queryCert(query);
+        Certificate certificate = certificateService.selectOneByExample(CertificateExample
+                .newBuilder()
+                .build()
+                .createCriteria()
+                .andCertCodeEqualTo(query)
+                .toExample());
         // 验证证书记录是否存在
         // 如果证书记录存在, 则查询证书对应的捐赠/受捐详情
         if (Objects.nonNull(certificate)) {
