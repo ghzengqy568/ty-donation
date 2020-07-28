@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.baidu.mapp.bcd.common.utils.digest.Digest;
 
-public class CertServiceTest {
+public class ChainServiceTest {
 
     public String placeHolder(String content, Map<String, String> map) {
         if (content == null) {

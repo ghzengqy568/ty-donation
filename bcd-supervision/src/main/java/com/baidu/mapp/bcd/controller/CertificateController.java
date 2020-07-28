@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baidu.mapp.bcd.common.utils.digest.Digest;
 import com.baidu.mapp.bcd.domain.base.R;
-import com.baidu.mapp.bcd.service.CertService;
+import com.baidu.mapp.bcd.service.ChainService;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -22,14 +22,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class CertificateController {
 
     @Autowired
-    CertService certService;
+    ChainService chainService;
 
     @Autowired
     Digest digest;
 
     @GetMapping("fetch/{certCode}")
     public R<String> queryByCertCode(@PathVariable("certCode") String certCode) throws Exception {
-        String res = certService.readChain(certCode);
+        String res = chainService.readChain(certCode);
         if (StringUtils.isNotBlank(res)) {
             String[] split = res.split("\t");
             String content = split[2];

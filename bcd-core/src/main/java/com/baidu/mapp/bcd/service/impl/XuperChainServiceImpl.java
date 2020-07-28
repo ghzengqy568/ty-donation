@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2020 Baidu, Inc. All Rights Reserved.
  */
-package com.baidu.mapp.bcd.service;
+package com.baidu.mapp.bcd.service.impl;
 
 import java.net.URI;
 import java.net.URL;
@@ -27,10 +27,13 @@ import com.baidu.mapp.bcd.domain.Certificate;
 import com.baidu.mapp.bcd.domain.CertificateExample;
 import com.baidu.mapp.bcd.domain.dto.WasmContractDto;
 import com.baidu.mapp.bcd.domain.meta.MetaCertificate;
+import com.baidu.mapp.bcd.service.ChainService;
+import com.baidu.mapp.bcd.service.CertificateService;
 
 @Service
-public class CertService implements InitializingBean {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CertService.class);
+public class XuperChainServiceImpl implements InitializingBean, ChainService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChainService.class);
 
     @Value("${chain.service.url:http://122.112.158.98:8119/donate}")
     private String chainServiceUrl;
@@ -118,10 +121,10 @@ public class CertService implements InitializingBean {
     public String readChain(String certCode) {
         String result = null;
         Certificate certificate = certificateService.selectOneByExample(CertificateExample.newBuilder()
-                .build()
-                .createCriteria()
-                .andCertCodeEqualTo(certCode)
-                .toExample(),
+                        .build()
+                        .createCriteria()
+                        .andCertCodeEqualTo(certCode)
+                        .toExample(),
                 MetaCertificate.COLUMN_NAME_SOURCETABLE,
                 MetaCertificate.COLUMN_NAME_SOURCEID
         );

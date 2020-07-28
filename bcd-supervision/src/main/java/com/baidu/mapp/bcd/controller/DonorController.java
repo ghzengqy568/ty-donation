@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baidu.mapp.bcd.common.gson.GsonUtils;
 import com.baidu.mapp.bcd.common.utils.SignUtils;
 import com.baidu.mapp.bcd.common.utils.digest.Digest;
-import com.baidu.mapp.bcd.domain.Donatory;
-import com.baidu.mapp.bcd.domain.DonatoryExample;
 import com.baidu.mapp.bcd.domain.Donor;
 import com.baidu.mapp.bcd.domain.DonorExample;
 import com.baidu.mapp.bcd.domain.base.R;
@@ -36,7 +34,7 @@ import com.baidu.mapp.bcd.dto.CustomizedPair;
 import com.baidu.mapp.bcd.dto.DonorReq;
 import com.baidu.mapp.bcd.dto.LoginParam;
 import com.baidu.mapp.bcd.dto.LoginResponse;
-import com.baidu.mapp.bcd.service.CertService;
+import com.baidu.mapp.bcd.service.ChainService;
 import com.baidu.mapp.bcd.service.DonorService;
 import com.google.gson.JsonObject;
 
@@ -53,7 +51,7 @@ public class DonorController {
     DonorService donorService;
 
     @Autowired
-    CertService certService;
+    ChainService chainService;
 
     @Autowired
     Digest digest;
@@ -133,7 +131,7 @@ public class DonorController {
         JsonObject chainContent = new JsonObject();
         chainContent.addProperty("userName", userName);
         chainContent.addProperty("name", name);
-        String certCode = certService.writeChain(donorId, MetaDonor.TABLE_NAME, donorId, sign,
+        String certCode = chainService.writeChain(donorId, MetaDonor.TABLE_NAME, donorId, sign,
                 GsonUtils.toJsonString(chainContent));
         donor.setCertCode(certCode);
         donor.setLastModifyTime(new Date());

@@ -30,7 +30,7 @@ import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
 import com.baidu.mapp.bcd.service.ActivityPlanService;
 import com.baidu.mapp.bcd.service.ActivityService;
 import com.baidu.mapp.bcd.service.AssignService;
-import com.baidu.mapp.bcd.service.CertService;
+import com.baidu.mapp.bcd.service.ChainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,7 +65,7 @@ public class ActivityController {
     private AssignService assignService;
 
     @Autowired
-    CertService certService;
+    ChainService chainService;
 
     @PostMapping("/create")
     public R createActive(@RequestBody ActivityReq act) {
@@ -105,7 +105,7 @@ public class ActivityController {
         actChainMap.put(ChainConstants.ACTIVITY_START_TIME, startTimeInStr);
         actChainMap.put(ChainConstants.ACTIVITY_END_TIME, endTimeInStr);
         String actWriteChainStr = GsonUtils.toJsonString(actChainMap);
-        String actCertCode = certService.writeChain(ChainConstants.ADMIN_ID, MetaActivity.TABLE_NAME, activityId,
+        String actCertCode = chainService.writeChain(ChainConstants.ADMIN_ID, MetaActivity.TABLE_NAME, activityId,
                 actSign, actWriteChainStr);
         activity.setCertCode(actCertCode);
         activity.setLastModifyTime(new Date());
@@ -143,7 +143,8 @@ public class ActivityController {
             actPlanChainMap.put(ChainConstants.ACTIVITY_PLAN_NAME, name);
             actPlanChainMap.put(ChainConstants.ACTIVITY_PLAN_AMOUNT, amount);
             String writeChainStr = GsonUtils.toJsonString(actPlanChainMap);
-            String actPlanCertCode = certService.writeChain(ChainConstants.ADMIN_ID, MetaActivityPlan.TABLE_NAME, planId,
+            String actPlanCertCode = chainService
+                    .writeChain(ChainConstants.ADMIN_ID, MetaActivityPlan.TABLE_NAME, planId,
                     actPlanSign, writeChainStr);
             plan.setCertCode(actPlanCertCode);
             plan.setLastModifyTime(new Date());

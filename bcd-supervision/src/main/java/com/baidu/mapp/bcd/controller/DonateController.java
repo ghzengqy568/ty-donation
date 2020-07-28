@@ -34,7 +34,6 @@ import com.baidu.mapp.bcd.domain.PlanAllocationRelExample;
 import com.baidu.mapp.bcd.domain.base.Pagination;
 import com.baidu.mapp.bcd.domain.base.R;
 import com.baidu.mapp.bcd.domain.meta.MetaDonateFlow;
-import com.baidu.mapp.bcd.domain.meta.MetaDrawRecord;
 import com.baidu.mapp.bcd.domain.meta.MetaDrawRecordFlow;
 import com.baidu.mapp.bcd.dto.AllDonationFlowResp;
 import com.baidu.mapp.bcd.dto.DCActivityBriefResp;
@@ -55,7 +54,7 @@ import com.baidu.mapp.bcd.service.ActivityPlanService;
 import com.baidu.mapp.bcd.service.ActivityService;
 import com.baidu.mapp.bcd.service.AdminService;
 import com.baidu.mapp.bcd.service.AllocationService;
-import com.baidu.mapp.bcd.service.CertService;
+import com.baidu.mapp.bcd.service.ChainService;
 import com.baidu.mapp.bcd.service.DonateDetailService;
 import com.baidu.mapp.bcd.service.DonateFlowService;
 import com.baidu.mapp.bcd.service.DonatoryService;
@@ -112,7 +111,7 @@ public class DonateController {
     ActivityPlanService activityPlanService;
 
     @Autowired
-    CertService certService;
+    ChainService chainService;
 
     @Autowired
     DrawRecordFlowService drawRecordFlowService;
@@ -154,7 +153,7 @@ public class DonateController {
     public R<Verification> verify(@RequestParam String certCode) {
         // READ_CHAIN 校验链上和链下捐赠详情
         try {
-            String chainContent = certService.readChain(certCode);
+            String chainContent = chainService.readChain(certCode);
             String fromTable = StringUtils.EMPTY;
             String fromId = StringUtils.EMPTY;
             String donateContent = StringUtils.EMPTY;
@@ -358,7 +357,7 @@ public class DonateController {
 
         String sign = SignUtils.sign(donor.getDonorName(), donor.getIdcard(), donateTimeInString,
                 donateDetailMapList);
-        String certCode = certService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, flowId, sign, writeChainStr);
+        String certCode = chainService.writeChain(donorId, MetaDonateFlow.TABLE_NAME, flowId, sign, writeChainStr);
         flow.setCertCode(certCode);
         flow.setSign(sign);
         flow.setLastModifyTime(new Date());
@@ -449,7 +448,7 @@ public class DonateController {
     @GetMapping("/genericSearch")
     public R<List<DonationFlowBriefResp>> genericSearch(@RequestParam String query) {
         // 先精准匹配证书号
-        Certificate certificate = certService.queryCert(query);
+        Certificate certificate = chainService.queryCert(query);
         // 验证证书记录是否存在
         // 如果证书记录存在, 则查询证书对应的捐赠/受捐详情
         if (Objects.nonNull(certificate)) {

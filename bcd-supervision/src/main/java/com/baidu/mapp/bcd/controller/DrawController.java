@@ -36,7 +36,7 @@ import com.baidu.mapp.bcd.service.ActivityPlanService;
 import com.baidu.mapp.bcd.service.ActivityService;
 import com.baidu.mapp.bcd.service.AllocationService;
 import com.baidu.mapp.bcd.service.AssignService;
-import com.baidu.mapp.bcd.service.CertService;
+import com.baidu.mapp.bcd.service.ChainService;
 import com.baidu.mapp.bcd.service.DonatoryService;
 import com.baidu.mapp.bcd.service.DrawRecordDetailService;
 import com.baidu.mapp.bcd.service.DrawRecordFlowService;
@@ -81,7 +81,7 @@ public class DrawController {
     DrawRecordService drawRecordService;
 
     @Autowired
-    CertService certService;
+    ChainService chainService;
 
     @Autowired
     DrawRecordDetailService drawRecordDetailService;
@@ -111,7 +111,7 @@ public class DrawController {
     public R<Verification> verify(@RequestParam String certCode) {
         try {
             // READ_CHAIN 链下和链上领取详情
-            String chainContent = certService.readChain(certCode);
+            String chainContent = chainService.readChain(certCode);
             String fromTable = StringUtils.EMPTY;
             String fromId = StringUtils.EMPTY;
             String drawContent = StringUtils.EMPTY;
@@ -407,7 +407,7 @@ public class DrawController {
 
         String sign = SignUtils.sign(donatory.getDonatoryName(), donatory.getIdcard(), drawTimeInString,
                 drawDetailMapList);
-        String flowCertCode = certService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME,
+        String flowCertCode = chainService.writeChain(donatoryId, MetaDrawRecordFlow.TABLE_NAME,
                 drawRecordFlow.getId(), sign, writeChainStr);
         drawRecordFlow.setSign(sign);
         drawRecordFlow.setCertCode(flowCertCode);

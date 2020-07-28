@@ -53,7 +53,7 @@ import com.baidu.mapp.bcd.dto.LoginResponse;
 import com.baidu.mapp.bcd.service.ActivityPlanConfigService;
 import com.baidu.mapp.bcd.service.ActivityService;
 import com.baidu.mapp.bcd.service.AssignService;
-import com.baidu.mapp.bcd.service.CertService;
+import com.baidu.mapp.bcd.service.ChainService;
 import com.baidu.mapp.bcd.service.DonatoryService;
 import com.baidu.mapp.bcd.service.DrawRecordFlowService;
 import com.google.gson.JsonObject;
@@ -68,7 +68,7 @@ public class DonatoryController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DonatoryController.class);
 
     @Autowired
-    CertService certService;
+    ChainService chainService;
 
     @Autowired
     DonatoryService donatoryService;
@@ -206,7 +206,7 @@ public class DonatoryController {
         JsonObject chainContent = new JsonObject();
         chainContent.addProperty("userName", userName);
         chainContent.addProperty("name", name);
-        String certCode = certService.writeChain(donatoryId, MetaDonatory.TABLE_NAME, donatoryId, sign,
+        String certCode = chainService.writeChain(donatoryId, MetaDonatory.TABLE_NAME, donatoryId, sign,
                 GsonUtils.toJsonString(chainContent));
         donatory.setCertCode(certCode);
         donatory.setLastModifyTime(new Date());

@@ -48,7 +48,7 @@ public class AllocationController {
     DonateDetailService donateDetailService;
 
     @Autowired
-    CertService certService;
+    ChainService chainService;
 
     @Autowired
     PlanAllocationRelService planAllocationRelService;
@@ -178,7 +178,7 @@ public class AllocationController {
                 chainContent.addProperty("balance", b1);
                 chainContent.addProperty("used", used);
                 chainContent.addProperty("detailId", detailId);
-                String certCode = certService.writeChain(adminUserId, MetaAllocation.TABLE_NAME, allocationId, sign,
+                String certCode = chainService.writeChain(adminUserId, MetaAllocation.TABLE_NAME, allocationId, sign,
                         GsonUtils.toJsonString(chainContent));
                 allocation.setCertCode(certCode);
                 allocation.setLastModifyTime(new Date());
