@@ -4,6 +4,7 @@
 package com.baidu.mapp.bcd.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -346,6 +347,11 @@ public class DonatoryController {
                         .theme(item.getTheme())
                         .build()
         );
+        if (!donatoryActivityRes.isEmpty()) {
+            donatoryActivityRes =
+                    donatoryActivityRes.stream().sorted(Comparator.comparing(DonatoryActivityRes::getActivityId).reversed())
+                            .collect(Collectors.toList());
+        }
         if (drawStatus != null && !donatoryActivityRes.isEmpty()) {
             donatoryActivityRes =
                     donatoryActivityRes.stream().filter(item -> item.getDrawStatus().equals(drawStatus))

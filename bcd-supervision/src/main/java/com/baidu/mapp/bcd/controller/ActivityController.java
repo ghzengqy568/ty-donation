@@ -137,6 +137,7 @@ public class ActivityController {
 
         Set<Long> actIds = new HashSet<>();
         Pagination<ActivityResp> activityPagination = activityService.pagination(ActivityExample.newBuilder()
+                        .orderByClause("id desc")
                         .start(start)
                         .limit(pageSize)
                         .build(),

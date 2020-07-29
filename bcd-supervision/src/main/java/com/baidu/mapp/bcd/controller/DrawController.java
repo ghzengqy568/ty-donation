@@ -207,7 +207,7 @@ public class DrawController {
                 Verification verification = Verification.builder()
                         .pass(true)
                         .donorOrDonatoryName(MaskUtils.maskDonorName(donatoryName))
-                        .idCard(MaskUtils.maskIdCard(idCard))
+                        .idCard(MaskUtils.maskIdCard(digest.decryptDes(idCard)))
                         .time(drawRecordFlow.getDrawTime())
                         .drawVerificationDetailList(details)
                         .build();

@@ -81,8 +81,8 @@ public class CertServiceTest {
 
     @Test
     public void testSha1() throws Exception {
-        Digest in = Digest.getInstance("donate1234567890");
-        String s = in.encryptDes("曾庆勇");
+        Digest in = Digest.getInstance("donate0192837465");
+        String s = in.encryptDes("18756623882");
 
         System.out.println("encryptDes:" + s);
 

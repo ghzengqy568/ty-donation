@@ -254,7 +254,7 @@ public class DonateController {
                 Verification verification = Verification.builder()
                         .pass(true)
                         .donorOrDonatoryName(MaskUtils.maskDonorName(donorName))
-                        .idCard(MaskUtils.maskIdCard(idCard))
+                        .idCard(MaskUtils.maskIdCard(digest.decryptDes(idCard)))
                         .time(donateFlowInDB.getDonateTime())
                         .drawVerificationDetailList(details)
                         .build();
@@ -415,6 +415,7 @@ public class DonateController {
             try {
                 return digest.decryptDes(encrypted);
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return StringUtils.EMPTY;

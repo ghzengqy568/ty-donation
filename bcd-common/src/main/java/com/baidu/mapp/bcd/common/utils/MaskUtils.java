@@ -20,7 +20,7 @@ public class MaskUtils {
         }
 
         if (name.startsWith(ANONYMITY_PREFIX)) {
-            return maskFromStart(name, ANONYMITY_PREFIX.length());
+            return name;
         } else {
             return maskFromStart(name, 1);
         }
